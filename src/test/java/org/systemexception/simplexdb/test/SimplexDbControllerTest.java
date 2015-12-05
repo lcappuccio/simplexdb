@@ -49,19 +49,25 @@ public class SimplexDbControllerTest {
 
 	@Test
 	public void find_all() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT));
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/findall"));
 		verify(databaseService).findAll();
 	}
 
 	@Test
 	public void find_id() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/" + any()));
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/findbyid/" + any()));
 		verify(databaseService).findById(any());
 	}
 
 	@Test
+	public void find_match() throws Exception {
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/findbyname/" + any()));
+		verify(databaseService).findByFilename(any());
+	}
+
+	@Test
 	public void delete() throws Exception {
-		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + "/" + any()));
+		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + "/delete/" + any()));
 		verify(databaseService).delete(any());
 	}
 }

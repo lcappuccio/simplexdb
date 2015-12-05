@@ -70,6 +70,19 @@ public class DatabaseService implements DatabaseApi {
 	}
 
 	@Override
+	public List<DataId> findByFilename(final String match) {
+		logger.info("Find matching " + match);
+		ArrayList<DataId> foundItems = new ArrayList<>();
+		for (DataId dataId: databaseMap.keySet()) {
+			if(dataId.getDataId().contains(match)) {
+				foundItems.add(dataId);
+			}
+		}
+		logger.info("Found " + foundItems.size() + " matches");
+		return foundItems;
+	}
+
+	@Override
 	public boolean delete(DataId dataId) {
 		logger.info("Delete " + dataId.getDataId());
 		if (databaseMap.containsKey(dataId)) {

@@ -28,6 +28,11 @@ public interface DatabaseApi {
 	Optional<Data> findById(DataId dataId);
 
 	/**
+	 * List records matching string
+	 */
+	List<DataId> findByFilename(String match);
+
+	/**
 	 * Remove record from database
 	 */
 	boolean delete(DataId dataId);
