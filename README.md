@@ -21,4 +21,4 @@ Build with maven and run the artifact as any java application
 
 ## Settings
 
-Create folder `config` and file `application.properties`.
+Create folder `config` and file `application.properties`, change properties as you please.
