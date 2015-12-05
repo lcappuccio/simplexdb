@@ -28,7 +28,7 @@ public class DatabaseService implements DatabaseApi {
 
 	public DatabaseService(final String databaseName) {
 		logger.info("Creating database " + databaseName);
-		database = DBMaker.fileDB(new File(databaseName)).transactionDisable().make();
+		database = DBMaker.fileDB(new File(databaseName)).make();
 		databaseMap = database.hashMap("dataCollection");
 	}
 
@@ -88,7 +88,6 @@ public class DatabaseService implements DatabaseApi {
 	@Override
 	public boolean close() {
 		database.commit();
-		database.compact();
 		database.close();
 		logger.info("Database closed");
 		return database.isClosed();
