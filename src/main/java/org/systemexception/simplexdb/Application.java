@@ -8,8 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
  * @author leo
  * @date 04/12/15 23:27
  */
-@EnableAutoConfiguration
 @ComponentScan
+@EnableAutoConfiguration
 public class Application {
 
 	public static void main(String[] args) {
