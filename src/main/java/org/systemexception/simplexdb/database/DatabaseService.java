@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
 
+import javax.annotation.PreDestroy;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DatabaseService implements DatabaseApi {
 
 	public DatabaseService(final String databaseName) {
 		logger.info("Creating database " + databaseName);
-		database = DBMaker.fileDB(new File(databaseName)).transactionDisable().closeOnJvmShutdown().make();
+		database = DBMaker.fileDB(new File(databaseName)).make();
 		databaseMap = database.hashMap("dataCollection");
 	}
 
@@ -83,10 +84,10 @@ public class DatabaseService implements DatabaseApi {
 		}
 	}
 
+	@PreDestroy
 	@Override
-	public boolean closeDatabase() {
+	public boolean close() {
 		database.commit();
-		database.compact();
 		database.close();
 		logger.info("Database closed");
 		return database.isClosed();
