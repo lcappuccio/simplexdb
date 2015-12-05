@@ -33,7 +33,7 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	HttpStatus save(@RequestParam("file") MultipartFile dataFile) throws IOException {
+	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
 		DataId dataId = new DataId(dataFile.getOriginalFilename());
 		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info("Save " + dataId.getDataId());
@@ -51,8 +51,8 @@ public class SimplexDbController {
 		return databaseService.findAll();
 	}
 
-	@RequestMapping(value = "{id:.+}")
-	HttpStatus findById(@PathVariable("id") String id) throws IOException {
+	@RequestMapping(method = RequestMethod.GET, value = "{id:.+}")
+	HttpStatus findById(@PathVariable("id") final String id) throws IOException {
 		logger.info("Find " + id);
 		DataId dataId = new DataId(id);
 		Optional<Data> data = databaseService.findById(dataId);
@@ -67,6 +67,17 @@ public class SimplexDbController {
 				logger.error(e.getMessage());
 			}
 			return HttpStatus.FOUND;
+		}
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "{id:.+}")
+	HttpStatus delete(@PathVariable("id") final String id) {
+		logger.info("Delete " + id);
+		boolean deleted = databaseService.delete(new DataId(id));
+		if (deleted) {
+			return HttpStatus.OK;
+		} else {
+			return HttpStatus.NOT_FOUND;
 		}
 	}
 }
