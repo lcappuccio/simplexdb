@@ -8,15 +8,15 @@ import java.util.Arrays;
  */
 public class Data {
 
-	private final String dataId;
+	private final DataId dataId;
 	private final byte[] dataData;
 
-	public Data(final String dataId, final byte[] dataData) {
+	public Data(final DataId dataId, final byte[] dataData) {
 		this.dataId = dataId;
 		this.dataData = dataData;
 	}
 
-	public String getDataId() {
+	public DataId getDataId() {
 		return dataId;
 	}
 
