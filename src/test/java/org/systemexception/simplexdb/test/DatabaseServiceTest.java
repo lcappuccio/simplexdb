@@ -35,7 +35,7 @@ public class DatabaseServiceTest {
 
 	@After
 	public void tearDown() {
-		sut.closeDatabase();
+		sut.close();
 	}
 
 	@Test
