@@ -32,7 +32,7 @@ public class SimplexDbController {
 		this.databaseService = databaseService;
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "save", method = RequestMethod.POST)
 	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
 		DataId dataId = new DataId(dataFile.getOriginalFilename());
 		Data data = new Data(dataId, dataFile.getBytes());
@@ -45,14 +45,14 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "findall", method = RequestMethod.GET)
 	List<DataId> findAll() {
 		logger.info("Find all ids");
 		return databaseService.findAll();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "{id:.+}")
-	HttpStatus findById(@PathVariable("id") final String id) throws IOException {
+	@RequestMapping(value = "findbyid/{id:.+}" + "", method = RequestMethod.GET)
+	HttpStatus findById(@PathVariable("id") final String id) {
 		logger.info("Find " + id);
 		DataId dataId = new DataId(id);
 		Optional<Data> data = databaseService.findById(dataId);
@@ -70,7 +70,13 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "{id:.+}")
+	@RequestMapping(value = "findbyname/{match:.+}", method = RequestMethod.GET)
+	List<DataId> findByFilename(@PathVariable("match") final String match) {
+		logger.info("Find matching " + match);
+		return databaseService.findByFilename(match);
+	}
+
+	@RequestMapping(value = "delete/{id:.+}", method = RequestMethod.DELETE)
 	HttpStatus delete(@PathVariable("id") final String id) {
 		logger.info("Delete " + id);
 		boolean deleted = databaseService.delete(new DataId(id));

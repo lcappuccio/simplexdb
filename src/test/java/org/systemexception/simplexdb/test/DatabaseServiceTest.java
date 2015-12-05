@@ -9,11 +9,10 @@ import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
 
 import java.io.File;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author leo
@@ -97,9 +96,24 @@ public class DatabaseServiceTest {
 		Data emptyData = sut.findById(nonExistingId).get();
 	}
 
+	@Test
+	public void findMatches() {
+		int dataToAdd = 5;
+		for (int i = 0; i < dataToAdd; i ++) {
+			Data data = getDataForDatabase(String.valueOf(i));
+			sut.save(data);
+		}
+		List<DataId> foundItems = sut.findByFilename("1");
+		assertTrue(foundItems.size() == 1);
+		foundItems = sut.findByFilename("data");
+		assertTrue(foundItems.size() == 5);
+		foundItems = sut.findByFilename("NON_EXISTING_ID");
+		assertTrue(foundItems.size() == 0);
+	}
+
 	private Data getDataForDatabase(String id) {
-		byte[] dataContent = "TestData".getBytes();
-		DataId dataId = new DataId(id);
+		byte[] dataContent = ("data" + id).getBytes();
+		DataId dataId = new DataId("data" + id);
 		return new Data(dataId, dataContent);
 	}
 }
