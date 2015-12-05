@@ -3,8 +3,6 @@ package org.systemexception.simplexdb.database;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
@@ -24,8 +22,7 @@ public class DatabaseService implements DatabaseApi {
 	private final DB database;
 	private HTreeMap<DataId, byte[]> databaseMap;
 
-	@Autowired
-	public DatabaseService(@Value("${database.filename}") final String databaseName) {
+	public DatabaseService(final String databaseName) {
 		database = DBMaker.fileDB(new File(databaseName)).transactionDisable().closeOnJvmShutdown().make();
 		databaseMap = database.hashMap("dataCollection");
 	}
@@ -71,7 +68,7 @@ public class DatabaseService implements DatabaseApi {
 	}
 
 	@Override
-	public boolean close() {
+	public boolean closeDatabase() {
 		database.commit();
 		database.compact();
 		database.close();
