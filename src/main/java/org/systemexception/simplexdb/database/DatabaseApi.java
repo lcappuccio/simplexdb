@@ -35,5 +35,5 @@ public interface DatabaseApi {
 	/**
 	 * Close database
 	 */
-	boolean close();
+	boolean closeDatabase();
 }
