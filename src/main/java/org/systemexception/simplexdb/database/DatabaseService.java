@@ -74,6 +74,7 @@ public class DatabaseService implements DatabaseApi {
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
 			database.delete(dataId.getDataId());
+			database.commit();
 			logger.info(dataId.getDataId() + " removed");
 			return true;
 		} else {
