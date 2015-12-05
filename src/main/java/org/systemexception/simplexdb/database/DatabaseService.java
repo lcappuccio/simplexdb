@@ -1,17 +1,21 @@
 package org.systemexception.simplexdb.database;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * @author leo
  * @date 05/12/15 00:45
  */
-@Service
+@Component
 public class DatabaseService implements DatabaseApi {
 
-	@Value("${my.test}")
-	public String myValues;
+	@Value("${database.name}")
+	public String databaseName;
+
+	public DatabaseService() {
+
+	}
 
 	@Override
 	public void save() {
