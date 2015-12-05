@@ -1,5 +1,8 @@
 # simplexdb
-Simple Database based on MapDB and Spring REST Interface
+MapDB Database and Spring REST Interface
+
+The goal of this project is to create a portable storage for moving multiple files providing the
+lightest possible database with a REST interface.
 
 **Master**
 
@@ -11,4 +14,11 @@ Simple Database based on MapDB and Spring REST Interface
 
 ## Usage
 
-TBD
+Build with maven and run the artifact as any java application
+
+- `mvn clean install`
+- `java -jar $artifact-name.jar`
+
+## Settings
+
+Create folder `config` and file `application.properties`.
