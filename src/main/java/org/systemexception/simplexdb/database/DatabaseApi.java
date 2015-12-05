@@ -1,5 +1,11 @@
 package org.systemexception.simplexdb.database;
 
+import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.domain.DataId;
+
+import java.util.List;
+import java.util.Optional;
+
 /**
  * @author leo
  * @date 05/12/15 00:32
@@ -9,25 +15,25 @@ public interface DatabaseApi {
 	/**
 	 * Adds a record to the database
 	 */
-	void save();
+	boolean save(Data data);
 
 	/**
 	 * List all records on database
 	 */
-	void findAll();
+	List<DataId> findAll();
 
 	/**
 	 * List single record on database
 	 */
-	void findById();
+	Optional<Data> findById(DataId dataId);
 
 	/**
 	 * Remove record from database
 	 */
-	void delete();
+	boolean delete(DataId dataId);
 
 	/**
 	 * Close database
 	 */
-	void close();
+	boolean close();
 }
