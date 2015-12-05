@@ -59,7 +59,7 @@ public class DatabaseService implements DatabaseApi {
 
 	@Override
 	public Optional<Data> findById(DataId dataId) {
-		logger.info("Find " + dataId);
+		logger.info("Find " + dataId.getDataId());
 		if (databaseMap.containsKey(dataId)) {
 			logger.info(dataId.getDataId() + " found");
 			return Optional.of(new Data(dataId, databaseMap.get(dataId)));
