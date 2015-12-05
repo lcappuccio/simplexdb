@@ -52,7 +52,7 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "{id:.+}")
-	HttpStatus findById(@PathVariable("id") final String id) throws IOException {
+	HttpStatus findById(@PathVariable("id") final String id) {
 		logger.info("Find " + id);
 		DataId dataId = new DataId(id);
 		Optional<Data> data = databaseService.findById(dataId);
