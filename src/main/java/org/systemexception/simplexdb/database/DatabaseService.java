@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -96,6 +97,11 @@ public class DatabaseService implements DatabaseApi {
 			logger.info(dataId.getDataId() + " not found");
 			return false;
 		}
+	}
+
+	@Override
+	public void export() {
+		throw new NotImplementedException();
 	}
 
 	@PreDestroy
