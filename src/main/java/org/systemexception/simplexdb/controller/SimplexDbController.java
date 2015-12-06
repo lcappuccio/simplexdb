@@ -55,7 +55,7 @@ public class SimplexDbController {
 	}
 
 	// TODO collaborator for saving files
-	@RequestMapping(value = Endpoints.FINDBYID + "/{id:.+}", method = RequestMethod.GET)
+	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
 	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id, HttpServletResponse response) {
 		logger.info("Find " + id);
 		DataId dataId = new DataId(id);
@@ -75,13 +75,13 @@ public class SimplexDbController {
 	}
 
 	// TODO behaviour is inconsistent, findById saves files, this returns a list
-	@RequestMapping(value = Endpoints.FINDBYNAME + "/{match:.+}", method = RequestMethod.GET)
-	List<DataId> findByFilename(@PathVariable("match") final String match) {
+	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
+	List<DataId> findByFilename(@PathVariable("id") final String match) {
 		logger.info("Find matching " + match);
 		return databaseService.findByFilename(match);
 	}
 
-	@RequestMapping(value = Endpoints.DELETE + "/{id:.+}", method = RequestMethod.DELETE)
+	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE)
 	ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
 		logger.info("Delete " + id);
 		boolean deleted = databaseService.delete(new DataId(id));
