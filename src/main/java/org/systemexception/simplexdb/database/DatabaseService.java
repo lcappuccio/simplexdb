@@ -32,9 +32,12 @@ public class DatabaseService implements DatabaseApi {
 	public DatabaseService(final String databaseName) {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
-		// TODO document further about caching, transactions, mmap, etc
-		database = DBMaker.fileDB(new File(databaseName)).make();
+		database = makeDatabase();
 		databaseMap = database.hashMap("dataCollection");
+	}
+
+	private DB makeDatabase() {
+		return DBMaker.fileDB(new File(databaseName)).make();
 	}
 
 	@Override
