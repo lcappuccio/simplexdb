@@ -24,7 +24,7 @@ public class DatabaseService implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DB database;
-	private HTreeMap<DataId, byte[]> databaseMap;
+	private final HTreeMap<DataId, byte[]> databaseMap;
 
 	public DatabaseService(final String databaseName) {
 		logger.info("Creating database " + databaseName);

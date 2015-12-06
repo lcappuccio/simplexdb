@@ -51,7 +51,7 @@ public class SimplexDbController {
 		return databaseService.findAll();
 	}
 
-	@RequestMapping(value = "findbyid/{id:.+}" + "", method = RequestMethod.GET)
+	@RequestMapping(value = "findbyid/{id:.+}", method = RequestMethod.GET)
 	HttpStatus findById(@PathVariable("id") final String id) {
 		logger.info("Find " + id);
 		DataId dataId = new DataId(id);
