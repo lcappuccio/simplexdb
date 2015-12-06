@@ -12,7 +12,6 @@ import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,7 +55,7 @@ public class SimplexDbController {
 
 	// TODO collaborator for saving files
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
-	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id, HttpServletResponse response) {
+	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info("Find " + id);
 		DataId dataId = new DataId(id);
 		Optional<Data> data = databaseService.findById(dataId);
