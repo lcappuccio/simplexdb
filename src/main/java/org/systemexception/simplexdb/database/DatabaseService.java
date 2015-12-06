@@ -28,6 +28,7 @@ public class DatabaseService implements DatabaseApi {
 
 	public DatabaseService(final String databaseName) {
 		logger.info("Creating database " + databaseName);
+		// TODO document further about caching, transactions, mmap, etc
 		database = DBMaker.fileDB(new File(databaseName)).make();
 		databaseMap = database.hashMap("dataCollection");
 	}

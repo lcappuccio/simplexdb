@@ -51,6 +51,7 @@ public class SimplexDbController {
 		return databaseService.findAll();
 	}
 
+	// TODO collaborator for saving files
 	@RequestMapping(value = "findbyid/{id:.+}", method = RequestMethod.GET)
 	HttpStatus findById(@PathVariable("id") final String id) {
 		logger.info("Find " + id);
@@ -70,6 +71,7 @@ public class SimplexDbController {
 		}
 	}
 
+	// TODO behaviour is inconsistent, findById saves files, this returns a list
 	@RequestMapping(value = "findbyname/{match:.+}", method = RequestMethod.GET)
 	List<DataId> findByFilename(@PathVariable("match") final String match) {
 		logger.info("Find matching " + match);
