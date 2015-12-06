@@ -99,10 +99,9 @@ public class DatabaseService implements DatabaseApi {
 
 	@PreDestroy
 	@Override
-	public boolean close() {
+	public void close() {
 		database.commit();
 		database.close();
 		logger.info("Database closed");
-		return database.isClosed();
 	}
 }
