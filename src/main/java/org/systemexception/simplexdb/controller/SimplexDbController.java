@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.simplexdb.constants.Endpoints;
+import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
@@ -38,7 +39,7 @@ public class SimplexDbController {
 	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
 		DataId dataId = new DataId(dataFile.getOriginalFilename());
 		Data data = new Data(dataId, dataFile.getBytes());
-		logger.info("Save " + dataId.getDataId());
+		logger.info(LogMessages.SAVE + dataId.getDataId());
 		boolean saved = databaseService.save(data);
 		if (saved) {
 			return HttpStatus.CREATED;
@@ -49,14 +50,14 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET)
 	List<DataId> findAll() {
-		logger.info("Find all ids");
+		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return databaseService.findAll();
 	}
 
 	// TODO collaborator for saving files
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
 	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
-		logger.info("Find " + id);
+		logger.info(LogMessages.FIND_ID + id);
 		DataId dataId = new DataId(id);
 		Optional<Data> data = databaseService.findById(dataId);
 
@@ -76,13 +77,13 @@ public class SimplexDbController {
 	// TODO behaviour is inconsistent, findById saves files, this returns a list
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
 	List<DataId> findByFilename(@PathVariable("id") final String match) {
-		logger.info("Find matching " + match);
+		logger.info(LogMessages.FIND_MATCH + match);
 		return databaseService.findByFilename(match);
 	}
 
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE)
 	ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
-		logger.info("Delete " + id);
+		logger.info(LogMessages.DELETE + id);
 		boolean deleted = databaseService.delete(new DataId(id));
 		if (deleted) {
 			return new ResponseEntity<>(HttpStatus.OK);
