@@ -14,10 +14,13 @@ lightest possible database with a REST interface.
 
 ## Usage
 
+### Install
 Build with maven and run the artifact as any java application
 
 - `mvn clean install`
 - `java -jar $artifact-name.jar`
+
+### Insert Data
 
 ## Settings
 
