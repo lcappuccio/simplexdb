@@ -38,7 +38,12 @@ public interface DatabaseApi {
 	boolean delete(DataId dataId);
 
 	/**
+	 * Export all database items
+	 */
+	void export();
+
+	/**
 	 * Close database
 	 */
-	boolean close();
+	void close();
 }

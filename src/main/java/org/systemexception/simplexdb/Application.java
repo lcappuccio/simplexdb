@@ -27,5 +27,5 @@ public class Application {
 	@Bean
 	DatabaseService databaseService() {
 		return new DatabaseService(databaseFilename);
-	};
+	}
 }
