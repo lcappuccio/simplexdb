@@ -22,6 +22,8 @@ Build with maven and run the artifact as any java application
 
 ### Insert Data
 
+To insert data massively use `insert_files.sh` or the JMeter test plan.
+
 ## Settings
 
 Create folder `config` and file `application.properties`, change properties as you please.
