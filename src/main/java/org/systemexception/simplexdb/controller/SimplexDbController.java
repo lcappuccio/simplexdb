@@ -12,9 +12,8 @@ import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
+import org.systemexception.simplexdb.service.StorageService;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +28,9 @@ public class SimplexDbController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DatabaseService databaseService;
+
+	@Autowired
+	StorageService storageService;
 
 	@Autowired
 	public SimplexDbController(final DatabaseService databaseService) {
@@ -54,7 +56,6 @@ public class SimplexDbController {
 		return databaseService.findAll();
 	}
 
-	// TODO collaborator for saving files
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
 	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
@@ -64,12 +65,7 @@ public class SimplexDbController {
 		if (data.equals(Optional.empty())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			File dataFile = new File(dataId.getDataId());
-			try (FileOutputStream fos = new FileOutputStream(dataFile)) {
-				fos.write(data.get().getDataData());
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
+			storageService.saveFile(data.get());
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 	}
