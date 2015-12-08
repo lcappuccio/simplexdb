@@ -1,6 +1,7 @@
 package org.systemexception.simplexdb.test;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.systemexception.simplexdb.database.DatabaseApi;
@@ -30,6 +31,15 @@ public class DatabaseServiceTest {
 			databaseFile.delete();
 		}
 		sut = new DatabaseService(TEST_DATABASE_FILENAME);
+	}
+
+	@AfterClass
+	public static void tearDownSut() {
+		File databaseFile = new File(TEST_DATABASE_FILENAME);
+		if (databaseFile.exists()) {
+			databaseFile.delete();
+		}
+		assert(!databaseFile.exists());
 	}
 
 	@After

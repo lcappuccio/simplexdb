@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.test;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +25,19 @@ public class StorageServiceTest {
 
 	@BeforeClass
 	public static void setSut() {
+		File toRemove = new File(STORAGE_FOLDER);
+		if (toRemove.exists()) {
+			String[] files = toRemove.list();
+			for (String file: files) {
+				new File(STORAGE_FOLDER + File.separator + file).delete();
+			}
+		}
+		toRemove.delete();
+		assert(!toRemove.exists());
+	}
+
+	@AfterClass
+	public static void tearDownSut() {
 		File toRemove = new File(STORAGE_FOLDER);
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();

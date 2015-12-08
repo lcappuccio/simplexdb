@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.test;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
 import org.systemexception.simplexdb.service.StorageService;
 
+import java.io.File;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -35,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:application.properties")
 public class SimplexDbControllerTest {
 
+	private final static String TEST_DATABASE_FILENAME = "target" + File.separator + "test.db";
 	private DatabaseService databaseService;
 	private StorageService storageService;
 	@InjectMocks
@@ -57,6 +60,15 @@ public class SimplexDbControllerTest {
 		simplexDbController = new SimplexDbController(databaseService);
 		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(simplexDbController).build();
+	}
+
+	@AfterClass
+	public static void tearDownSut() {
+		File databaseFile = new File(TEST_DATABASE_FILENAME);
+		if (databaseFile.exists()) {
+			databaseFile.delete();
+		}
+		assert(!databaseFile.exists());
 	}
 
 	@Test
