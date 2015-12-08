@@ -6,8 +6,8 @@ package org.systemexception.simplexdb.constants;
  */
 public enum LogMessages {
 
-	CREATE_DATABASE("Creating database "),
-	CLOSE_DATABASE("Closed database "),
+	CREATE_DATABASE("Open database "),
+	CLOSE_DATABASE("Close database "),
 	FIND_ID("Find id: "),
 	FOUND_ID("Found id: "),
 	FOUND_NOT_ID("Not found id: "),
@@ -18,7 +18,8 @@ public enum LogMessages {
 	SAVED("Saved: "),
 	SAVE_CONFLICT("Already exists: "),
 	DELETE("Delete id: "),
-	DELETED("Deleted id: ");
+	DELETED("Deleted id: "),
+	STORAGE_FOLDER("Create folder: ");
 
 	private String message;
 
