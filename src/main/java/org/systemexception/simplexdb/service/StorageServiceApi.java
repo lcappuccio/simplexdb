@@ -8,5 +8,10 @@ import org.systemexception.simplexdb.domain.Data;
  */
 public interface StorageServiceApi {
 
+	/**
+	 * Saves domain object to disk
+	 *
+	 * @param data
+	 */
 	void saveFile(Data data);
 }
