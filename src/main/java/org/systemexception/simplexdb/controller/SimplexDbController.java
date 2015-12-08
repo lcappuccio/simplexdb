@@ -16,7 +16,6 @@ import org.systemexception.simplexdb.domain.DataId;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,9 +36,9 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST)
-	HttpStatus save(@RequestParam("file") final File dataFile) throws IOException {
-		DataId dataId = new DataId(dataFile.getName());
-		Data data = new Data(dataId, Files.readAllBytes(dataFile.toPath()));
+	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
+		DataId dataId = new DataId(dataFile.getOriginalFilename());
+		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info(LogMessages.SAVE + dataId.getDataId());
 		boolean saved = databaseService.save(data);
 		if (saved) {
