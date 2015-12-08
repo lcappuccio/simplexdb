@@ -2,6 +2,8 @@ package org.systemexception.simplexdb.test;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.domain.DataId;
 import org.systemexception.simplexdb.service.StorageService;
 
 import java.io.File;
@@ -16,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 public class StorageServiceTest {
 
 	private final static String STORAGE_FOLDER = "target" + File.separator + "test_output";
+	private final Data testData = new Data(new DataId("TEST"), "TEST".getBytes());
 	StorageService sut;
 
 	@Before
@@ -26,5 +29,12 @@ public class StorageServiceTest {
 	@Test
 	public void outputFolderExists() {
 		assertTrue(new File(STORAGE_FOLDER).exists());
+	}
+
+	@Test
+	public void saveDataExists() {
+		sut.saveFile(testData);
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataId().getDataId());
+		assertTrue(testDataFile.exists());
 	}
 }
