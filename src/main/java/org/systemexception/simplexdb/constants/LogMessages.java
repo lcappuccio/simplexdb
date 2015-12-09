@@ -19,7 +19,8 @@ public enum LogMessages {
 	SAVE_CONFLICT("Already exists: "),
 	DELETE("Delete id: "),
 	DELETED("Deleted id: "),
-	STORAGE_FOLDER("Create folder: ");
+	STORAGE_FOLDER("Create folder: "),
+	SCHEDULED_COMMIT("Committing");
 
 	private String message;
 

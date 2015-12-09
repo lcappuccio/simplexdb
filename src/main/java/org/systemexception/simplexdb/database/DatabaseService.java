@@ -5,6 +5,7 @@ import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
@@ -48,7 +49,6 @@ public class DatabaseService implements DatabaseApi {
 			return false;
 		} else {
 			databaseMap.put(data.getDataId(), data.getDataData());
-			database.commit();
 			logger.info(LogMessages.SAVED + data.getDataId().getDataId());
 			return true;
 		}
@@ -96,7 +96,6 @@ public class DatabaseService implements DatabaseApi {
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
 			database.delete(dataId.getDataId());
-			database.commit();
 			logger.info(LogMessages.DELETED + dataId.getDataId());
 			return true;
 		} else {
@@ -110,9 +109,16 @@ public class DatabaseService implements DatabaseApi {
 		throw new NotImplementedException();
 	}
 
+	@Scheduled(fixedDelay=5000)
+	public void commit() {
+		logger.info(LogMessages.SCHEDULED_COMMIT.toString());
+		database.commit();
+	}
+
 	@PreDestroy
 	@Override
 	public void close() {
+		database.compact();
 		database.commit();
 		database.close();
 		logger.info(LogMessages.CLOSE_DATABASE + databaseName);
