@@ -58,7 +58,7 @@ public class DatabaseService implements DatabaseApi {
 	public List<DataId> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<DataId> dataIds = new ArrayList<>();
-		for (DataId dataId: databaseMap.keySet()) {
+		for (DataId dataId : databaseMap.keySet()) {
 			dataIds.add(dataId);
 		}
 		logger.info(LogMessages.FOUND_ID.toString() + dataIds.size());
@@ -81,8 +81,8 @@ public class DatabaseService implements DatabaseApi {
 	public List<DataId> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		ArrayList<DataId> foundItems = new ArrayList<>();
-		for (DataId dataId: databaseMap.keySet()) {
-			if(dataId.getDataId().contains(match)) {
+		for (DataId dataId : databaseMap.keySet()) {
+			if (dataId.getDataId().contains(match)) {
 				foundItems.add(dataId);
 			}
 		}
@@ -109,7 +109,7 @@ public class DatabaseService implements DatabaseApi {
 		throw new NotImplementedException();
 	}
 
-	@Scheduled(fixedDelay=5000)
+	@Scheduled(fixedDelay = 5000)
 	public void commit() {
 		logger.info(LogMessages.SCHEDULED_COMMIT.toString());
 		database.commit();
