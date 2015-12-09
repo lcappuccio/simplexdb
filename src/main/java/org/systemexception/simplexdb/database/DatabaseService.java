@@ -124,7 +124,6 @@ public class DatabaseService implements DatabaseApi {
 	@PreDestroy
 	@Override
 	public void close() {
-		database.compact();
 		database.commit();
 		database.close();
 		logger.info(LogMessages.CLOSE_DATABASE + databaseName);
