@@ -5,6 +5,7 @@ import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
@@ -28,6 +29,7 @@ public class DatabaseService implements DatabaseApi {
 	private final DB database;
 	private final HTreeMap<DataId, byte[]> databaseMap;
 	private final String databaseName;
+	private Boolean newData = false;
 
 	public DatabaseService(final String databaseName) {
 		this.databaseName = databaseName;
@@ -48,8 +50,8 @@ public class DatabaseService implements DatabaseApi {
 			return false;
 		} else {
 			databaseMap.put(data.getDataId(), data.getDataData());
-			database.commit();
 			logger.info(LogMessages.SAVED + data.getDataId().getDataId());
+			newData = true;
 			return true;
 		}
 	}
@@ -58,7 +60,7 @@ public class DatabaseService implements DatabaseApi {
 	public List<DataId> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<DataId> dataIds = new ArrayList<>();
-		for (DataId dataId: databaseMap.keySet()) {
+		for (DataId dataId : databaseMap.keySet()) {
 			dataIds.add(dataId);
 		}
 		logger.info(LogMessages.FOUND_ID.toString() + dataIds.size());
@@ -81,8 +83,8 @@ public class DatabaseService implements DatabaseApi {
 	public List<DataId> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		ArrayList<DataId> foundItems = new ArrayList<>();
-		for (DataId dataId: databaseMap.keySet()) {
-			if(dataId.getDataId().contains(match)) {
+		for (DataId dataId : databaseMap.keySet()) {
+			if (dataId.getDataId().contains(match)) {
 				foundItems.add(dataId);
 			}
 		}
@@ -96,7 +98,7 @@ public class DatabaseService implements DatabaseApi {
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
 			database.delete(dataId.getDataId());
-			database.commit();
+			newData = true;
 			logger.info(LogMessages.DELETED + dataId.getDataId());
 			return true;
 		} else {
@@ -110,9 +112,19 @@ public class DatabaseService implements DatabaseApi {
 		throw new NotImplementedException();
 	}
 
+	@Scheduled(cron = "${database.commit.frequency}")
+	public void commit() {
+		if (newData) {
+			database.commit();
+			logger.info(LogMessages.SCHEDULED_COMMIT.toString());
+			newData = false;
+		}
+	}
+
 	@PreDestroy
 	@Override
 	public void close() {
+		database.compact();
 		database.commit();
 		database.close();
 		logger.info(LogMessages.CLOSE_DATABASE + databaseName);

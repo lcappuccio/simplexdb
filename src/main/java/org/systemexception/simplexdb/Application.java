@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.service.StorageService;
 
@@ -18,6 +19,7 @@ import java.io.IOException;
 @ComponentScan
 @EnableAutoConfiguration
 @SpringBootApplication
+@EnableScheduling
 public class Application {
 
 	@Value("${database.filename}")
