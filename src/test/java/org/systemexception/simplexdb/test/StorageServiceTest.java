@@ -10,6 +10,11 @@ import org.systemexception.simplexdb.service.StorageService;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.assertTrue;
 
@@ -64,5 +69,21 @@ public class StorageServiceTest {
 		sut.saveFile(testData);
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataId().getDataId());
 		assertTrue(testDataFile.exists());
+	}
+
+	@Test
+	public void historify() throws IOException {
+		sut.saveFile(testData);
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataId().getDataId());
+		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
+		sut.saveFile(testData);
+		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis()) + "_" +
+				testDataFile.getName()).exists());
+	}
+
+	private String convertTime(long time) {
+		Date date = new Date(time);
+		Format format = new SimpleDateFormat("yyyyMMddHHmmss");
+		return format.format(date);
 	}
 }
