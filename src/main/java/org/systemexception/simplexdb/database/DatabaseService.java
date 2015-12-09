@@ -29,6 +29,7 @@ public class DatabaseService implements DatabaseApi {
 	private final DB database;
 	private final HTreeMap<DataId, byte[]> databaseMap;
 	private final String databaseName;
+	private Boolean newData = false;
 
 	public DatabaseService(final String databaseName) {
 		this.databaseName = databaseName;
@@ -50,6 +51,7 @@ public class DatabaseService implements DatabaseApi {
 		} else {
 			databaseMap.put(data.getDataId(), data.getDataData());
 			logger.info(LogMessages.SAVED + data.getDataId().getDataId());
+			newData = true;
 			return true;
 		}
 	}
@@ -96,6 +98,7 @@ public class DatabaseService implements DatabaseApi {
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
 			database.delete(dataId.getDataId());
+			newData = true;
 			logger.info(LogMessages.DELETED + dataId.getDataId());
 			return true;
 		} else {
@@ -109,10 +112,13 @@ public class DatabaseService implements DatabaseApi {
 		throw new NotImplementedException();
 	}
 
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(cron = "${database.commit.frequency}")
 	public void commit() {
-		logger.info(LogMessages.SCHEDULED_COMMIT.toString());
-		database.commit();
+		if (newData) {
+			database.commit();
+			logger.info(LogMessages.SCHEDULED_COMMIT.toString());
+			newData = false;
+		}
 	}
 
 	@PreDestroy
