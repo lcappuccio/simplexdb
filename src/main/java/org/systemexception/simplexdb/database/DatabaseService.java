@@ -107,11 +107,6 @@ public class DatabaseService implements DatabaseApi {
 		}
 	}
 
-	@Override
-	public void export() {
-		throw new NotImplementedException();
-	}
-
 	@Scheduled(cron = "${database.commit.frequency}")
 	public void commit() {
 		if (newData) {
