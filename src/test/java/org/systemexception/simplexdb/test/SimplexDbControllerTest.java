@@ -23,6 +23,8 @@ import org.systemexception.simplexdb.domain.DataId;
 import org.systemexception.simplexdb.service.StorageService;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -55,7 +57,6 @@ public class SimplexDbControllerTest {
 		when(mockData.getDataData()).thenReturn("123".getBytes());
 		databaseService = mock(DatabaseService.class);
 		storageService = mock(StorageService.class);
-		when(databaseService.findAll()).thenReturn(null);
 		when(databaseService.findById(mockData.getDataId())).thenReturn(Optional.of(mockData));
 		when(databaseService.delete(mockData.getDataId())).thenReturn(true);
 		simplexDbController = new SimplexDbController(databaseService);
@@ -118,7 +119,9 @@ public class SimplexDbControllerTest {
 
 	@Test
 	public void export() throws Exception {
-		when(databaseService.findAll()).thenReturn(any());
+		List<DataId> dataIdList = new ArrayList<>();
+		dataIdList.add(mockData.getDataId());
+		when(databaseService.findAll()).thenReturn(dataIdList);
 		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.EXPORT)).andExpect(status()
 				.is(HttpStatus.OK.value()));
 		verify(databaseService).findAll();
