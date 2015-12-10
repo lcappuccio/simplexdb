@@ -87,4 +87,15 @@ public class SimplexDbController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET)
+	ResponseEntity<HttpStatus> export() {
+		logger.info(LogMessages.EXPORT_START.toString());
+		List<DataId> dataIdList = databaseService.findAll();
+		for (DataId dataId: dataIdList) {
+			storageService.saveFile(databaseService.findById(dataId).get());
+		}
+		logger.info(LogMessages.EXPORT_FINISH.toString());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

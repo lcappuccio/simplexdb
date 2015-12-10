@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.simplexdb.Application;
+import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.controller.SimplexDbController;
 import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.domain.Data;
@@ -22,6 +23,8 @@ import org.systemexception.simplexdb.domain.DataId;
 import org.systemexception.simplexdb.service.StorageService;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -54,7 +57,6 @@ public class SimplexDbControllerTest {
 		when(mockData.getDataData()).thenReturn("123".getBytes());
 		databaseService = mock(DatabaseService.class);
 		storageService = mock(StorageService.class);
-		when(databaseService.findAll()).thenReturn(null);
 		when(databaseService.findById(mockData.getDataId())).thenReturn(Optional.of(mockData));
 		when(databaseService.delete(mockData.getDataId())).thenReturn(true);
 		simplexDbController = new SimplexDbController(databaseService);
@@ -68,18 +70,18 @@ public class SimplexDbControllerTest {
 		if (databaseFile.exists()) {
 			databaseFile.delete();
 		}
-		assert(!databaseFile.exists());
+		assert (!databaseFile.exists());
 	}
 
 	@Test
 	public void find_all() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/findall"));
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDALL));
 		verify(databaseService).findAll();
 	}
 
 	@Test
 	public void find_id_and_save() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/findbyid/" + mockData.getDataId().getDataId()))
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getDataId().getDataId()))
 				.andExpect(status().is(HttpStatus.FOUND.value()));
 		verify(databaseService).findById(mockData.getDataId());
 		verify(storageService).saveFile(mockData);
@@ -88,28 +90,41 @@ public class SimplexDbControllerTest {
 	@Test
 	public void dont_find_id() throws Exception {
 		when(databaseService.findById(mockData.getDataId())).thenReturn(Optional.empty());
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/findbyid/" + mockData.getDataId().getDataId()))
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getDataId().getDataId()))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 		verify(databaseService).findById(mockData.getDataId());
 	}
 
 	@Test
 	public void find_match() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + "/findbyname/" + any()));
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYNAME + "/" + any()));
 		verify(databaseService).findByFilename(any());
 	}
 
 	@Test
 	public void delete_existing() throws Exception {
-		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + "/delete/" + mockData.getDataId().getDataId()))
+		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getDataId().getDataId
+				()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 		verify(databaseService).delete(mockData.getDataId());
 	}
+
 	@Test
 	public void delete_not_existing() throws Exception {
 		when(databaseService.delete(mockData.getDataId())).thenReturn(false);
-		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + "/delete/" + mockData.getDataId().getDataId()))
-				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getDataId().getDataId
+				())).andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 		verify(databaseService).delete(mockData.getDataId());
+	}
+
+	@Test
+	public void export() throws Exception {
+		List<DataId> dataIdList = new ArrayList<>();
+		dataIdList.add(mockData.getDataId());
+		when(databaseService.findAll()).thenReturn(dataIdList);
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.EXPORT)).andExpect(status()
+				.is(HttpStatus.OK.value()));
+		verify(databaseService).findAll();
+		verify(storageService).saveFile(any());
 	}
 }
