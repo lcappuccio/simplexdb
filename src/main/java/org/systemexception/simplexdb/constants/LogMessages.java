@@ -25,7 +25,7 @@ public enum LogMessages {
 	STORAGE_FOLDER("Create folder: "),
 	STORAGE_RENAME(" renamed to ");
 
-	private String message;
+	private final String message;
 
 	LogMessages(final String message) {
 		this.message = message;
