@@ -26,7 +26,7 @@ public class StorageServiceTest {
 
 	private final static String STORAGE_FOLDER = "target" + File.separator + "test_output";
 	private final Data testData = new Data(new DataId("TEST"), "TEST".getBytes());
-	StorageService sut;
+	private StorageService sut;
 
 	@BeforeClass
 	public static void setSut() {
