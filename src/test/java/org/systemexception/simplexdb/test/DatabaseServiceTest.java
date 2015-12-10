@@ -104,6 +104,7 @@ public class DatabaseServiceTest {
 	public void dontFindNonExistingData() {
 		DataId nonExistingId = new DataId("nonExistingId");
 		Data emptyData = sut.findById(nonExistingId).get();
+		assertTrue(emptyData.equals(null));
 	}
 
 	@Test
