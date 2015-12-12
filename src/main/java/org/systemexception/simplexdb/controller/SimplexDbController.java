@@ -27,15 +27,12 @@ import java.util.Optional;
 public class SimplexDbController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final DatabaseService databaseService;
 
 	@Autowired
 	StorageService storageService;
 
 	@Autowired
-	public SimplexDbController(final DatabaseService databaseService) {
-		this.databaseService = databaseService;
-	}
+	DatabaseService databaseService;
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST)
 	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {

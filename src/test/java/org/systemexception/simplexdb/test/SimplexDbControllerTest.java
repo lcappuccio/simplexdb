@@ -59,7 +59,7 @@ public class SimplexDbControllerTest {
 		storageService = mock(StorageService.class);
 		when(databaseService.findById(mockData.getDataId())).thenReturn(Optional.of(mockData));
 		when(databaseService.delete(mockData.getDataId())).thenReturn(true);
-		simplexDbController = new SimplexDbController(databaseService);
+		simplexDbController = new SimplexDbController();
 		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(simplexDbController).build();
 	}
