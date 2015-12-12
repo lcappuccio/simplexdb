@@ -6,23 +6,26 @@ package org.systemexception.simplexdb.constants;
  */
 public enum LogMessages {
 
-	CREATE_DATABASE("Open database "),
 	CLOSE_DATABASE("Close database "),
+	CREATE_DATABASE("Open database "),
+	DELETE("Delete id: "),
+	DELETED("Deleted id: "),
+	EXPORT_START("Export started"),
+	EXPORT_FINISH("Export finished"),
+	FIND_ALL_IDS("Find all ids"),
+	FIND_MATCH("Find matching: "),
 	FIND_ID("Find id: "),
 	FOUND_ID("Found id: "),
 	FOUND_NOT_ID("Not found id: "),
-	FIND_ALL_IDS("Find all ids"),
-	FIND_MATCH("Find matching: "),
 	FOUND_MATCHING("Found matching: "),
 	SAVE("Save: "),
 	SAVED("Saved: "),
 	SAVE_CONFLICT("Already exists: "),
-	DELETE("Delete id: "),
-	DELETED("Deleted id: "),
+	SCHEDULED_COMMIT("Committing"),
 	STORAGE_FOLDER("Create folder: "),
-	SCHEDULED_COMMIT("Committing");
+	STORAGE_RENAME(" renamed to ");
 
-	private String message;
+	private final String message;
 
 	LogMessages(final String message) {
 		this.message = message;

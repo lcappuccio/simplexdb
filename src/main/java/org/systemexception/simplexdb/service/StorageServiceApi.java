@@ -11,7 +11,7 @@ public interface StorageServiceApi {
 	/**
 	 * Saves domain object to disk
 	 *
-	 * @param data
+	 * @param data the Data domain object
 	 */
 	void saveFile(Data data);
 }

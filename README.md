@@ -22,8 +22,22 @@ Build with maven and run the artifact as any java application
 
 ### Insert Data
 
-To insert data massively use `insert_files.sh` or the JMeter test plan.
+To insert data massively use `insert_files.sh` or the included JMeter test plan.
 
 ## Settings
 
-Create folder `config` and file `application.properties`, change properties as you please.
+Create folder `config` and file `application.properties`, change the settings as you please.
+
+Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
+
+## Endpoints
+
+The application is deployed to http://host_id:port/simplexdb where **host_id** and **port** depend on the environment.
+
+- **save**: stores a file in the database
+- **findall**: obtain a full list of the stored data (ids only) in JSON format
+- **findbyid**: will download and save to disk the file with the corresponding id, if a the same id was previously saved
+the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
+- **findbyname**: will scan the db to find all the ids that contain the string to search
+- **delete**: deletes from the database the specified id
+- **export**: will write to disk all data currently stored in the database
