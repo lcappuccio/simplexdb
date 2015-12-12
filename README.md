@@ -32,7 +32,7 @@ Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/curr
 
 ## Endpoints
 
-The application is deployed to http://host_id:port/simplexdb
+The application is deployed to http://host_id:port/simplexdb where **host_id** and **port** depend on the environment.
 
 - **save**: stores a file in the database
 - **findall**: obtain a full list of the stored data (ids only) in JSON format
