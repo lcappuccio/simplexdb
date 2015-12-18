@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -71,6 +72,16 @@ public class SimplexDbControllerTest {
 			databaseFile.delete();
 		}
 		assert (!databaseFile.exists());
+	}
+
+	@Test
+	public void save() throws Exception {
+		MockMultipartFile dataFile = new MockMultipartFile("file", "filename.txt", "text/plain",
+				"some xml".getBytes());
+		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile));
+		DataId dataId = new DataId(dataFile.getOriginalFilename());
+		Data data = new Data(dataId, dataFile.getBytes());
+		verify(databaseService).save(data);
 	}
 
 	@Test
