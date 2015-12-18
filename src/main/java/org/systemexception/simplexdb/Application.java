@@ -7,8 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.service.StorageService;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.IOException;
 
@@ -33,12 +35,12 @@ public class Application {
 	}
 
 	@Bean
-	DatabaseService databaseService() {
+	DatabaseApi databaseService() {
 		return new DatabaseService(databaseFilename);
 	}
 
 	@Bean
-	StorageService storageService() throws IOException {
+	StorageServiceApi storageService() throws IOException {
 		return new StorageService(storageFolder);
 	}
 }

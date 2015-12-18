@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.constants.LogMessages;
-import org.systemexception.simplexdb.database.DatabaseService;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
-import org.systemexception.simplexdb.service.StorageService;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,10 +29,10 @@ public class SimplexDbController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	StorageService storageService;
+	StorageServiceApi storageService;
 
 	@Autowired
-	DatabaseService databaseService;
+	DatabaseApi databaseService;
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST)
 	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
