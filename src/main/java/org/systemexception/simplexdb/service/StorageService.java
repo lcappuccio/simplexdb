@@ -2,7 +2,6 @@ package org.systemexception.simplexdb.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -19,7 +18,6 @@ import java.util.Date;
  * @author leo
  * @date 08/12/15 22:00
  */
-@Service
 public class StorageService implements StorageServiceApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());

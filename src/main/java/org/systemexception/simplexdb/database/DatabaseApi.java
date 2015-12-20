@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.database;
 
+import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.domain.DataId;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:32
  */
+@Service
 public interface DatabaseApi {
 
 	/**

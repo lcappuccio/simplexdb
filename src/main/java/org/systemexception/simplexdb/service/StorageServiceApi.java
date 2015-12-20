@@ -1,11 +1,13 @@
 package org.systemexception.simplexdb.service;
 
+import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.domain.Data;
 
 /**
  * @author leo
  * @date 08/12/15 22:15
  */
+@Service
 public interface StorageServiceApi {
 
 	/**
