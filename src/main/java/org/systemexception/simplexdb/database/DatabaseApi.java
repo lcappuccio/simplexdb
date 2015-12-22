@@ -2,7 +2,6 @@ package org.systemexception.simplexdb.database;
 
 import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.domain.Data;
-import org.systemexception.simplexdb.domain.DataId;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,22 +21,22 @@ public interface DatabaseApi {
 	/**
 	 * List all records on database
 	 */
-	List<DataId> findAll();
+	List<Data> findAll();
 
 	/**
 	 * List single record on database
 	 */
-	Optional<Data> findById(DataId dataId);
+	Optional<Data> findById(String dataId);
 
 	/**
 	 * List records matching string
 	 */
-	List<DataId> findByFilename(String match);
+	List<Data> findByFilename(String match);
 
 	/**
 	 * Remove record from database
 	 */
-	boolean delete(DataId dataId);
+	boolean delete(String dataId);
 
 	/**
 	 * Close database

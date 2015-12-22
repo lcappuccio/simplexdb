@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.domain.Data;
-import org.systemexception.simplexdb.domain.DataId;
 
 import java.io.File;
 import java.util.List;
@@ -83,26 +82,26 @@ public class DatabaseServiceTest {
 	public void deleteExistingData() {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
-		assertTrue(sut.delete(data.getDataId()));
+		assertTrue(sut.delete(data.getDataInternalId()));
 	}
 
 	@Test
 	public void dontDeleteNonExistingData() {
 		Data data = getDataForDatabase("id");
-		assertFalse(sut.delete(data.getDataId()));
+		assertFalse(sut.delete(data.getDataName()));
 	}
 
 	@Test
 	public void findExistingData() {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
-		Data foundData = sut.findById(data.getDataId()).get();
+		Data foundData = sut.findById(data.getDataInternalId()).get();
 		assertEquals(foundData, data);
 	}
 
 	@Test(expected = NoSuchElementException.class)
 	public void dontFindNonExistingData() {
-		DataId nonExistingId = new DataId("nonExistingId");
+		String nonExistingId = "nonExistingId";
 		Data emptyData = sut.findById(nonExistingId).get();
 		assertTrue(emptyData.equals(null));
 	}
@@ -114,7 +113,7 @@ public class DatabaseServiceTest {
 			Data data = getDataForDatabase(String.valueOf(i));
 			sut.save(data);
 		}
-		List<DataId> foundItems = sut.findByFilename("1");
+		List<Data> foundItems = sut.findByFilename("1");
 		assertTrue(foundItems.size() == 1);
 		foundItems = sut.findByFilename("data");
 		assertTrue(foundItems.size() == 5);
@@ -124,7 +123,7 @@ public class DatabaseServiceTest {
 
 	private Data getDataForDatabase(String id) {
 		byte[] dataContent = ("data" + id).getBytes();
-		DataId dataId = new DataId("data" + id);
-		return new Data(dataId, dataContent);
+		String dataId = "data" + id;
+		return new Data(dataId, dataId, dataContent);
 	}
 }

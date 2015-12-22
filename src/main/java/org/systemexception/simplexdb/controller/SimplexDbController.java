@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +12,6 @@ import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
-import org.systemexception.simplexdb.domain.DataId;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.IOException;
@@ -34,31 +34,30 @@ public class SimplexDbController {
 	@Autowired
 	DatabaseApi databaseService;
 
-	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST)
-	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
-		DataId dataId = new DataId(dataFile.getOriginalFilename());
+	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
+		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
-		logger.info(LogMessages.SAVE + dataId.getDataId());
+		logger.info(LogMessages.SAVE + dataId);
 		boolean saved = databaseService.save(data);
 		if (saved) {
-			return HttpStatus.CREATED;
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		} else {
-			return HttpStatus.CONFLICT;
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
 
-	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET)
-	List<DataId> findAll() {
+	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return databaseService.findAll();
 	}
 
-	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
-	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
+	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
+			produces = MediaType.TEXT_PLAIN_VALUE)
+	ResponseEntity<HttpStatus> extractFile(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
-		DataId dataId = new DataId(id);
-		Optional<Data> data = databaseService.findById(dataId);
-
+		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
@@ -67,17 +66,18 @@ public class SimplexDbController {
 		}
 	}
 
-	// TODO behaviour is inconsistent, findById saves files, this returns a list
-	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
-	List<DataId> findByFilename(@PathVariable("id") final String match) {
+	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	List<Data> findByFilename(@PathVariable("id") final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return databaseService.findByFilename(match);
 	}
 
-	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE)
+	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE,
+			produces = MediaType.TEXT_PLAIN_VALUE)
 	ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
 		logger.info(LogMessages.DELETE + id);
-		boolean deleted = databaseService.delete(new DataId(id));
+		boolean deleted = databaseService.delete(id);
 		if (deleted) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
@@ -85,12 +85,12 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET)
+	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	ResponseEntity<HttpStatus> export() {
 		logger.info(LogMessages.EXPORT_START.toString());
-		List<DataId> dataIdList = databaseService.findAll();
-		for (DataId dataId: dataIdList) {
-			storageService.saveFile(databaseService.findById(dataId).get());
+		List<Data> dataIdList = databaseService.findAll();
+		for (Data data : dataIdList) {
+			storageService.saveFile(databaseService.findById(data.getDataInternalId()).get());
 		}
 		logger.info(LogMessages.EXPORT_FINISH.toString());
 		return new ResponseEntity<>(HttpStatus.OK);
