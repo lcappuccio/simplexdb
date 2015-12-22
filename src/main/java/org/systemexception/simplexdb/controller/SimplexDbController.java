@@ -55,7 +55,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
 			produces = MediaType.TEXT_PLAIN_VALUE)
-	ResponseEntity<HttpStatus> extractFile(@PathVariable("id") final String id) {
+	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
 		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
