@@ -6,7 +6,6 @@ import org.mapdb.HTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -20,7 +19,6 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:45
  */
-@Service
 public class DatabaseService implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
