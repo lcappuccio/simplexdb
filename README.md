@@ -38,6 +38,6 @@ The application is deployed to http://host_id:port/simplexdb where **host_id** a
 - **findall**: obtain a full list of the stored data (ids only) in JSON format
 - **findbyid**: will download and save to disk the file with the corresponding id, if a the same id was previously saved
 the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
-- **findbyname**: will scan the db to find all the ids that contain the string to search
-- **delete**: deletes from the database the specified id
+- **findbyname**: obtain a full list of the stored data in JSON format with name matching the searched string
+- **delete**: deletes the specified id entry from the database
 - **export**: will write to disk all data currently stored in the database
