@@ -55,9 +55,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
 	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
-		String dataId = id;
-		Optional<Data> data = databaseService.findById(dataId);
-
+		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
