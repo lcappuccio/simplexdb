@@ -2,7 +2,6 @@ package org.systemexception.simplexdb.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -19,7 +18,6 @@ import java.util.Date;
  * @author leo
  * @date 08/12/15 22:00
  */
-@Service
 public class StorageService implements StorageServiceApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -40,7 +38,7 @@ public class StorageService implements StorageServiceApi {
 
 	@Override
 	public void saveFile(Data data) {
-		File dataFile = new File(storageFolder + File.separator + data.getDataId().getDataId());
+		File dataFile = new File(storageFolder + File.separator + data.getDataName());
 		historifyFile(dataFile);
 		try (FileOutputStream fos = new FileOutputStream(dataFile)) {
 			fos.write(data.getDataData());
@@ -55,9 +53,13 @@ public class StorageService implements StorageServiceApi {
 			try {
 				attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
 				long fileTime = attrs.creationTime().toMillis();
-				String hitorifiedFilename= File.separator + convertTime(fileTime) + "_" + file.getName();
-				file.renameTo(new File(storageFolder + File.separator + hitorifiedFilename));
-				logger.info(file.getName() + LogMessages.STORAGE_RENAME + hitorifiedFilename);
+				String hitorifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
+				boolean renamedOk = file.renameTo(new File(storageFolder + File.separator + hitorifiedFilename));
+				if (renamedOk) {
+					logger.info(file.getName() + LogMessages.STORAGE_RENAME + hitorifiedFilename);
+				} else {
+					logger.error(file.getName() + LogMessages.STORAGE_RENAME_FAILED);
+				}
 			} catch (IOException e) {
 				logger.error(e.getMessage());
 			}

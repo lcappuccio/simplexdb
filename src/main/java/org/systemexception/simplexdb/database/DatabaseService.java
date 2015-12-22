@@ -6,10 +6,8 @@ import org.mapdb.HTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
-import org.systemexception.simplexdb.domain.DataId;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -21,12 +19,11 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:45
  */
-@Service
 public class DatabaseService implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DB database;
-	private final HTreeMap<DataId, byte[]> databaseMap;
+	private final HTreeMap<String, Data> databaseMap;
 	private final String databaseName;
 	private Boolean newData = false;
 
@@ -43,48 +40,49 @@ public class DatabaseService implements DatabaseApi {
 
 	@Override
 	public boolean save(Data data) {
-		logger.info(LogMessages.SAVE + data.getDataId().getDataId());
-		if (databaseMap.containsKey(data.getDataId())) {
-			logger.info(LogMessages.SAVE_CONFLICT + data.getDataId().getDataId());
+		logger.info(LogMessages.SAVE + data.getDataName());
+		if (databaseMap.containsKey(data.getDataInternalId())) {
+			logger.info(LogMessages.SAVE_CONFLICT + data.getDataName());
 			return false;
 		} else {
-			databaseMap.put(data.getDataId(), data.getDataData());
-			logger.info(LogMessages.SAVED + data.getDataId().getDataId());
+			databaseMap.put(data.getDataInternalId(), data);
+			logger.info(LogMessages.SAVED + data.getDataName());
 			newData = true;
 			return true;
 		}
 	}
 
 	@Override
-	public List<DataId> findAll() {
+	public List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
-		List<DataId> dataIds = new ArrayList<>();
-		for (DataId dataId : databaseMap.keySet()) {
-			dataIds.add(dataId);
+		List<Data> foundData = new ArrayList<>();
+		for (String dataId : databaseMap.keySet()) {
+			foundData.add(new Data(dataId, databaseMap.get(dataId).getDataName(), databaseMap.get(dataId).getDataData()));
 		}
-		logger.info(LogMessages.FOUND_ID.toString() + dataIds.size());
-		return dataIds;
+		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
+		return foundData;
 	}
 
 	@Override
-	public Optional<Data> findById(DataId dataId) {
-		logger.info(LogMessages.FIND_ID + dataId.getDataId());
+	public Optional<Data> findById(String dataId) {
+		logger.info(LogMessages.FIND_ID + dataId);
 		if (databaseMap.containsKey(dataId)) {
-			logger.info(LogMessages.FOUND_ID + dataId.getDataId());
-			return Optional.of(new Data(dataId, databaseMap.get(dataId)));
+			logger.info(LogMessages.FOUND_ID + dataId);
+			return Optional.of(new Data(dataId, databaseMap.get(dataId).getDataName(),
+					databaseMap.get(dataId).getDataData()));
 		} else {
-			logger.info(LogMessages.FOUND_NOT_ID + dataId.getDataId());
+			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return Optional.empty();
 		}
 	}
 
 	@Override
-	public List<DataId> findByFilename(final String match) {
+	public List<Data> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
-		ArrayList<DataId> foundItems = new ArrayList<>();
-		for (DataId dataId : databaseMap.keySet()) {
-			if (dataId.getDataId().contains(match)) {
-				foundItems.add(dataId);
+		ArrayList<Data> foundItems = new ArrayList<>();
+		for (String dataId : databaseMap.keySet()) {
+			if (databaseMap.get(dataId).getDataName().contains(match)) {
+				foundItems.add(databaseMap.get(dataId));
 			}
 		}
 		logger.info(LogMessages.FOUND_MATCHING.toString() + foundItems.size());
@@ -92,16 +90,16 @@ public class DatabaseService implements DatabaseApi {
 	}
 
 	@Override
-	public boolean delete(DataId dataId) {
-		logger.info(LogMessages.DELETE + dataId.getDataId());
+	public boolean delete(String dataId) {
+		logger.info(LogMessages.DELETE + dataId);
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
-			database.delete(dataId.getDataId());
+			database.delete(dataId);
 			newData = true;
-			logger.info(LogMessages.DELETED + dataId.getDataId());
+			logger.info(LogMessages.DELETED + dataId);
 			return true;
 		} else {
-			logger.info(LogMessages.FOUND_NOT_ID + dataId.getDataId());
+			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return false;
 		}
 	}

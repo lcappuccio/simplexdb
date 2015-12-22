@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.systemexception.simplexdb.domain.Data;
-import org.systemexception.simplexdb.domain.DataId;
 import org.systemexception.simplexdb.service.StorageService;
 
 import java.io.File;
@@ -25,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class StorageServiceTest {
 
 	private final static String STORAGE_FOLDER = "target" + File.separator + "test_output";
-	private final Data testData = new Data(new DataId("TEST"), "TEST".getBytes());
+	private final Data testData = new Data("TEST", "TEST".getBytes());
 	private StorageService sut;
 
 	@BeforeClass
@@ -67,14 +66,14 @@ public class StorageServiceTest {
 	@Test
 	public void saveDataExists() {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataId().getDataId());
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataName());
 		assertTrue(testDataFile.exists());
 	}
 
 	@Test
 	public void historify() throws IOException {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataId().getDataId());
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataName());
 		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(testData);
 		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis()) + "_" +

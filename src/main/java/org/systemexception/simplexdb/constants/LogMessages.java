@@ -23,7 +23,8 @@ public enum LogMessages {
 	SAVE_CONFLICT("Already exists: "),
 	SCHEDULED_COMMIT("Committing"),
 	STORAGE_FOLDER("Create folder: "),
-	STORAGE_RENAME(" renamed to ");
+	STORAGE_RENAME(" renamed to "),
+	STORAGE_RENAME_FAILED(" failed to rename");
 
 	private final String message;
 
