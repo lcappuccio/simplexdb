@@ -15,6 +15,8 @@ public interface DatabaseApi {
 
 	/**
 	 * Adds a record to the database
+	 *
+	 * @param data the data object to save to database
 	 */
 	boolean save(Data data);
 
@@ -24,17 +26,23 @@ public interface DatabaseApi {
 	List<Data> findAll();
 
 	/**
-	 * List single record on database
+	 * List and eventually save single record on database
+	 *
+	 * @param dataId the internal data id of the object to search and eventually extract to file
 	 */
 	Optional<Data> findById(String dataId);
 
 	/**
 	 * List records matching string
+	 *
+	 * @param match string to search in database (see org.systemexception.simplexdb.domain.Data#dataName)
 	 */
 	List<Data> findByFilename(String match);
 
 	/**
 	 * Remove record from database
+	 *
+	 * @param dataId the internal data id of the object to delete
 	 */
 	boolean delete(String dataId);
 
