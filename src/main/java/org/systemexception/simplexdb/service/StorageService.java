@@ -40,7 +40,7 @@ public class StorageService implements StorageServiceApi {
 
 	@Override
 	public void saveFile(Data data) {
-		File dataFile = new File(storageFolder + File.separator + data.getDataId().getDataId());
+		File dataFile = new File(storageFolder + File.separator + data.getDataName());
 		historifyFile(dataFile);
 		try (FileOutputStream fos = new FileOutputStream(dataFile)) {
 			fos.write(data.getDataData());

@@ -11,7 +11,6 @@ import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
-import org.systemexception.simplexdb.domain.DataId;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.IOException;
@@ -36,9 +35,9 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST)
 	HttpStatus save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
-		DataId dataId = new DataId(dataFile.getOriginalFilename());
+		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
-		logger.info(LogMessages.SAVE + dataId.getDataId());
+		logger.info(LogMessages.SAVE + dataId);
 		boolean saved = databaseService.save(data);
 		if (saved) {
 			return HttpStatus.CREATED;
@@ -48,7 +47,7 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET)
-	List<DataId> findAll() {
+	List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return databaseService.findAll();
 	}
@@ -56,7 +55,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
 	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
-		DataId dataId = new DataId(id);
+		String dataId = id;
 		Optional<Data> data = databaseService.findById(dataId);
 
 		if (data.equals(Optional.empty())) {
@@ -69,7 +68,7 @@ public class SimplexDbController {
 
 	// TODO behaviour is inconsistent, findById saves files, this returns a list
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET)
-	List<DataId> findByFilename(@PathVariable("id") final String match) {
+	List<Data> findByFilename(@PathVariable("id") final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return databaseService.findByFilename(match);
 	}
@@ -77,7 +76,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE)
 	ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
 		logger.info(LogMessages.DELETE + id);
-		boolean deleted = databaseService.delete(new DataId(id));
+		boolean deleted = databaseService.delete(id);
 		if (deleted) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
@@ -88,9 +87,9 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET)
 	ResponseEntity<HttpStatus> export() {
 		logger.info(LogMessages.EXPORT_START.toString());
-		List<DataId> dataIdList = databaseService.findAll();
-		for (DataId dataId: dataIdList) {
-			storageService.saveFile(databaseService.findById(dataId).get());
+		List<Data> dataIdList = databaseService.findAll();
+		for (Data data: dataIdList) {
+			storageService.saveFile(databaseService.findById(data.getDataInternalId()).get());
 		}
 		logger.info(LogMessages.EXPORT_FINISH.toString());
 		return new ResponseEntity<>(HttpStatus.OK);
