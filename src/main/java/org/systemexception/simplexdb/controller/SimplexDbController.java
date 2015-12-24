@@ -35,6 +35,7 @@ public class SimplexDbController {
 	DatabaseApi databaseService;
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
 	ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
@@ -48,6 +49,7 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return databaseService.findAll();
@@ -55,6 +57,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
 			produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
 	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
 		Optional<Data> data = databaseService.findById(id);
@@ -68,6 +71,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	List<Data> findByFilename(@PathVariable("id") final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return databaseService.findByFilename(match);
@@ -75,6 +79,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
 	ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
 		logger.info(LogMessages.DELETE + id);
 		boolean deleted = databaseService.delete(id);
@@ -86,6 +91,7 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
 	ResponseEntity<HttpStatus> export() {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
