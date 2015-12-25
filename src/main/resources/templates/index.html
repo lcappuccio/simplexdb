@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Data List</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<table>
+	<thead>
+	<tr>
+		<td>ID</td>
+		<td>Name</td>
+	</tr>
+	</thead>
+	<tr th:each="data: ${datalist}">
+		<td th:text="${data.dataInternalId}"></td>
+		<td th:text="${data.dataName}"></td>
+	</tr>
+</table>
+</body>
+</html>
