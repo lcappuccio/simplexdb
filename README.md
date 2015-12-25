@@ -41,3 +41,4 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **findbyname**: obtain a full list of the stored data in JSON format with name matching the searched string
 - **delete**: deletes the specified id entry from the database
 - **export**: will write to disk all data currently stored in the database
+- **view**: HTML view with a table and all objects in the database using Thymeleaf
