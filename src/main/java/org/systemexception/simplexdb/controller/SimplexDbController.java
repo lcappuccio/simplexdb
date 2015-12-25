@@ -58,7 +58,7 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
-	public String viewAll(Model model) {
+	String viewAll(Model model) {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}

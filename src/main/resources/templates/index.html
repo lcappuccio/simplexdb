@@ -3,19 +3,28 @@
 <head>
 	<title>Data List</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+	<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+	      th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
+	      rel="stylesheet" media="screen"/>
 </head>
 <body>
-<table>
-	<thead>
-	<tr>
-		<td>ID</td>
-		<td>Name</td>
-	</tr>
-	</thead>
-	<tr th:each="data: ${datalist}">
-		<td th:text="${data.dataInternalId}"></td>
-		<td th:text="${data.dataName}"></td>
-	</tr>
-</table>
+<div class="container">
+	<h2>Data List</h2>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="data: ${datalist}">
+			<td th:text="${data.dataInternalId}"></td>
+			<td th:text="${data.dataName}"></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
 </body>
 </html>
