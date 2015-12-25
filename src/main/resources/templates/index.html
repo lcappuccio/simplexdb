@@ -16,12 +16,14 @@
 		<tr>
 			<th>ID</th>
 			<th>Name</th>
+			<th>Size</th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="data: ${datalist}">
 			<td th:text="${data.dataInternalId}"></td>
 			<td th:text="${data.dataName}"></td>
+			<td th:text="${data.size}"></td>
 		</tr>
 		</tbody>
 	</table>
