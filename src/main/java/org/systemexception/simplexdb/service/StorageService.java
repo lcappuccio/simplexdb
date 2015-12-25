@@ -42,8 +42,9 @@ public class StorageService implements StorageServiceApi {
 		historifyFile(dataFile);
 		try (FileOutputStream fos = new FileOutputStream(dataFile)) {
 			fos.write(data.getDataData());
+			logger.info(data.getDataName() + LogMessages.STORAGE_SAVE);
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			logger.error(data.getDataName() + LogMessages.STORAGE_SAVE_FAILED + e.getMessage());
 		}
 	}
 
@@ -61,7 +62,7 @@ public class StorageService implements StorageServiceApi {
 					logger.error(file.getName() + LogMessages.STORAGE_RENAME_FAILED);
 				}
 			} catch (IOException e) {
-				logger.error(e.getMessage());
+				logger.error(file.getName() + LogMessages.STORAGE_RENAME_EXCEPTION + e.getMessage());
 			}
 		}
 	}

@@ -14,6 +14,7 @@ public class Data implements Serializable {
 
 	private final String dataInternalId;
 	private final String dataName;
+	private final String size;
 	@JsonIgnore
 	private final byte[] dataData;
 
@@ -22,12 +23,14 @@ public class Data implements Serializable {
 		this.dataInternalId = UUID.randomUUID().toString();
 		this.dataName = dataName;
 		this.dataData = dataData;
+		this.size = calculateSize();
 	}
 
 	public Data(final String dataInternalId, final String dataName, final byte[] dataData) {
 		this.dataInternalId = dataInternalId;
 		this.dataName = dataName;
 		this.dataData = dataData;
+		this.size = calculateSize();
 	}
 
 	public String getDataInternalId() {
@@ -40,6 +43,27 @@ public class Data implements Serializable {
 
 	public byte[] getDataData() {
 		return dataData;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	private String calculateSize() {
+		float Kb = 1024 * 1;
+		float Mb = 1024 * Kb;
+		float Gb = 1024 * Mb;
+		float size = (float)dataData.length;
+		if (size < Kb) {
+			return dataData.length + " Byte";
+		}
+		if (size < Mb) {
+			return (size / Kb) + " Kb";
+		}
+		if (size < Gb) {
+			return (size / Mb) + " Mb";
+		}
+		return (size / Gb) + " Gb";
 	}
 
 	@Override
