@@ -7,6 +7,7 @@ package org.systemexception.simplexdb.constants;
 public class Endpoints {
 
 	public static final String CONTEXT = "/simplexdb";
+	public static final String VIEW = "/view";
 	public static final String SAVE = "/save";
 	public static final String FINDALL = "/findall";
 	public static final String FINDBYID = "/findbyid";

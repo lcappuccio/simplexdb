@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.simplexdb.constants.Endpoints;
@@ -22,7 +24,7 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:55
  */
-@RestController
+@Controller
 @RequestMapping(value = Endpoints.CONTEXT)
 public class SimplexDbController {
 
@@ -53,6 +55,12 @@ public class SimplexDbController {
 	List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return databaseService.findAll();
+	}
+
+	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
+	public String viewAll(Model model) {
+		model.addAttribute("datalist", databaseService.findAll());
+		return "index";
 	}
 
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
