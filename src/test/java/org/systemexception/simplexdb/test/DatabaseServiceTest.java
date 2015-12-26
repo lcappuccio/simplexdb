@@ -97,13 +97,14 @@ public class DatabaseServiceTest {
 		sut.save(data);
 		Data foundData = sut.findById(data.getDataInternalId()).get();
 		assertEquals(foundData, data);
+		assertEquals(data.getDataSize(), foundData.getDataSize());
 	}
 
 	@Test(expected = NoSuchElementException.class)
 	public void dontFindNonExistingData() {
 		String nonExistingId = "nonExistingId";
 		Data emptyData = sut.findById(nonExistingId).get();
-		assertTrue(emptyData.equals(null));
+		assertTrue(null == emptyData);
 	}
 
 	@Test

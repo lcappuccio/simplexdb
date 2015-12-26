@@ -14,7 +14,7 @@ public class Data implements Serializable {
 
 	private final String dataInternalId;
 	private final String dataName;
-	private final String size;
+	private final String dataSize;
 	@JsonIgnore
 	private final byte[] dataData;
 
@@ -23,14 +23,14 @@ public class Data implements Serializable {
 		this.dataInternalId = UUID.randomUUID().toString();
 		this.dataName = dataName;
 		this.dataData = dataData;
-		this.size = calculateSize();
+		this.dataSize = calculateSize();
 	}
 
 	public Data(final String dataInternalId, final String dataName, final byte[] dataData) {
 		this.dataInternalId = dataInternalId;
 		this.dataName = dataName;
 		this.dataData = dataData;
-		this.size = calculateSize();
+		this.dataSize = calculateSize();
 	}
 
 	public String getDataInternalId() {
@@ -45,8 +45,8 @@ public class Data implements Serializable {
 		return dataData;
 	}
 
-	public String getSize() {
-		return size;
+	public String getDataSize() {
+		return dataSize;
 	}
 
 	private String calculateSize() {
@@ -58,12 +58,12 @@ public class Data implements Serializable {
 			return dataData.length + " Byte";
 		}
 		if (size < Mb) {
-			return (size / Kb) + " Kb";
+			return (size / Kb) + " KB";
 		}
 		if (size < Gb) {
-			return (size / Mb) + " Mb";
+			return (size / Mb) + " MB";
 		}
-		return (size / Gb) + " Gb";
+		return (size / Gb) + " GB";
 	}
 
 	@Override
@@ -78,10 +78,4 @@ public class Data implements Serializable {
 
 	}
 
-	@Override
-	public int hashCode() {
-		int result = dataName != null ? dataName.hashCode() : 0;
-		result = 31 * result + Arrays.hashCode(dataData);
-		return result;
-	}
 }
