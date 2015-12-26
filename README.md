@@ -7,10 +7,12 @@ lightest possible database with a REST interface.
 **Master**
 
 [![Build Status](https://travis-ci.org/lcappuccio/simplexdb.svg?branch=master)](https://travis-ci.org/lcappuccio/simplexdb)
+[![Coverage Status](https://coveralls.io/repos/lcappuccio/simplexdb/badge.svg?branch=master&service=github)](https://coveralls.io/github/lcappuccio/simplexdb?branch=master)
 
 **Develop**
 
 [![Build Status](https://travis-ci.org/lcappuccio/simplexdb.svg?branch=develop)](https://travis-ci.org/lcappuccio/simplexdb)
+[![Coverage Status](https://coveralls.io/repos/lcappuccio/simplexdb/badge.svg?branch=master&service=github)](https://coveralls.io/github/lcappuccio/simplexdb?branch=develop)
 
 ## Usage
 
