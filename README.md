@@ -12,7 +12,7 @@ lightest possible database with a REST interface.
 **Develop**
 
 [![Build Status](https://travis-ci.org/lcappuccio/simplexdb.svg?branch=develop)](https://travis-ci.org/lcappuccio/simplexdb)
-[![codecov.io](https://codecov.io/github/lcappuccio/simplexdb/coverage.svg?branch=master)](https://codecov.io/github/lcappuccio/simplexdb?branch=develop)
+[![codecov.io](https://codecov.io/github/lcappuccio/simplexdb/coverage.svg?branch=develop)](https://codecov.io/github/lcappuccio/simplexdb?branch=develop)
 
 ## Usage
 
