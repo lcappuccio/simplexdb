@@ -97,6 +97,7 @@ public class DatabaseServiceTest {
 		sut.save(data);
 		Data foundData = sut.findById(data.getDataInternalId()).get();
 		assertEquals(foundData, data);
+		assertEquals(data.getDataSize(), foundData.getDataSize());
 	}
 
 	@Test(expected = NoSuchElementException.class)
