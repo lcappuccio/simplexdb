@@ -8,6 +8,7 @@ lightest possible database with a REST interface.
 
 [![Build Status](https://travis-ci.org/lcappuccio/simplexdb.svg?branch=master)](https://travis-ci.org/lcappuccio/simplexdb)
 [![codecov.io](https://codecov.io/github/lcappuccio/simplexdb/coverage.svg?branch=master)](https://codecov.io/github/lcappuccio/simplexdb?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/68207375c31d4510afbad94e3f3a543a)](https://www.codacy.com/app/leo_4/simplexdb)
 
 **Develop**
 
