@@ -57,7 +57,8 @@ public class DatabaseService implements DatabaseApi {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<Data> foundData = new ArrayList<>();
 		for (String dataId : databaseMap.keySet()) {
-			foundData.add(new Data(dataId, databaseMap.get(dataId).getDataName(), databaseMap.get(dataId).getDataData()));
+			foundData.add(new Data(dataId, databaseMap.get(dataId).getDataName(),
+						databaseMap.get(dataId).getDataData()));
 		}
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
 		return foundData;
