@@ -31,14 +31,14 @@ public class SimplexDbController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	StorageServiceApi storageService;
+	private StorageServiceApi storageService;
 
 	@Autowired
-	DatabaseApi databaseService;
+	private DatabaseApi databaseService;
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
+	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info(LogMessages.SAVE + dataId);
@@ -52,13 +52,13 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	List<Data> findAll() {
+	public List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return databaseService.findAll();
 	}
 
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
-	String viewAll(Model model) {
+	public String viewAll(Model model) {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}
@@ -66,7 +66,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
+	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
 		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
@@ -80,7 +80,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	List<Data> findByFilename(@PathVariable("id") final String match) {
+	public List<Data> findByFilename(@PathVariable("id") final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return databaseService.findByFilename(match);
 	}
@@ -88,7 +88,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
+	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
 		logger.info(LogMessages.DELETE + id);
 		boolean deleted = databaseService.delete(id);
 		if (deleted) {
@@ -100,7 +100,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	ResponseEntity<HttpStatus> export() {
+	public ResponseEntity<HttpStatus> export() {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
 		for (Data data : dataIdList) {
