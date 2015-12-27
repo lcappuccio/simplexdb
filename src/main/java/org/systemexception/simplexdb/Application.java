@@ -35,12 +35,12 @@ public class Application {
 	}
 
 	@Bean
-	DatabaseApi databaseService() {
+	public DatabaseApi databaseService() {
 		return new DatabaseService(databaseFilename);
 	}
 
 	@Bean
-	StorageServiceApi storageService() throws IOException {
+	public StorageServiceApi storageService() throws IOException {
 		return new StorageService(storageFolder);
 	}
 }

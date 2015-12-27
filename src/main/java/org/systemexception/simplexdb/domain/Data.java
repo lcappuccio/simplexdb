@@ -52,18 +52,14 @@ public class Data implements Serializable {
 	private String calculateSize() {
 		float Kb = 1024 * 1;
 		float Mb = 1024 * Kb;
-		float Gb = 1024 * Mb;
-		float size = (float)dataData.length;
+		float size = (float) dataData.length;
 		if (size < Kb) {
 			return dataData.length + " Byte";
 		}
 		if (size < Mb) {
 			return (size / Kb) + " KB";
 		}
-		if (size < Gb) {
-			return (size / Mb) + " MB";
-		}
-		return (size / Gb) + " GB";
+		return (size / Mb) + " MB";
 	}
 
 	@Override
