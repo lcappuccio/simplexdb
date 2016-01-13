@@ -86,7 +86,15 @@ public class SimplexDbControllerTest {
 
 	@Test
 	public void find_all() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDALL));
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDALL)).andExpect(status()
+				.is(HttpStatus.OK.value()));
+		verify(databaseService).findAll();
+	}
+
+	@Test
+	public void view_all() throws Exception {
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.VIEW)).andExpect(status()
+				.is(HttpStatus.OK.value()));
 		verify(databaseService).findAll();
 	}
 
