@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.DatabaseService;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -21,7 +20,7 @@ import static org.junit.Assert.*;
 public class DatabaseServiceTest {
 
 	private final static String TEST_DATABASE_FILENAME = "target" + File.separator + "test.db";
-	private DatabaseApi sut;
+	private DatabaseService sut;
 
 	@Before
 	public void setUp() {
@@ -56,6 +55,7 @@ public class DatabaseServiceTest {
 	public void addRecord() {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
+		sut.commit();
 		assertTrue(saved);
 	}
 

@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,6 +61,7 @@ public class SimplexDbControllerTest {
 		storageService = mock(StorageService.class);
 		when(databaseService.findById(mockData.getDataName())).thenReturn(Optional.of(mockData));
 		when(databaseService.delete(mockData.getDataName())).thenReturn(true);
+		when(databaseService.save(any())).thenReturn(true);
 		simplexDbController = new SimplexDbController();
 		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(simplexDbController).build();
@@ -76,9 +78,22 @@ public class SimplexDbControllerTest {
 
 	@Test
 	public void save() throws Exception {
-		MockMultipartFile dataFile = new MockMultipartFile("file", "filename.txt", "text/plain",
-				"some xml".getBytes());
-		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile));
+		MockMultipartFile dataFile = new MockMultipartFile("file", UUID.randomUUID().toString(), "text/plain",
+				"some data".getBytes());
+		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
+				.andExpect(status().is(HttpStatus.CREATED.value()));
+		String dataId = dataFile.getOriginalFilename();
+		Data data = new Data(dataId, dataFile.getBytes());
+		verify(databaseService).save(data);
+	}
+
+	@Test
+	public void save_conflict() throws Exception {
+		when(databaseService.save(any())).thenReturn(false);
+		MockMultipartFile dataFile = new MockMultipartFile("file", UUID.randomUUID().toString(), "text/plain",
+				"some data".getBytes());
+		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
+				.andExpect(status().is(HttpStatus.CONFLICT.value()));
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
 		verify(databaseService).save(data);
