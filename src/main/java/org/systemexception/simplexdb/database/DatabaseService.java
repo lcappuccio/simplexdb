@@ -105,6 +105,7 @@ public class DatabaseService implements DatabaseApi {
 		}
 	}
 
+	// TODO Candidate for an aspect?
 	@Scheduled(cron = "${database.commit.frequency}")
 	public void commit() {
 		if (newData) {
