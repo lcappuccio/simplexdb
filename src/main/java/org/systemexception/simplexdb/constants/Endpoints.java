@@ -15,5 +15,5 @@ public class Endpoints {
 	public static final String DELETE = "/delete";
 	public static final String EXPORT = "/export";
 
-	public static final String ID_WITH_EXTENSTION = "/{id:.+}";
+	public static final String ID_WITH_EXTENSION = "/{id:.+}";
 }
