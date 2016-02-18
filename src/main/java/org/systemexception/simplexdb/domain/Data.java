@@ -18,7 +18,6 @@ public class Data implements Serializable {
 	@JsonIgnore
 	private final byte[] dataData;
 
-
 	public Data(final String dataName, final byte[] dataData) {
 		this.dataInternalId = UUID.randomUUID().toString();
 		this.dataName = dataName;
