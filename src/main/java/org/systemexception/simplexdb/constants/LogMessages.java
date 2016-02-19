@@ -21,7 +21,7 @@ public enum LogMessages {
 	SAVE("Save: "),
 	SAVED("Saved: "),
 	SAVE_CONFLICT("Already exists: "),
-	SCHEDULED_COMMIT("Committing"),
+	COMMIT_MESSAGE("Committing"),
 	STORAGE_FOLDER("Create folder: "),
 	STORAGE_SAVE(" saved"),
 	STORAGE_SAVE_FAILED(" failed to save, exception: "),
