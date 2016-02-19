@@ -54,10 +54,10 @@ public class StorageService implements StorageServiceApi {
 			try {
 				attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
 				long fileTime = attrs.creationTime().toMillis();
-				String hitorifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
-				boolean renamedOk = file.renameTo(new File(storageFolder + File.separator + hitorifiedFilename));
+				String historifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
+				boolean renamedOk = file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
 				if (renamedOk) {
-					logger.info(file.getName() + LogMessages.STORAGE_RENAME + hitorifiedFilename);
+					logger.info(file.getName() + LogMessages.STORAGE_RENAME + historifiedFilename);
 				} else {
 					logger.error(file.getName() + LogMessages.STORAGE_RENAME_FAILED);
 				}

@@ -63,7 +63,7 @@ public class SimplexDbController {
 		return "index";
 	}
 
-	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
+	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
@@ -77,7 +77,7 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.GET,
+	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Data> findByFilename(@PathVariable("id") final String match) {
@@ -85,7 +85,7 @@ public class SimplexDbController {
 		return databaseService.findByFilename(match);
 	}
 
-	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSTION, method = RequestMethod.DELETE,
+	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {

@@ -5,7 +5,6 @@ import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -25,7 +24,6 @@ public class DatabaseService implements DatabaseApi {
 	private final DB database;
 	private final HTreeMap<String, Data> databaseMap;
 	private final String databaseName;
-	private Boolean newData = false;
 
 	public DatabaseService(final String databaseName) {
 		this.databaseName = databaseName;
@@ -47,7 +45,6 @@ public class DatabaseService implements DatabaseApi {
 		} else {
 			databaseMap.put(data.getDataInternalId(), data);
 			logger.info(LogMessages.SAVED + data.getDataName());
-			newData = true;
 			return true;
 		}
 	}
@@ -58,7 +55,7 @@ public class DatabaseService implements DatabaseApi {
 		List<Data> foundData = new ArrayList<>();
 		for (String dataId : databaseMap.keySet()) {
 			foundData.add(new Data(dataId, databaseMap.get(dataId).getDataName(),
-						databaseMap.get(dataId).getDataData()));
+					databaseMap.get(dataId).getDataData()));
 		}
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
 		return foundData;
@@ -96,7 +93,6 @@ public class DatabaseService implements DatabaseApi {
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
 			database.delete(dataId);
-			newData = true;
 			logger.info(LogMessages.DELETED + dataId);
 			return true;
 		} else {
@@ -105,13 +101,10 @@ public class DatabaseService implements DatabaseApi {
 		}
 	}
 
-	@Scheduled(cron = "${database.commit.frequency}")
+	@Override
 	public void commit() {
-		if (newData) {
-			database.commit();
-			logger.info(LogMessages.SCHEDULED_COMMIT.toString());
-			newData = false;
-		}
+		database.commit();
+		logger.info(LogMessages.COMMIT_MESSAGE.toString());
 	}
 
 	@PreDestroy

@@ -50,4 +50,9 @@ public interface DatabaseApi {
 	 * Close database
 	 */
 	void close();
+
+	/**
+	 * Commit
+	 */
+	void commit();
 }

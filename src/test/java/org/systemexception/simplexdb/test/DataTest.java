@@ -13,8 +13,8 @@ import static org.junit.Assert.assertTrue;
 public class DataTest {
 
 	private Data sut;
-	private byte[] bytes = new byte[256];
-	private String dataName = "TEST_DATA";
+	private final byte[] bytes = new byte[256];
+	private final String dataName = "TEST_DATA";
 
 	@Before
 	public void setUp() {
