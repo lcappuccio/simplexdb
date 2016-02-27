@@ -52,9 +52,9 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<Data> findAll() {
+	public ResponseEntity<List<Data>> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
-		return databaseService.findAll();
+		return new ResponseEntity<List<Data>>(databaseService.findAll(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
@@ -80,9 +80,9 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<Data> findByFilename(@PathVariable("id") final String match) {
+	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
-		return databaseService.findByFilename(match);
+		return new ResponseEntity<List<Data>>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,
