@@ -16,7 +16,6 @@ lightest possible database with a REST interface.
 [![codecov.io](https://codecov.io/github/lcappuccio/simplexdb/coverage.svg?branch=develop)](https://codecov.io/github/lcappuccio/simplexdb?branch=develop)
 
 ## Supported Databases
-
 - **MapDB**
 - **BerkeleyDB**
 
@@ -30,9 +29,7 @@ Build with maven and run the artifact as any java application
 
 ## Configuration
 Create folder `config` and file `application.properties`, change the settings as you please.
-
 Have a look at the properties file and specify the mandatory parameters:
-
 - database.type
 - database.filename
 - storage.folder
@@ -40,21 +37,17 @@ Have a look at the properties file and specify the mandatory parameters:
 Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
 
 ## Insert Data
-
 To insert data massively use `insert_files.sh` or the included JMeter plan.
 
 ### JMeter Plan Usage
-
 - Replace `$FILE_LIST_PATH` with the path where your files are located (e.g. /home/foo/data)
 - Replace `$FILE_LIST_CSV` with the path pointing to a csv with a full file list (e.g. /home/foo/data/file_list.csv)
 
 #### Example Variables
-
 - `$FILE_LIST_PATH`: /home/foo/data
 - `$FILE_LIST_CSV`: /home/foo/data/file_list.csv
 
 #### file_list.csv
-
 file1.txt
 
 file2.txt
@@ -65,14 +58,11 @@ file3.txt
 
 fileN.txt
 
-
 ## Endpoints
-
 The application is deployed to http://host_id:port/simplexdb/$action where **host_id** and **port** depend on the
 environment.
 
 Replace $action with:
-
 - **save**: stores a file in the database
 - **findall**: obtain a full list of the stored data (ids only) in JSON format
 - **findbyid**: will download and save to disk the file with the corresponding id, if the same id was previously saved
@@ -83,12 +73,10 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **view**: HTML view with a table and all objects in the database using Thymeleaf, use a browser
 
 ## Performance
-
 - Testbed: ASUS K52F, Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
 - **MapDB**: Throughput: 50 files/sec, 13Kb/sec
 - **Berkeley DB**: Throughput: 125 files/sec, 33Kb/sec
 
 # ToDo
-
 - Authentication
 - Frontend
