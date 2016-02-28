@@ -1,13 +1,15 @@
 package org.systemexception.simplexdb;
 
+import com.sleepycat.je.DatabaseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.systemexception.simplexdb.database.BerkeleyDbService;
 import org.systemexception.simplexdb.database.DatabaseApi;
-import org.systemexception.simplexdb.database.DatabaseService;
+import org.systemexception.simplexdb.database.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
@@ -28,13 +30,23 @@ public class Application {
 	@Value("${storage.folder}")
 	private String storageFolder;
 
+	@Value("${database.type}")
+	private String databaseType;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean
-	public DatabaseApi databaseService() {
-		return new DatabaseService(databaseFilename);
+	public DatabaseApi databaseService() throws DatabaseException {
+		if ("mapdb".equals(databaseType)) {
+			return new MapDbService(databaseFilename);
+		}
+		if ("berkeleydb".equals(databaseType)) {
+			return new BerkeleyDbService(databaseFilename);
+		}
+		// Use a default
+		return new MapDbService(databaseFilename);
 	}
 
 	@Bean

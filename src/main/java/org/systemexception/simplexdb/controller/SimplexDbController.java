@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.controller;
 
+import com.sleepycat.je.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
+	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException, DatabaseException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info(LogMessages.SAVE + dataId);
@@ -52,13 +53,13 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<Data> findAll() {
+	public ResponseEntity<List<Data>> findAll() throws DatabaseException {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
-		return databaseService.findAll();
+		return new ResponseEntity<>(databaseService.findAll(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
-	public String viewAll(Model model) {
+	public String viewAll(Model model) throws DatabaseException {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}
@@ -66,7 +67,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
+	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + id);
 		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
@@ -80,15 +81,15 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<Data> findByFilename(@PathVariable("id") final String match) {
+	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws DatabaseException {
 		logger.info(LogMessages.FIND_MATCH + match);
-		return databaseService.findByFilename(match);
+		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
+	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) throws DatabaseException {
 		logger.info(LogMessages.DELETE + id);
 		boolean deleted = databaseService.delete(id);
 		if (deleted) {
@@ -100,7 +101,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> export() {
+	public ResponseEntity<HttpStatus> export() throws DatabaseException {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
 		for (Data data : dataIdList) {

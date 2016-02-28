@@ -18,14 +18,14 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:45
  */
-public class DatabaseService implements DatabaseApi {
+public class MapDbService implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DB database;
 	private final HTreeMap<String, Data> databaseMap;
 	private final String databaseName;
 
-	public DatabaseService(final String databaseName) {
+	public MapDbService(final String databaseName) {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		database = makeDatabase();
