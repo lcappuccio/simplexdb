@@ -88,8 +88,17 @@ public class BerkeleyDbService implements Api {
 	}
 
 	@Override
-	public List<Data> findByFilename(String match) {
-		throw new UnsupportedOperationException();
+	public List<Data> findByFilename(String match) throws DatabaseException {
+		logger.info(LogMessages.FIND_MATCH + match);
+		List<Data> allData = findAll();
+		ArrayList<Data> foundItems = new ArrayList<>();
+		for (Data data: allData) {
+			if (data.getDataName().contains(match)) {
+				foundItems.add(data);
+			}
+		}
+		logger.info(LogMessages.FOUND_MATCHING.toString() + foundItems.size());
+		return foundItems;
 	}
 
 	@Override

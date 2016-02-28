@@ -14,12 +14,11 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author leo
@@ -109,8 +108,18 @@ public class BerkeleyDbServiceTest implements AbstractDbTest {
 	}
 
 	@Test
-	public void findMatches() {
-
+	public void findMatches() throws DatabaseException {
+		int dataToAdd = 5;
+		for (int i = 0; i < dataToAdd; i ++) {
+			Data data = getDataForDatabase(String.valueOf(i));
+			sut.save(data);
+		}
+		List<Data> foundItems = sut.findByFilename("1");
+		assertTrue(foundItems.size() == 1);
+		foundItems = sut.findByFilename("data");
+		assertTrue(foundItems.size() == 5);
+		foundItems = sut.findByFilename("NON_EXISTING_ID");
+		assertTrue(foundItems.size() == 0);
 	}
 
 	private Data getDataForDatabase(String id) {

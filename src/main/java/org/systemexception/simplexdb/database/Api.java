@@ -38,7 +38,7 @@ public interface Api {
 	 *
 	 * @param match string to search in database (see org.systemexception.simplexdb.domain.Data#dataName)
 	 */
-	List<Data> findByFilename(String match);
+	List<Data> findByFilename(String match) throws DatabaseException;
 
 	/**
 	 * Remove record from database

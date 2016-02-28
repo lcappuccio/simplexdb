@@ -24,6 +24,6 @@ public interface AbstractDbTest {
 
 	void dontFindNonExistingData() throws DatabaseException;
 
-	void findMatches();
+	void findMatches() throws DatabaseException;
 
 }

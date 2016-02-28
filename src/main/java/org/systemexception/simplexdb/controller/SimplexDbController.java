@@ -81,7 +81,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) {
+	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws DatabaseException {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
