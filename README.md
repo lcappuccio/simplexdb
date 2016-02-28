@@ -28,22 +28,20 @@ Build with maven and run the artifact as any java application
 - `mvn clean install`
 - `java -jar $artifact-name.jar`
 
-### Configuration
-Have a look at the properties and specify the mandatory parameters:
+## Configuration
+Create folder `config` and file `application.properties`, change the settings as you please.
+
+Have a look at the properties file and specify the mandatory parameters:
 
 - database.type
 - database.filename
 - storage.folder
 
-### Insert Data
+Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
+
+## Insert Data
 
 To insert data massively use `insert_files.sh` or the included JMeter test plan.
-
-## Settings
-
-Create folder `config` and file `application.properties`, change the settings as you please.
-
-Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
 
 ## Endpoints
 
@@ -54,7 +52,7 @@ Replace $action with:
 
 - **save**: stores a file in the database
 - **findall**: obtain a full list of the stored data (ids only) in JSON format
-- **findbyid**: will download and save to disk the file with the corresponding id, if a the same id was previously saved
+- **findbyid**: will download and save to disk the file with the corresponding id, if the same id was previously saved
 the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **findbyname**: obtain a full list of the stored data in JSON format with name matching the searched string
 - **delete**: deletes the specified id entry from the database
