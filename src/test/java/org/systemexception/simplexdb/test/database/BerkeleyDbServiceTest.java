@@ -2,8 +2,8 @@ package org.systemexception.simplexdb.test.database;
 
 import com.sleepycat.je.DatabaseException;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.systemexception.simplexdb.database.BerkeleyDbService;
 import org.systemexception.simplexdb.domain.Data;
@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -25,10 +26,10 @@ import static org.junit.Assert.assertTrue;
 public class BerkeleyDbServiceTest implements AbstractDbTest {
 
 	private final static String TEST_DATABASE_FILENAME = "target" + File.separator + "test_berkeley.db";
-	private static BerkeleyDbService sut;
+	private BerkeleyDbService sut;
 
-	@BeforeClass
-	public static void setUp() throws DatabaseException {
+	@Before
+	public void setUp() throws DatabaseException {
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		if (databaseFile.exists()) {
 			databaseFile.delete();
@@ -37,12 +38,14 @@ public class BerkeleyDbServiceTest implements AbstractDbTest {
 		sut = new BerkeleyDbService(TEST_DATABASE_FILENAME);
 	}
 
-	@AfterClass
-	public static void tearDownSut() throws DatabaseException, IOException {
+	@After
+	public void tearDown() throws DatabaseException, IOException {
 		sut.close();
+		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
 		walk.forEach(item -> item.toFile().delete());
 		FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
+		assert(!databaseFile.exists());
 	}
 
 	@Test
@@ -61,11 +64,11 @@ public class BerkeleyDbServiceTest implements AbstractDbTest {
 
 	@Test
 	public void dontAddDuplicateRecord() throws DatabaseException {
-//		Data data = getDataForDatabase("id");
-//		boolean saved = sut.save(data);
-//		assertTrue(saved);
-//		boolean notSaved = sut.save(data);
-//		assertFalse(notSaved);
+		Data data = getDataForDatabase("id");
+		boolean saved = sut.save(data);
+		assertTrue(saved);
+		boolean notSaved = sut.save(data);
+		assertFalse(notSaved);
 	}
 
 	@Test

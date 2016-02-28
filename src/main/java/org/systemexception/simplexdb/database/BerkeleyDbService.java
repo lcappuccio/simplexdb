@@ -44,7 +44,7 @@ public class BerkeleyDbService implements Api {
 		DatabaseEntry dbKey = new DatabaseEntry(data.getDataName().getBytes());
 		DatabaseEntry dbData = new DatabaseEntry(data.getDataData());
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
-		if (operationStatus.equals(OperationStatus.SUCCESS)) {
+		if (!operationStatus.equals(OperationStatus.NOTFOUND)) {
 			return false;
 		} else {
 			OperationStatus result = database.put(null, dbKey, dbData);
