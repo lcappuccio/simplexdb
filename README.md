@@ -84,7 +84,7 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 
 ## Performance
 
-- Testbed: Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
+- Testbed: ASUS K52F, Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
 
 - **MapDB**: Throughput: 50 files/sec, 13Kb/sec
 - **Berkeley DB**: Throughput: 125 files/sec, 33Kb/sec
