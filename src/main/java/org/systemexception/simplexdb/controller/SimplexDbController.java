@@ -89,7 +89,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
+	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) throws DatabaseException {
 		logger.info(LogMessages.DELETE + id);
 		boolean deleted = databaseService.delete(id);
 		if (deleted) {

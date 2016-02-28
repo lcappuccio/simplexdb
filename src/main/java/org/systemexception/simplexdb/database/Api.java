@@ -45,7 +45,7 @@ public interface Api {
 	 *
 	 * @param dataId the internal data id of the object to delete
 	 */
-	boolean delete(String dataId);
+	boolean delete(String dataId) throws DatabaseException;
 
 	/**
 	 * Close database

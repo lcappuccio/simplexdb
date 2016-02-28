@@ -84,11 +84,15 @@ public class BerkeleyDbServiceTest implements AbstractDbTest {
 
 	@Test
 	public void deleteExistingData() throws DatabaseException {
+		Data data = getDataForDatabase("id");
+		sut.save(data);
+		assertTrue(sut.delete(data.getDataInternalId()));
 	}
 
 	@Test
-	public void dontDeleteNonExistingData() {
-
+	public void dontDeleteNonExistingData() throws DatabaseException {
+		Data data = getDataForDatabase("id");
+		assertFalse(sut.delete(data.getDataName()));
 	}
 
 	@Test

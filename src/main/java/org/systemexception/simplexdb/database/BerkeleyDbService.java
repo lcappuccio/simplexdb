@@ -102,8 +102,18 @@ public class BerkeleyDbService implements Api {
 	}
 
 	@Override
-	public boolean delete(String dataId) {
-		throw new UnsupportedOperationException();
+	public boolean delete(String dataId) throws DatabaseException {
+		logger.info(LogMessages.DELETE + dataId);
+		Optional<Data> dataById = findById(dataId);
+		if(dataById.isPresent()) {
+			DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
+			database.delete(null, dbKey);
+			logger.info(LogMessages.DELETED + dataId);
+			return true;
+		} else {
+			logger.info(LogMessages.FOUND_NOT_ID + dataId);
+			return false;
+		}
 	}
 
 	@Override

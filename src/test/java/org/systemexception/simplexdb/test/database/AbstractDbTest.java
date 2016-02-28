@@ -18,7 +18,7 @@ public interface AbstractDbTest {
 
 	void deleteExistingData() throws DatabaseException;
 
-	void dontDeleteNonExistingData();
+	void dontDeleteNonExistingData() throws DatabaseException;
 
 	void findExistingData() throws DatabaseException;
 
