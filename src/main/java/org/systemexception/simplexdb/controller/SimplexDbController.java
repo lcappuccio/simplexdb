@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.constants.LogMessages;
-import org.systemexception.simplexdb.database.Api;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
@@ -35,7 +35,7 @@ public class SimplexDbController {
 	private StorageServiceApi storageService;
 
 	@Autowired
-	private Api databaseService;
+	private DatabaseApi databaseService;
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody

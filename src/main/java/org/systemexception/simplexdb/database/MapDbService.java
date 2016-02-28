@@ -18,7 +18,7 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:45
  */
-public class MapDbService implements Api {
+public class MapDbService implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DB database;

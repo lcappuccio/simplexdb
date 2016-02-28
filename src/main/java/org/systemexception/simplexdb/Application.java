@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.systemexception.simplexdb.database.Api;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
@@ -37,7 +37,7 @@ public class Application {
 	}
 
 	@Bean
-	public Api databaseService() {
+	public DatabaseApi databaseService() {
 		if ("mapdb".equals(databaseType)) {
 			return new MapDbService(databaseFilename);
 		}

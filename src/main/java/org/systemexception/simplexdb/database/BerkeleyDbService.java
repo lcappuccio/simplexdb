@@ -18,7 +18,7 @@ import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
  * @author leo
  * @date 28/02/16 11:55
  */
-public class BerkeleyDbService implements Api {
+public class BerkeleyDbService implements DatabaseApi {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final Environment environment;

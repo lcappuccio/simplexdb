@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
 public class CommitMonitor {
 
 	@Autowired
-	private Api databaseService;
+	private DatabaseApi databaseService;
 
-	@AfterReturning("execution(* org.systemexception.simplexdb.database.Api.save(..)) || " +
-			"execution(* org.systemexception.simplexdb.database.Api.delete(..))")
+	@AfterReturning("execution(* org.systemexception.simplexdb.database.DatabaseApi.save(..)) || " +
+			"execution(* org.systemexception.simplexdb.database.DatabaseApi.delete(..))")
 	public void logCommit(JoinPoint joinPoint) throws DatabaseException {
 		databaseService.commit();
 	}

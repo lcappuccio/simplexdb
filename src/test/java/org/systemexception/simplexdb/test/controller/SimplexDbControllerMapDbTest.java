@@ -1,4 +1,4 @@
-package org.systemexception.simplexdb.test;
+package org.systemexception.simplexdb.test.controller;
 
 import org.junit.AfterClass;
 import org.junit.Before;

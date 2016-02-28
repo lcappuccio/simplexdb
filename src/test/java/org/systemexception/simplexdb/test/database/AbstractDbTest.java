@@ -2,7 +2,7 @@ package org.systemexception.simplexdb.test.database;
 
 import com.sleepycat.je.DatabaseException;
 import org.junit.Test;
-import org.systemexception.simplexdb.database.Api;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractDbTest {
 
-	protected Api sut;
+	protected DatabaseApi sut;
 	protected static String TEST_DATABASE_FILENAME;
 
 	@Test
