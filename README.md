@@ -88,3 +88,8 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 
 - **MapDB**: Throughput: 50 files/sec, 13Kb/sec
 - **Berkeley DB**: Throughput: 125 files/sec, 33Kb/sec
+
+# ToDo
+
+- Authentication
+- Frontend
