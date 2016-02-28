@@ -46,7 +46,7 @@ To insert data massively use `insert_files.sh` or the included JMeter plan.
 ### JMeter Plan Usage
 
 - Replace `$FILE_LIST_PATH` with the path where your files are located (e.g. /home/foo/data)
-- Replace `$FILE_LIST_CSV` with the path pointing to a csv with a full file list (e.g. /home/file/data/file_list.csv)
+- Replace `$FILE_LIST_CSV` with the path pointing to a csv with a full file list (e.g. /home/foo/data/file_list.csv)
 
 #### Example Variables
 
