@@ -31,7 +31,7 @@ public interface Api {
 	 *
 	 * @param dataId the internal data id of the object to search and eventually extract to file
 	 */
-	Optional<Data> findById(String dataId);
+	Optional<Data> findById(String dataId) throws DatabaseException;
 
 	/**
 	 * List records matching string

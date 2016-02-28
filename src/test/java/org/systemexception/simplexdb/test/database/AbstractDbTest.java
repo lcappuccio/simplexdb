@@ -16,13 +16,13 @@ public interface AbstractDbTest {
 
 	void getDataIdList() throws DatabaseException;
 
-	void deleteExistingData();
+	void deleteExistingData() throws DatabaseException;
 
 	void dontDeleteNonExistingData();
 
-	void findExistingData();
+	void findExistingData() throws DatabaseException;
 
-	void dontFindNonExistingData();
+	void dontFindNonExistingData() throws DatabaseException;
 
 	void findMatches();
 

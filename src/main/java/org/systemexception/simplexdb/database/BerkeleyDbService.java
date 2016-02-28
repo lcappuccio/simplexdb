@@ -74,8 +74,17 @@ public class BerkeleyDbService implements Api {
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) {
-		throw new UnsupportedOperationException();
+	public Optional<Data> findById(String dataId) throws DatabaseException {
+		logger.info(LogMessages.FIND_ID + dataId);
+		List<Data> allData = findAll();
+		for (Data data: allData) {
+			if (dataId.equals(data.getDataName())) {
+				logger.info(LogMessages.FOUND_ID + dataId);
+				return Optional.of(data);
+			}
+		}
+		logger.info(LogMessages.FOUND_NOT_ID + dataId);
+		return Optional.empty();
 	}
 
 	@Override

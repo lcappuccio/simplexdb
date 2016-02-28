@@ -14,8 +14,10 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -82,8 +84,7 @@ public class BerkeleyDbServiceTest implements AbstractDbTest {
 	}
 
 	@Test
-	public void deleteExistingData() {
-
+	public void deleteExistingData() throws DatabaseException {
 	}
 
 	@Test
@@ -92,13 +93,19 @@ public class BerkeleyDbServiceTest implements AbstractDbTest {
 	}
 
 	@Test
-	public void findExistingData() {
-
+	public void findExistingData() throws DatabaseException {
+		Data data = getDataForDatabase("id");
+		sut.save(data);
+		Data foundData = sut.findById(data.getDataInternalId()).get();
+		assertEquals(foundData, data);
+		assertEquals(data.getDataSize(), foundData.getDataSize());
 	}
 
-	@Test
-	public void dontFindNonExistingData() {
-
+	@Test(expected = NoSuchElementException.class)
+	public void dontFindNonExistingData() throws DatabaseException {
+		String nonExistingId = "nonExistingId";
+		Data emptyData = sut.findById(nonExistingId).get();
+		assertTrue(null == emptyData);
 	}
 
 	@Test
