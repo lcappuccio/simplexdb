@@ -41,7 +41,30 @@ Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/curr
 
 ## Insert Data
 
-To insert data massively use `insert_files.sh` or the included JMeter test plan.
+To insert data massively use `insert_files.sh` or the included JMeter plan.
+
+### JMeter Plan Usage
+
+- Replace `$FILE_LIST_PATH` with the path where your files are located (e.g. /home/foo/data)
+- Replace `$FILE_LIST_CSV` with the path pointing to a csv with a full file list (e.g. /home/file/data/file_list.csv)
+
+#### Example Variables
+
+- `$FILE_LIST_PATH`: /home/foo/data
+- `$FILE_LIST_CSV`: /home/foo/data/file_list.csv
+
+#### file_list.csv
+
+file1.txt
+
+file2.txt
+
+file3.txt
+
+...
+
+fileN.txt
+
 
 ## Endpoints
 
@@ -58,3 +81,10 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **delete**: deletes the specified id entry from the database
 - **export**: will write to disk all data currently stored in the database
 - **view**: HTML view with a table and all objects in the database using Thymeleaf, use a browser
+
+## Performance
+
+- Testbed: Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
+
+- **MapDB**: Throughput: 50 files/sec, 13Kb/sec
+- **Berkeley DB**: Throughput: 125 files/sec, 33Kb/sec
