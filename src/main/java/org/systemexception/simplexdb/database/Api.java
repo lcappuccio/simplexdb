@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.database;
 
+import com.sleepycat.je.DatabaseException;
 import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -18,12 +19,12 @@ public interface Api {
 	 *
 	 * @param data the data object to save to database
 	 */
-	boolean save(Data data);
+	boolean save(Data data) throws DatabaseException;
 
 	/**
 	 * List all records on database
 	 */
-	List<Data> findAll();
+	List<Data> findAll() throws DatabaseException;
 
 	/**
 	 * List and eventually save single record on database
@@ -49,7 +50,7 @@ public interface Api {
 	/**
 	 * Close database
 	 */
-	void close();
+	void close() throws DatabaseException;
 
 	/**
 	 * Commit

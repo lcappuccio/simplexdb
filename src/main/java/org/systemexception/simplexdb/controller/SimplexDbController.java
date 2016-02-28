@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.controller;
 
+import com.sleepycat.je.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException {
+	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException, DatabaseException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info(LogMessages.SAVE + dataId);
@@ -52,13 +53,13 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Data>> findAll() {
+	public ResponseEntity<List<Data>> findAll() throws DatabaseException {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return new ResponseEntity<>(databaseService.findAll(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
-	public String viewAll(Model model) {
+	public String viewAll(Model model) throws DatabaseException {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}
@@ -100,7 +101,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> export() {
+	public ResponseEntity<HttpStatus> export() throws DatabaseException {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
 		for (Data data : dataIdList) {

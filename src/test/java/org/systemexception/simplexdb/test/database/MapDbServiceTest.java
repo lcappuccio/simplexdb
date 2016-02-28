@@ -1,4 +1,4 @@
-package org.systemexception.simplexdb.test;
+package org.systemexception.simplexdb.test.database;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @author leo
  * @date 05/12/15 01:58
  */
-public class MapDbServiceTest {
+public class MapDbServiceTest implements AbstractDbTest {
 
 	private final static String TEST_DATABASE_FILENAME = "target" + File.separator + "test_map.db";
 	private MapDbService sut;

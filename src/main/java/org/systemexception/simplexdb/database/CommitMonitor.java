@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.database;
 
+import com.sleepycat.je.DatabaseException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,7 +20,7 @@ public class CommitMonitor {
 
 	@AfterReturning("execution(* org.systemexception.simplexdb.database.Api.save(..)) || " +
 			"execution(* org.systemexception.simplexdb.database.Api.delete(..))")
-	public void logCommit(JoinPoint joinPoint) {
+	public void logCommit(JoinPoint joinPoint) throws DatabaseException {
 		databaseService.commit();
 	}
 }
