@@ -17,8 +17,8 @@ public class DatabaseCommitMonitor {
 	@Autowired
 	private DatabaseApi databaseService;
 
-	@AfterReturning("execution(* org.systemexception.simplexdb.database.DatabaseService.save(..)) || " +
-			"execution(* org.systemexception.simplexdb.database.DatabaseService.delete(..))")
+	@AfterReturning("execution(* org.systemexception.simplexdb.database.DatabaseApi.save(..)) || " +
+			"execution(* org.systemexception.simplexdb.database.DatabaseApi.delete(..))")
 	public void logCommit(JoinPoint joinPoint) {
 		databaseService.commit();
 	}
