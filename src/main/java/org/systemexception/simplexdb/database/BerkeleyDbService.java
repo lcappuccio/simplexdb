@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sleepycat.je.LockMode.*;
 import static com.sleepycat.je.LockMode.DEFAULT;
+import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
 
 /**
  * @author leo
@@ -47,13 +47,9 @@ public class BerkeleyDbService implements Api {
 		if (!operationStatus.equals(OperationStatus.NOTFOUND)) {
 			return false;
 		} else {
-			OperationStatus result = database.put(null, dbKey, dbData);
-			if (result.equals(OperationStatus.SUCCESS)) {
-				logger.info(LogMessages.SAVED + data.getDataName());
-				return true;
-			} else {
-				return false;
-			}
+			database.put(null, dbKey, dbData);
+			logger.info(LogMessages.SAVED + data.getDataName());
+			return true;
 		}
 	}
 
@@ -77,7 +73,7 @@ public class BerkeleyDbService implements Api {
 	public Optional<Data> findById(String dataId) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + dataId);
 		List<Data> allData = findAll();
-		for (Data data: allData) {
+		for (Data data : allData) {
 			if (dataId.equals(data.getDataName())) {
 				logger.info(LogMessages.FOUND_ID + dataId);
 				return Optional.of(data);
@@ -92,7 +88,7 @@ public class BerkeleyDbService implements Api {
 		logger.info(LogMessages.FIND_MATCH + match);
 		List<Data> allData = findAll();
 		ArrayList<Data> foundItems = new ArrayList<>();
-		for (Data data: allData) {
+		for (Data data : allData) {
 			if (data.getDataName().contains(match)) {
 				foundItems.add(data);
 			}
@@ -105,7 +101,7 @@ public class BerkeleyDbService implements Api {
 	public boolean delete(String dataId) throws DatabaseException {
 		logger.info(LogMessages.DELETE + dataId);
 		Optional<Data> dataById = findById(dataId);
-		if(dataById.isPresent()) {
+		if (dataById.isPresent()) {
 			DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 			database.delete(null, dbKey);
 			logger.info(LogMessages.DELETED + dataId);
