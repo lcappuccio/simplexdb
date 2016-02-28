@@ -49,7 +49,7 @@ public class Data implements Serializable {
 	}
 
 	private String calculateSize() {
-		float Kb = 1024 * 1;
+		float Kb = 1024;
 		float Mb = 1024 * Kb;
 		float size = (float) dataData.length;
 		if (size < Kb) {

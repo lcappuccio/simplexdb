@@ -1,10 +1,8 @@
-package org.systemexception.simplexdb.test;
+package org.systemexception.simplexdb.test.database;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
+import com.sleepycat.je.DatabaseException;
 import org.junit.Test;
-import org.systemexception.simplexdb.database.DatabaseService;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
@@ -15,35 +13,12 @@ import static org.junit.Assert.*;
 
 /**
  * @author leo
- * @date 05/12/15 01:58
+ * @date 28/02/16 15:05
  */
-public class DatabaseServiceTest {
+public abstract class AbstractDbTest {
 
-	private final static String TEST_DATABASE_FILENAME = "target" + File.separator + "test.db";
-	private DatabaseService sut;
-
-	@Before
-	public void setUp() {
-		File databaseFile = new File(TEST_DATABASE_FILENAME);
-		if (databaseFile.exists()) {
-			databaseFile.delete();
-		}
-		sut = new DatabaseService(TEST_DATABASE_FILENAME);
-	}
-
-	@AfterClass
-	public static void tearDownSut() {
-		File databaseFile = new File(TEST_DATABASE_FILENAME);
-		if (databaseFile.exists()) {
-			databaseFile.delete();
-		}
-		assert(!databaseFile.exists());
-	}
-
-	@After
-	public void tearDown() {
-		sut.close();
-	}
+	protected DatabaseApi sut;
+	protected static String TEST_DATABASE_FILENAME;
 
 	@Test
 	public void databaseCreated() {
@@ -52,7 +27,7 @@ public class DatabaseServiceTest {
 	}
 
 	@Test
-	public void addRecord() {
+	public void addRecord() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
 		sut.commit();
@@ -60,7 +35,7 @@ public class DatabaseServiceTest {
 	}
 
 	@Test
-	public void dontAddDuplicateRecord() {
+	public void dontAddDuplicateRecord() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
 		assertTrue(saved);
@@ -69,7 +44,7 @@ public class DatabaseServiceTest {
 	}
 
 	@Test
-	public void getDataIdList() {
+	public void getDataIdList() throws DatabaseException {
 		int dataToAdd = 10;
 		for (int i = 0; i < dataToAdd; i ++) {
 			Data data = getDataForDatabase(String.valueOf(i));
@@ -79,20 +54,20 @@ public class DatabaseServiceTest {
 	}
 
 	@Test
-	public void deleteExistingData() {
+	public void deleteExistingData() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 		assertTrue(sut.delete(data.getDataInternalId()));
 	}
 
 	@Test
-	public void dontDeleteNonExistingData() {
+	public void dontDeleteNonExistingData() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		assertFalse(sut.delete(data.getDataName()));
 	}
 
 	@Test
-	public void findExistingData() {
+	public void findExistingData() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 		Data foundData = sut.findById(data.getDataInternalId()).get();
@@ -101,14 +76,14 @@ public class DatabaseServiceTest {
 	}
 
 	@Test(expected = NoSuchElementException.class)
-	public void dontFindNonExistingData() {
+	public void dontFindNonExistingData() throws DatabaseException {
 		String nonExistingId = "nonExistingId";
 		Data emptyData = sut.findById(nonExistingId).get();
 		assertTrue(null == emptyData);
 	}
 
 	@Test
-	public void findMatches() {
+	public void findMatches() throws DatabaseException {
 		int dataToAdd = 5;
 		for (int i = 0; i < dataToAdd; i ++) {
 			Data data = getDataForDatabase(String.valueOf(i));
@@ -122,9 +97,10 @@ public class DatabaseServiceTest {
 		assertTrue(foundItems.size() == 0);
 	}
 
-	private Data getDataForDatabase(String id) {
+	protected Data getDataForDatabase(String id) {
 		byte[] dataContent = ("data" + id).getBytes();
 		String dataId = "data" + id;
 		return new Data(dataId, dataId, dataContent);
 	}
+
 }

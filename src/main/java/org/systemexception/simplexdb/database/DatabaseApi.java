@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.database;
 
+import com.sleepycat.je.DatabaseException;
 import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -18,38 +19,38 @@ public interface DatabaseApi {
 	 *
 	 * @param data the data object to save to database
 	 */
-	boolean save(Data data);
+	boolean save(Data data) throws DatabaseException;
 
 	/**
 	 * List all records on database
 	 */
-	List<Data> findAll();
+	List<Data> findAll() throws DatabaseException;
 
 	/**
 	 * List and eventually save single record on database
 	 *
 	 * @param dataId the internal data id of the object to search and eventually extract to file
 	 */
-	Optional<Data> findById(String dataId);
+	Optional<Data> findById(String dataId) throws DatabaseException;
 
 	/**
 	 * List records matching string
 	 *
 	 * @param match string to search in database (see org.systemexception.simplexdb.domain.Data#dataName)
 	 */
-	List<Data> findByFilename(String match);
+	List<Data> findByFilename(String match) throws DatabaseException;
 
 	/**
 	 * Remove record from database
 	 *
 	 * @param dataId the internal data id of the object to delete
 	 */
-	boolean delete(String dataId);
+	boolean delete(String dataId) throws DatabaseException;
 
 	/**
 	 * Close database
 	 */
-	void close();
+	void close() throws DatabaseException;
 
 	/**
 	 * Commit

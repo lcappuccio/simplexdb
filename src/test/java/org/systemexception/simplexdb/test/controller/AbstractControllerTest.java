@@ -1,11 +1,8 @@
-package org.systemexception.simplexdb.test;
+package org.systemexception.simplexdb.test.controller;
 
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpStatus;
@@ -14,67 +11,41 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.simplexdb.Application;
 import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.controller.SimplexDbController;
-import org.systemexception.simplexdb.database.DatabaseService;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageService;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 /**
  * @author leo
- * @date 05/12/15 21:53
+ * @date 28/02/16 17:22
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
-public class SimplexDbControllerTest {
+public abstract class AbstractControllerTest {
 
-	private final static String TEST_DATABASE_FILENAME = "target" + File.separator + "test.db";
-	private DatabaseService databaseService;
-	private StorageService storageService;
+	protected static String TEST_DATABASE_FILENAME;
+	protected DatabaseApi databaseService;
+	protected StorageService storageService;
 	@InjectMocks
 	@Autowired
-	private SimplexDbController simplexDbController;
-	private MockMvc sut;
-	private final static String ENDPOINT = "/simplexdb/";
-	private Data mockData;
-
-	@Before
-	public void setUp() {
-		mockData = mock(Data.class);
-		when(mockData.getDataInternalId()).thenReturn("123");
-		when(mockData.getDataName()).thenReturn("123");
-		when(mockData.getDataData()).thenReturn("123".getBytes());
-		databaseService = mock(DatabaseService.class);
-		storageService = mock(StorageService.class);
-		when(databaseService.findById(mockData.getDataName())).thenReturn(Optional.of(mockData));
-		when(databaseService.delete(mockData.getDataName())).thenReturn(true);
-		when(databaseService.save(any())).thenReturn(true);
-		simplexDbController = new SimplexDbController();
-		MockitoAnnotations.initMocks(this);
-		sut = MockMvcBuilders.standaloneSetup(simplexDbController).build();
-	}
-
-	@AfterClass
-	public static void tearDownSut() {
-		File databaseFile = new File(TEST_DATABASE_FILENAME);
-		if (databaseFile.exists()) {
-			databaseFile.delete();
-		}
-		assert (!databaseFile.exists());
-	}
+	protected SimplexDbController simplexDbController;
+	protected MockMvc sut;
+	protected final static String ENDPOINT = "/simplexdb/";
+	protected Data mockData;
 
 	@Test
 	public void save() throws Exception {
