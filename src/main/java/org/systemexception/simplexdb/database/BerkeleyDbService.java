@@ -31,6 +31,10 @@ public class BerkeleyDbService implements DatabaseApi {
 		EnvironmentConfig envConfig = new EnvironmentConfig();
 		envConfig.setTransactional(true);
 		envConfig.setAllowCreate(true);
+		File productionDatabaseFile = new File(databaseName);
+		if (!productionDatabaseFile.exists()) {
+			productionDatabaseFile.mkdir();
+		}
 		environment = new Environment(new File(databaseName), envConfig);
 		DatabaseConfig databaseConfig = new DatabaseConfig();
 		databaseConfig.setAllowCreate(true);
