@@ -11,7 +11,7 @@ import java.util.Optional;
  * @date 05/12/15 00:32
  */
 @Service
-public interface DatabaseApi {
+public interface Api {
 
 	/**
 	 * Adds a record to the database

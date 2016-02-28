@@ -6,10 +6,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.systemexception.simplexdb.database.DatabaseApi;
-import org.systemexception.simplexdb.database.DatabaseService;
+import org.systemexception.simplexdb.database.Api;
+import org.systemexception.simplexdb.database.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
@@ -28,13 +29,22 @@ public class Application {
 	@Value("${storage.folder}")
 	private String storageFolder;
 
+	@Value("${database.type}")
+	private String databaseType;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean
-	public DatabaseApi databaseService() {
-		return new DatabaseService(databaseFilename);
+	public Api databaseService() {
+		if ("mapdb".equals(databaseType)) {
+			return new MapDbService(databaseFilename);
+		}
+		if ("berkeleydb".equals(databaseType)) {
+			throw new NotImplementedException();
+		}
+		return null;
 	}
 
 	@Bean

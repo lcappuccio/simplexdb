@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.constants.LogMessages;
-import org.systemexception.simplexdb.database.DatabaseApi;
+import org.systemexception.simplexdb.database.Api;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
@@ -34,7 +34,7 @@ public class SimplexDbController {
 	private StorageServiceApi storageService;
 
 	@Autowired
-	private DatabaseApi databaseService;
+	private Api databaseService;
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
@@ -54,7 +54,7 @@ public class SimplexDbController {
 	@ResponseBody
 	public ResponseEntity<List<Data>> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
-		return new ResponseEntity<List<Data>>(databaseService.findAll(), HttpStatus.OK);
+		return new ResponseEntity<>(databaseService.findAll(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
@@ -82,7 +82,7 @@ public class SimplexDbController {
 	@ResponseBody
 	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
-		return new ResponseEntity<List<Data>>(databaseService.findByFilename(match), HttpStatus.OK);
+		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,

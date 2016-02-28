@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.systemexception.simplexdb.database.DatabaseService;
+import org.systemexception.simplexdb.database.MapDbService;
 import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
@@ -17,10 +17,10 @@ import static org.junit.Assert.*;
  * @author leo
  * @date 05/12/15 01:58
  */
-public class DatabaseServiceTest {
+public class DatabaseMapDbServiceTest {
 
 	private final static String TEST_DATABASE_FILENAME = "target" + File.separator + "test.db";
-	private DatabaseService sut;
+	private MapDbService sut;
 
 	@Before
 	public void setUp() {
@@ -28,7 +28,7 @@ public class DatabaseServiceTest {
 		if (databaseFile.exists()) {
 			databaseFile.delete();
 		}
-		sut = new DatabaseService(TEST_DATABASE_FILENAME);
+		sut = new MapDbService(TEST_DATABASE_FILENAME);
 	}
 
 	@AfterClass

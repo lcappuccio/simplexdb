@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
-public class DatabaseCommitMonitor {
+public class CommitMonitor {
 
 	@Autowired
-	private DatabaseApi databaseService;
+	private Api databaseService;
 
-	@AfterReturning("execution(* org.systemexception.simplexdb.database.DatabaseApi.save(..)) || " +
-			"execution(* org.systemexception.simplexdb.database.DatabaseApi.delete(..))")
+	@AfterReturning("execution(* org.systemexception.simplexdb.database.Api.save(..)) || " +
+			"execution(* org.systemexception.simplexdb.database.Api.delete(..))")
 	public void logCommit(JoinPoint joinPoint) {
 		databaseService.commit();
 	}
