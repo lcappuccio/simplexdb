@@ -33,7 +33,10 @@ public class BerkeleyDbService implements DatabaseApi {
 		envConfig.setAllowCreate(true);
 		File productionDatabaseFile = new File(databaseName);
 		if (!productionDatabaseFile.exists()) {
-			productionDatabaseFile.mkdir();
+			boolean mkdir = productionDatabaseFile.mkdir();
+			if (!mkdir) {
+				throw new DatabaseException();
+			}
 		}
 		environment = new Environment(new File(databaseName), envConfig);
 		DatabaseConfig databaseConfig = new DatabaseConfig();
@@ -52,7 +55,7 @@ public class BerkeleyDbService implements DatabaseApi {
 			os.writeObject(data);
 			out.toByteArray();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		DatabaseEntry dbData = new DatabaseEntry(out.toByteArray());
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
@@ -80,7 +83,7 @@ public class BerkeleyDbService implements DatabaseApi {
 				data = (Data) is.readObject();
 				foundData.add(new Data(data.getDataInternalId(), data.getDataName(), dbData.getData()));
 			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 		databaseCursor.close();
@@ -100,7 +103,7 @@ public class BerkeleyDbService implements DatabaseApi {
 					ObjectInputStream is = new ObjectInputStream(in);
 					data = (Data) is.readObject();
 				} catch (IOException | ClassNotFoundException e) {
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 				return Optional.of(data);
 			}
