@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,8 +45,17 @@ public class BerkeleyDbService implements DatabaseApi {
 	@Override
 	public boolean save(Data data) throws DatabaseException {
 		logger.info(LogMessages.SAVE + data.getDataName());
-		DatabaseEntry dbKey = new DatabaseEntry(data.getDataName().getBytes());
-		DatabaseEntry dbData = new DatabaseEntry(data.getDataData());
+		DatabaseEntry dbKey = new DatabaseEntry(data.getDataInternalId().getBytes());
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ObjectOutputStream os;
+		try {
+			os = new ObjectOutputStream(out);
+			os.writeObject(data);
+			out.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		DatabaseEntry dbData = new DatabaseEntry(out.toByteArray());
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
 		if (!operationStatus.equals(OperationStatus.NOTFOUND)) {
 			return false;
@@ -65,8 +74,15 @@ public class BerkeleyDbService implements DatabaseApi {
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
 		while (databaseCursor.getNext(dbKey, dbData, DEFAULT).equals(OperationStatus.SUCCESS)) {
-			String key = new String(dbKey.getData());
-			foundData.add(new Data(key, dbData.getData()));
+			Data data;
+			try {
+				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+				ObjectInputStream is = new ObjectInputStream(in);
+				data = (Data) is.readObject();
+				foundData.add(new Data(data.getDataInternalId(), data.getDataName(), dbData.getData()));
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		databaseCursor.close();
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
@@ -78,8 +94,16 @@ public class BerkeleyDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_ID + dataId);
 		List<Data> allData = findAll();
 		for (Data data : allData) {
-			if (dataId.equals(data.getDataName())) {
+			if (dataId.equals(data.getDataInternalId())) {
 				logger.info(LogMessages.FOUND_ID + dataId);
+				Data serializedData = null;
+				try {
+					ByteArrayInputStream in = new ByteArrayInputStream(data.getDataData());
+					ObjectInputStream is = new ObjectInputStream(in);
+					data = (Data) is.readObject();
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+				}
 				return Optional.of(data);
 			}
 		}
