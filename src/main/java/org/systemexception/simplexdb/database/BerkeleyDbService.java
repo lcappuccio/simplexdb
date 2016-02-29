@@ -96,7 +96,6 @@ public class BerkeleyDbService implements DatabaseApi {
 		for (Data data : allData) {
 			if (dataId.equals(data.getDataInternalId())) {
 				logger.info(LogMessages.FOUND_ID + dataId);
-				Data serializedData = null;
 				try {
 					ByteArrayInputStream in = new ByteArrayInputStream(data.getDataData());
 					ObjectInputStream is = new ObjectInputStream(in);
