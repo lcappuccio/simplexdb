@@ -95,17 +95,18 @@ public class BerkeleyDbService implements DatabaseApi {
 	public Optional<Data> findById(String dataId) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + dataId);
 		List<Data> allData = findAll();
-		for (Data data : allData) {
+		for (final Data data : allData) {
 			if (dataId.equals(data.getDataInternalId())) {
+				Data innerData = null;
 				logger.info(LogMessages.FOUND_ID + dataId);
 				try {
 					ByteArrayInputStream in = new ByteArrayInputStream(data.getDataData());
 					ObjectInputStream is = new ObjectInputStream(in);
-					data = (Data) is.readObject();
+					innerData = (Data) is.readObject();
 				} catch (IOException | ClassNotFoundException e) {
 					logger.error(e.getMessage());
 				}
-				return Optional.of(data);
+				return Optional.of(innerData);
 			}
 		}
 		logger.info(LogMessages.FOUND_NOT_ID + dataId);
@@ -117,7 +118,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_MATCH + match);
 		List<Data> allData = findAll();
 		ArrayList<Data> foundItems = new ArrayList<>();
-		for (Data data : allData) {
+		for (final Data data : allData) {
 			if (data.getDataName().contains(match)) {
 				foundItems.add(data);
 			}
