@@ -47,9 +47,8 @@ public class BerkeleyDbService implements DatabaseApi {
 		logger.info(LogMessages.SAVE + data.getDataName());
 		DatabaseEntry dbKey = new DatabaseEntry(data.getDataInternalId().getBytes());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream os;
 		try {
-			os = new ObjectOutputStream(out);
+			ObjectOutputStream os = new ObjectOutputStream(out);
 			os.writeObject(data);
 			out.toByteArray();
 		} catch (IOException e) {
