@@ -19,6 +19,7 @@
 			<th>Name</th>
 			<th>Size</th>
 			<th></th>
+			<th></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -27,8 +28,16 @@
 			<td th:text="${data.dataName}"></td>
 			<td th:text="${data.dataSize}"></td>
 			<td>
-				<button type="submit" class="btn btn-default">Save</button>
-				<button type="submit" class="btn btn-danger">Delete</button>
+				<form th:action="@{/simplexdb/findbyid/{path}(path=${data.dataInternalId})}" th:method="get"
+				      th:target="_blank">
+					<button type="submit" class="btn btn-default">Save</button>
+				</form>
+			</td>
+			<td>
+				<form th:action="@{/simplexdb/delete/{path}(path=${data.dataInternalId})}" th:method="delete"
+				      th:target="_blank">
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</form>
 			</td>
 		</tr>
 		</tbody>
