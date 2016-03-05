@@ -32,7 +32,8 @@
 	<h2>Upload File</h2>
 	<form id="form1" enctype="multipart/form-data" method="post" action="save">
 		<div class="row">
-			<input type="file" name="fileToUpload" id="fileUploadBtn" class="form-control" onchange="fileSelected();"/>
+			<input type="file" name="fileToUpload" multiple="multiple" id="fileUploadBtn" class="form-control"
+			       onchange="fileSelected();"/>
 		</div>
 		<div id="fileName"></div>
 		<div id="fileSize"></div>
