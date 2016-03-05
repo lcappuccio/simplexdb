@@ -44,12 +44,12 @@ public abstract class AbstractControllerTest {
 	@Autowired
 	protected SimplexDbController simplexDbController;
 	protected MockMvc sut;
-	protected final static String ENDPOINT = "/simplexdb/";
+	protected final static String ENDPOINT = "/simplexdb/", REQUEST_PARAM = "fileToUpload";
 	protected Data mockData;
 
 	@Test
 	public void save() throws Exception {
-		MockMultipartFile dataFile = new MockMultipartFile("file", UUID.randomUUID().toString(), "text/plain",
+		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(), "text/plain",
 				"some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
 				.andExpect(status().is(HttpStatus.CREATED.value()));
@@ -61,7 +61,7 @@ public abstract class AbstractControllerTest {
 	@Test
 	public void save_conflict() throws Exception {
 		when(databaseService.save(any())).thenReturn(false);
-		MockMultipartFile dataFile = new MockMultipartFile("file", UUID.randomUUID().toString(), "text/plain",
+		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(), "text/plain",
 				"some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
 				.andExpect(status().is(HttpStatus.CONFLICT.value()));

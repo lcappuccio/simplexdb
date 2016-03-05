@@ -12,9 +12,6 @@ import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
 
 import java.io.IOException;
 
@@ -55,22 +52,5 @@ public class Application {
 	@Bean
 	public StorageServiceApi storageService() throws IOException {
 		return new StorageService(storageFolder);
-	}
-
-	@Bean
-	public Docket restfulApi() {
-		return new Docket(DocumentationType.SWAGGER_2).groupName("restful-api").select().build().apiInfo(apiInfo());
-	}
-
-	private ApiInfo apiInfo() {
-		return new ApiInfo(
-				"SimplexDB",
-				"REST API with embedded Database",
-				"0.9.2-SNAPSHOT",
-				null,
-				"leo@systemexception.org",
-				"GPL v3",
-				"https://github.com/lcappuccio/simplexdb/blob/master/LICENSE"
-		);
 	}
 }
