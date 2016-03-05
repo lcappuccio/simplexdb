@@ -2,7 +2,7 @@ function saveData(data) {
 	$.ajax({
 		url: '/simplexdb/findbyid/' + data,
 		type: 'GET',
-		success: function(response) {
+		success: function (response) {
 			console.log(response);
 		}
 	});
@@ -12,7 +12,7 @@ function deleteData(data) {
 	$.ajax({
 		url: '/simplexdb/delete/' + data,
 		type: 'DELETE',
-		success: function(response) {
+		success: function (response) {
 			console.log(response);
 		}
 	});
@@ -22,7 +22,7 @@ function exportData() {
 	$.ajax({
 		url: '/simplexdb/export/',
 		type: 'GET',
-		success: function(response) {
+		success: function (response) {
 			console.log(response);
 		}
 	});
@@ -58,26 +58,25 @@ function uploadFile() {
 function uploadProgress(evt) {
 	if (evt.lengthComputable) {
 		var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-		document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+		document.getElementById('uploadBtn').value = 'Progress: ' + percentComplete.toString() + '%';
 	}
 	else {
-		document.getElementById('progressNumber').innerHTML = 'unable to compute';
+		document.getElementById('uploadBtn').value = 'Progress: Unable to compute';
 	}
 }
 
 function uploadComplete(evt) {
-	/* This event is raised when the server send back a response */
-	alert(evt.target.responseText);
+	document.getElementById('uploadBtn').value = 'Upload';
 }
 
 function uploadFailed(evt) {
-	alert("There was an error attempting to upload the file.");
+	document.getElementById('uploadBtn').value = 'Failed';
 }
 
 function uploadCanceled(evt) {
-	alert("The upload has been canceled by the user or the browser dropped the connection.");
+	document.getElementById('uploadBtn').value = 'The upload has been canceled by the user or the browser dropped the connection';
 }
 
-$(document).ready(function(){
+$(document).ready(function () {
 	$('#dataTable').DataTable();
 });
