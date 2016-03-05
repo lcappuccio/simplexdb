@@ -9,10 +9,10 @@
 	<link href="http://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet"/>
 	<link href="../css/style.css" rel="stylesheet"/>
 	<!-- JS -->
+	<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
 	        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 	        crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 	<script src="http://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"/>
 	<script src="../js/data-operations.js"></script>
 </head>
@@ -26,6 +26,20 @@
 	</div>
 </nav>
 <div class="container">
+	<h2>Upload File</h2>
+	<form id="form1" enctype="multipart/form-data" method="post" action="save">
+		<div class="row">
+			<label for="fileUploadBtn">Select a File to Upload</label><br/>
+			<input type="file" name="fileToUpload" id="fileUploadBtn" class="form-control" onchange="fileSelected();"/>
+		</div>
+		<div id="fileName"></div>
+		<div id="fileSize"></div>
+		<div id="fileType"></div>
+		<div class="row">
+			<input type="button" onclick="uploadFile()" class="form-control" value="Upload"/>
+		</div>
+		<div id="progressNumber"></div>
+	</form>
 	<h2>Data List</h2>
 	<table class="table table-striped" id="dataTable">
 		<thead>
@@ -52,19 +66,6 @@
 		</tr>
 		</tbody>
 	</table>
-	<form id="form1" enctype="multipart/form-data" method="post" action="save">
-		<div class="row">
-			<label for="file">Select a File to Upload</label><br/>
-			<input type="file" name="file" id="file" class="form-control" onchange="fileSelected();"/>
-		</div>
-		<div id="fileName"></div>
-		<div id="fileSize"></div>
-		<div id="fileType"></div>
-		<div class="row">
-			<input type="button" onclick="uploadFile()" class="form-control" value="Upload"/>
-		</div>
-		<div id="progressNumber"></div>
-	</form>
 </div>
 </body>
 </html>

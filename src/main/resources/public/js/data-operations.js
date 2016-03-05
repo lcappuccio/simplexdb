@@ -29,7 +29,7 @@ function exportData() {
 }
 
 function fileSelected() {
-	var file = document.getElementById('file').files[0];
+	var file = document.getElementById('fileUploadBtn').files[0];
 	if (file) {
 		var fileSize = 0;
 		if (file.size > 1024 * 1024)
@@ -45,7 +45,7 @@ function fileSelected() {
 
 function uploadFile() {
 	var fd = new FormData();
-	fd.append("file", document.getElementById('file').files[0]);
+	fd.append("fileToUpload", document.getElementById('fileUploadBtn').files[0]);
 	var xhr = new XMLHttpRequest();
 	xhr.upload.addEventListener("progress", uploadProgress, false);
 	xhr.addEventListener("load", uploadComplete, false);

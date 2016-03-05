@@ -41,7 +41,8 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException, DatabaseException {
+	public ResponseEntity<HttpStatus> save(@RequestParam("fileToUpload") final MultipartFile dataFile)
+			throws IOException, DatabaseException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info(LogMessages.SAVE + dataId);
