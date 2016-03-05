@@ -59,7 +59,7 @@ file3.txt
 fileN.txt
 
 ## Endpoints
-The application is deployed to http://host_id:port/simplexdb/$action where **host_id** and **port** depend on the
+The application is deployed to http://host:port/simplexdb/$action where **host** and **port** depend on the
 environment.
 
 Replace $action with:
@@ -70,13 +70,15 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **findbyname**: obtain a full list of the stored data in JSON format with name matching the searched string
 - **delete**: deletes the specified id entry from the database
 - **export**: will write to disk all data currently stored in the database
-- **view**: HTML view with a table and all objects in the database using Thymeleaf, use a browser
+
+## Frontend
+The UI is deployed in http://host:port/simplexdb/view
 
 ## Performance
 - Testbed: ASUS K52F, Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
+- Uploaded with the JMeter plan running on the same machine
 - **MapDB**: Throughput: 50 files/sec, 13Kb/sec
 - **Berkeley DB**: Throughput: 125 files/sec, 33Kb/sec
 
 # ToDo
 - Authentication
-- Frontend
