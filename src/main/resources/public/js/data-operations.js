@@ -102,7 +102,7 @@ function uploadFailed(evt) {
 }
 
 function uploadCanceled(evt) {
-	document.getElementById('uploadBtn').value = 'The upload has been canceled by the user or the browser dropped the connection';
+	document.getElementById('uploadBtn').value = 'Canceled';
 }
 
 $(document).ready(function () {
