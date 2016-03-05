@@ -3,10 +3,10 @@ function saveData(data) {
 		url: '/simplexdb/findbyid/' + data,
 		type: 'GET',
 		statusCode: {
-			302: function(response) {
+			302: function (response) {
 				document.getElementById('saveBtn_' + data).style.backgroundColor = 'green';
 			},
-			404: function(response) {
+			404: function (response) {
 				document.getElementById('saveBtn_' + data).style.backgroundColor = 'red';
 			}
 		}
