@@ -77,3 +77,7 @@ function uploadFailed(evt) {
 function uploadCanceled(evt) {
 	alert("The upload has been canceled by the user or the browser dropped the connection.");
 }
+
+$(document).ready(function(){
+	$('#dataTable').DataTable();
+});
