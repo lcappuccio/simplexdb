@@ -2,8 +2,13 @@ function saveData(data) {
 	$.ajax({
 		url: '/simplexdb/findbyid/' + data,
 		type: 'GET',
-		success: function (response) {
-			console.log(response);
+		statusCode: {
+			302: function(response) {
+				document.getElementById('saveBtn_' + data).style.backgroundColor = 'green';
+			},
+			404: function(response) {
+				document.getElementById('saveBtn_' + data).style.backgroundColor = 'red';
+			}
 		}
 	});
 }
@@ -13,7 +18,8 @@ function deleteData(data) {
 		url: '/simplexdb/delete/' + data,
 		type: 'DELETE',
 		success: function (response) {
-			console.log(response);
+			document.getElementById('saveBtn_' + data).disabled = true;
+			document.getElementById('deleteBtn_' + data).disabled = true;
 		}
 	});
 }
