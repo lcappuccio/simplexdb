@@ -16,6 +16,7 @@ import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Optional;
  * @date 05/12/15 00:55
  */
 @Controller
+@EnableSwagger2
 @RequestMapping(value = Endpoints.CONTEXT)
 public class SimplexDbController {
 
