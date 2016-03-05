@@ -3,9 +3,10 @@
 <head>
 	<title>Data List</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
+	<!-- CSS -->
 	<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 	<link href="../css/style.css" rel="stylesheet"/>
+	<!-- JS -->
 	<script src="../js/jquery-2.2.1.min.js"></script>
 	<script src="../js/data-operations.js"></script>
 </head>
@@ -45,6 +46,19 @@
 		</tr>
 		</tbody>
 	</table>
+	<form id="form1" enctype="multipart/form-data" method="post" action="save">
+		<div class="row">
+			<label for="file">Select a File to Upload</label><br />
+			<input type="file" name="file" id="file" class="form-control" onchange="fileSelected();"/>
+		</div>
+		<div id="fileName"></div>
+		<div id="fileSize"></div>
+		<div id="fileType"></div>
+		<div class="row">
+			<input type="button" onclick="uploadFile()" class="form-control" value="Upload" />
+		</div>
+		<div id="progressNumber"></div>
+	</form>
 </div>
 </body>
 </html>
