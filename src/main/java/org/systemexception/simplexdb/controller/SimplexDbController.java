@@ -16,6 +16,7 @@ import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Optional;
  * @date 05/12/15 00:55
  */
 @Controller
+@EnableSwagger2
 @RequestMapping(value = Endpoints.CONTEXT)
 public class SimplexDbController {
 
@@ -39,7 +41,8 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException, DatabaseException {
+	public ResponseEntity<HttpStatus> save(@RequestParam("fileToUpload") final MultipartFile dataFile)
+			throws IOException, DatabaseException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info(LogMessages.SAVE + dataId);

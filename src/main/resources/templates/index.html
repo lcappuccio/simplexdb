@@ -1,22 +1,72 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Data List</title>
+	<title>SimplexDB</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-	<link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
-	      th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
-	      rel="stylesheet" media="screen"/>
+	<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png"/>
+	<!-- CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+	      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+	<link rel="stylesheet" type="text/css"
+	      href="https://cdn.datatables.net/t/bs/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>
+	<link href="../css/style.css" rel="stylesheet"/>
+	<!-- JS -->
+	<script src="https://code.jquery.com/jquery-1.12.1.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+	        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+	        crossorigin="anonymous"></script>
+	<script type="text/javascript"
+	        src="https://cdn.datatables.net/t/bs/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
+	<script src="../js/data-operations.js"></script>
 </head>
 <body>
 <div class="container">
-	<h2>Data List</h2>
-	<table class="table table-striped">
+
+</div>
+<div class="container">
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">SimplexDB</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span
+							class="glyphicon glyphicon-import"></span> Upload Files <strong class="caret"></strong></a>
+					<ul class="dropdown-menu">
+						<form class="form-group" enctype="multipart/form-data" method="post" action="save"
+						      style="padding: 20px 20px 20px 20px">
+							<div class="btn-group btn-group-justified">
+								<div class="btn-group">
+									<input class="btn btn-default" id="fileUploadBtn" name="fileToUpload"
+									       type="file" multiple="multiple" onchange="fileSelected();"/>
+								</div>
+								<div class="btn-group">
+									<input class="btn btn-default" id="uploadBtn" value="Upload" type="button"
+									       onclick="uploadFile()"/>
+								</div>
+							</div>
+							<div id="fileName"></div>
+							<div id="fileSize"></div>
+							<div id="fileType"></div>
+						</form>
+					</ul>
+				</li>
+				<li><a href="#" onclick="exportData()"><span class="glyphicon glyphicon-export"></span> Export</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../swagger-ui.html" target="_blank"><span class="glyphicon glyphicon-info-sign">
+				</span> API Documentation</a></li>
+			</ul>
+		</div>
+	</nav>
+	<table class="table table-striped" id="dataTable">
 		<thead>
 		<tr>
 			<th>ID</th>
 			<th>Name</th>
 			<th>Size</th>
+			<th></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -24,6 +74,16 @@
 			<td th:text="${data.dataInternalId}"></td>
 			<td th:text="${data.dataName}"></td>
 			<td th:text="${data.dataSize}"></td>
+			<td>
+				<button type="submit" class="btn btn-default"
+				        th:id="'saveBtn_' + ${data.dataInternalId}"
+				        th:onclick="'saveData(\'' + ${data.dataInternalId} + '\');'">Export
+				</button>
+				<button type="submit" class="btn btn-danger"
+				        th:id="'deleteBtn_' + ${data.dataInternalId}"
+				        th:onclick="'deleteData(\'' + ${data.dataInternalId} + '\');'">Delete
+				</button>
+			</td>
 		</tr>
 		</tbody>
 	</table>
