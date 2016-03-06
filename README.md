@@ -74,7 +74,7 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 Automated documentation provided by Swagger: [API Documentation](http://localhost:8080/swagger-ui.html)
 
 ## Frontend
-Basic usage UI is deployed automatically and embedded in the project.
+A [console](http://localhost:8080/simplexdb/view) is deployed automatically and embedded in the project.
 It is basically a thymeleaf template with some simple javascript code and bootstrap css.
 
 ## Monitoring
@@ -85,7 +85,7 @@ Actuators are deployed (e.g.):
 * [beans](http://localhost:8080/beans)
 * [metrics](http://localhost:8080/metrics)
 
-Further endpoints: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints)
+Further info: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints)
 
 ## Performance
 - Testbed: ASUS K52F, Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
@@ -96,4 +96,3 @@ Further endpoints: [Spring Reference](http://docs.spring.io/spring-boot/docs/cur
 # ToDo
 - Authentication
 - Spring actuators integration in UI
-- Favicon
