@@ -22,10 +22,12 @@ function uploadCanceled(evt) {
 
 function fileSizeCalculator(fileSize) {
 	var fileSizeString = "";
-	if (fileSize > 1000 * 1000)
+	if (fileSize > 1000 * 1000) {
 		fileSizeString = (Math.round(fileSize * 100 / (1000 * 1000)) / 100).toString() + 'MB';
-	else
+	}
+	else {
 		fileSizeString = (Math.round(fileSize * 100 / 1000) / 100).toString() + 'KB';
+	}
 	return fileSizeString;
 }
 
