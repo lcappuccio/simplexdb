@@ -76,11 +76,10 @@ public class BerkeleyDbService implements DatabaseApi {
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
 		while (databaseCursor.getNext(dbKey, dbData, DEFAULT).equals(OperationStatus.SUCCESS)) {
-			Data data;
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
-				data = (Data) is.readObject();
+				Data data = (Data) is.readObject();
 				foundData.add(new Data(data.getDataInternalId(), data.getDataName(), dbData.getData()));
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
@@ -97,12 +96,11 @@ public class BerkeleyDbService implements DatabaseApi {
 		List<Data> allData = findAll();
 		for (final Data data : allData) {
 			if (dataId.equals(data.getDataInternalId())) {
-				Data innerData;
 				logger.info(LogMessages.FOUND_ID + dataId);
 				try {
 					ByteArrayInputStream in = new ByteArrayInputStream(data.getDataData());
 					ObjectInputStream is = new ObjectInputStream(in);
-					innerData = (Data) is.readObject();
+					Data innerData = (Data) is.readObject();
 					return Optional.of(innerData);
 				} catch (IOException | ClassNotFoundException e) {
 					logger.error(e.getMessage());
