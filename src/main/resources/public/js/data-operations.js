@@ -8,15 +8,15 @@ function uploadProgress(evt) {
 	}
 }
 
-function uploadComplete(evt) {
+function uploadComplete() {
 	document.getElementById("uploadBtn").value = "Upload";
 }
 
-function uploadFailed(evt) {
+function uploadFailed() {
 	document.getElementById("uploadBtn").value = "Failed";
 }
 
-function uploadCanceled(evt) {
+function uploadCanceled() {
 	document.getElementById("uploadBtn").value = "Canceled";
 }
 
@@ -62,7 +62,6 @@ function exportData() {
 		url: "/simplexdb/export/",
 		type: "GET",
 		success: function (response) {
-			console.log(response);
 		}
 	});
 }
@@ -70,7 +69,6 @@ function exportData() {
 function fileSelected() {
 	var files = document.getElementById("fileUploadBtn").files;
 	if (files.length > 1) {
-		var filesCount = files.length;
 		document.getElementById("fileName").innerHTML = "File count: " + files.length;
 		document.getElementById("fileType").innerHTML = "Type: multiple";
 		var fileSize = 0;
