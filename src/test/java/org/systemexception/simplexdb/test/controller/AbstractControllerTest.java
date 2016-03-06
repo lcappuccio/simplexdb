@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.systemexception.simplexdb.Application;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author leo
  * @date 28/02/16 17:22
  */
+@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
 @TestPropertySource(locations = "classpath:application.properties")
@@ -44,12 +46,12 @@ public abstract class AbstractControllerTest {
 	@Autowired
 	protected SimplexDbController simplexDbController;
 	protected MockMvc sut;
-	protected final static String ENDPOINT = "/simplexdb/";
+	protected final static String ENDPOINT = "/simplexdb/", REQUEST_PARAM = "fileToUpload";
 	protected Data mockData;
 
 	@Test
 	public void save() throws Exception {
-		MockMultipartFile dataFile = new MockMultipartFile("file", UUID.randomUUID().toString(), "text/plain",
+		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(), "text/plain",
 				"some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
 				.andExpect(status().is(HttpStatus.CREATED.value()));
@@ -61,7 +63,7 @@ public abstract class AbstractControllerTest {
 	@Test
 	public void save_conflict() throws Exception {
 		when(databaseService.save(any())).thenReturn(false);
-		MockMultipartFile dataFile = new MockMultipartFile("file", UUID.randomUUID().toString(), "text/plain",
+		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(), "text/plain",
 				"some data".getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
 				.andExpect(status().is(HttpStatus.CONFLICT.value()));

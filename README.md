@@ -59,7 +59,7 @@ file3.txt
 fileN.txt
 
 ## Endpoints
-The application is deployed to http://host_id:port/simplexdb/$action where **host_id** and **port** depend on the
+The application is deployed to http://host:port/simplexdb/$action where **host** and **port** depend on the
 environment.
 
 Replace $action with:
@@ -70,13 +70,30 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **findbyname**: obtain a full list of the stored data in JSON format with name matching the searched string
 - **delete**: deletes the specified id entry from the database
 - **export**: will write to disk all data currently stored in the database
-- **view**: HTML view with a table and all objects in the database using Thymeleaf, use a browser
+
+Automated documentation provided by Swagger: [API Documentation](http://localhost:8080/swagger-ui.html)
+
+## Frontend
+Basic usage UI is deployed automatically and embedded in the project.
+It is basically a thymeleaf template with some simple javascript code and bootstrap css.
+
+## Monitoring
+
+Actuators are deployed (e.g.):
+
+* [autoconfig](http://localhost:8080/autoconfig)
+* [beans](http://localhost:8080/beans)
+* [metrics](http://localhost:8080/metrics)
+
+Further endpoints: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints)
 
 ## Performance
 - Testbed: ASUS K52F, Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
+- Uploaded with the JMeter plan running on the same machine
 - **MapDB**: Throughput: 50 files/sec, 13Kb/sec
 - **Berkeley DB**: Throughput: 125 files/sec, 33Kb/sec
 
 # ToDo
 - Authentication
-- Frontend
+- Spring actuators integration in UI
+- Favicon

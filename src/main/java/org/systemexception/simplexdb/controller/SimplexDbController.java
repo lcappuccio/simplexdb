@@ -27,8 +27,8 @@ import java.util.Optional;
  * @date 05/12/15 00:55
  */
 @Controller
-@RequestMapping(value = Endpoints.CONTEXT)
 @EnableSwagger2
+@RequestMapping(value = Endpoints.CONTEXT)
 public class SimplexDbController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -41,7 +41,8 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> save(@RequestParam("file") final MultipartFile dataFile) throws IOException, DatabaseException {
+	public ResponseEntity<HttpStatus> save(@RequestParam("fileToUpload") final MultipartFile dataFile)
+			throws IOException, DatabaseException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
 		logger.info(LogMessages.SAVE + dataId);
