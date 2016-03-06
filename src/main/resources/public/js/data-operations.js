@@ -1,3 +1,25 @@
+function uploadProgress(evt) {
+	if (evt.lengthComputable) {
+		var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+		document.getElementById('uploadBtn').value = 'Progress: ' + percentComplete.toString() + '%';
+	}
+	else {
+		document.getElementById('uploadBtn').value = 'Progress: Unable to compute';
+	}
+}
+
+function uploadComplete(evt) {
+	document.getElementById('uploadBtn').value = 'Upload';
+}
+
+function uploadFailed(evt) {
+	document.getElementById('uploadBtn').value = 'Failed';
+}
+
+function uploadCanceled(evt) {
+	document.getElementById('uploadBtn').value = 'Canceled';
+}
+
 function fileSizeCalculator(fileSize) {
 	var fileSizeString = '';
 	if (fileSize > 1000 * 1000)
@@ -81,28 +103,6 @@ function uploadFile() {
 		xmlHttpRequest.open("POST", "save");
 		xmlHttpRequest.send(formData);
 	}
-}
-
-function uploadProgress(evt) {
-	if (evt.lengthComputable) {
-		var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-		document.getElementById('uploadBtn').value = 'Progress: ' + percentComplete.toString() + '%';
-	}
-	else {
-		document.getElementById('uploadBtn').value = 'Progress: Unable to compute';
-	}
-}
-
-function uploadComplete(evt) {
-	document.getElementById('uploadBtn').value = 'Upload';
-}
-
-function uploadFailed(evt) {
-	document.getElementById('uploadBtn').value = 'Failed';
-}
-
-function uploadCanceled(evt) {
-	document.getElementById('uploadBtn').value = 'Canceled';
 }
 
 $(document).ready(function () {
