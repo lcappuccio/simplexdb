@@ -29,6 +29,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
+		envConfig.setConfigParam("je.log.fileMax", "256000000");
 		envConfig.setTransactional(true);
 		envConfig.setAllowCreate(true);
 		File productionDatabaseFile = new File(databaseName);
@@ -143,6 +144,7 @@ public class BerkeleyDbService implements DatabaseApi {
 	@Override
 	public void close() throws DatabaseException {
 		database.close();
+		environment.cleanLog();
 		environment.close();
 		logger.info(LogMessages.CLOSE_DATABASE + databaseName);
 	}
