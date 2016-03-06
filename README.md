@@ -71,8 +71,21 @@ the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **delete**: deletes the specified id entry from the database
 - **export**: will write to disk all data currently stored in the database
 
+Automated documentation provided by Swagger: [API Documentation](http://localhost:8080/swagger-ui.html)
+
 ## Frontend
-The UI is deployed in http://host:port/simplexdb/view
+Basic usage UI is deployed automatically and embedded in the project.
+It is basically a thymeleaf template with some simple javascript code and bootstrap css.
+
+## Monitoring
+
+Actuators are deployed (e.g.):
+
+* [autoconfig](http://localhost:8080/autoconfig)
+* [beans](http://localhost:8080/beans)
+* [metrics](http://localhost:8080/metrics)
+
+Further endpoints: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready-endpoints)
 
 ## Performance
 - Testbed: ASUS K52F, Intel Core i3@2.13GHz, 8Gb RAM, Intel SSD X-25M 80Gb
@@ -82,3 +95,5 @@ The UI is deployed in http://host:port/simplexdb/view
 
 # ToDo
 - Authentication
+- Spring actuators integration in UI
+- Favicon
