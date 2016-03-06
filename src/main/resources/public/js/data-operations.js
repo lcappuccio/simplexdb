@@ -74,8 +74,8 @@ function fileSelected() {
 		document.getElementById("fileName").innerHTML = "File count: " + files.length;
 		document.getElementById("fileType").innerHTML = "Type: multiple";
 		var fileSize = 0;
-		for (i = 0; i < files.length; i++) {
-			fileSize += files[i].size;
+		for (x = 0; x < files.length; x++) {
+			fileSize += files[x].size;
 		}
 		var fileSizeTotal = fileSizeCalculator(fileSize);
 
@@ -94,9 +94,9 @@ function fileSelected() {
 
 function uploadFile() {
 	var filesToUpload = document.getElementById("fileUploadBtn").files;
-	for (i = 0; i < filesToUpload.length; i++) {
+	for (y = 0; y < filesToUpload.length; y++) {
 		var formData = new FormData();
-		formData.append("fileToUpload", filesToUpload[i]);
+		formData.append("fileToUpload", filesToUpload[y]);
 		var xmlHttpRequest = new XMLHttpRequest();
 		xmlHttpRequest.upload.addEventListener("progress", uploadProgress, false);
 		xmlHttpRequest.addEventListener("load", uploadComplete, false);
