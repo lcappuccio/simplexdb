@@ -97,16 +97,16 @@ public class BerkeleyDbService implements DatabaseApi {
 		List<Data> allData = findAll();
 		for (final Data data : allData) {
 			if (dataId.equals(data.getDataInternalId())) {
-				Data innerData = null;
+				Data innerData;
 				logger.info(LogMessages.FOUND_ID + dataId);
 				try {
 					ByteArrayInputStream in = new ByteArrayInputStream(data.getDataData());
 					ObjectInputStream is = new ObjectInputStream(in);
 					innerData = (Data) is.readObject();
+					return Optional.of(innerData);
 				} catch (IOException | ClassNotFoundException e) {
 					logger.error(e.getMessage());
 				}
-				return Optional.of(innerData);
 			}
 		}
 		logger.info(LogMessages.FOUND_NOT_ID + dataId);
