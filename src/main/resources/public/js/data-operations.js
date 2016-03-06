@@ -68,20 +68,21 @@ function exportData() {
 
 function fileSelected() {
 	var files = document.getElementById("fileUploadBtn").files;
+	var fileSizeTotal = 0;
 	if (files.length > 1) {
 		document.getElementById("fileName").innerHTML = "File count: " + files.length;
 		document.getElementById("fileType").innerHTML = "Type: multiple";
 		var fileSize = 0;
-		for (x = 0; x < files.length; x++) {
+		for (var x = 0; x < files.length; x++) {
 			fileSize += files[x].size;
 		}
-		var fileSizeTotal = fileSizeCalculator(fileSize);
+		fileSizeTotal = fileSizeCalculator(fileSize);
 
 		document.getElementById("fileSize").innerHTML = "Size: " + fileSizeTotal;
 	} else {
 		var file = document.getElementById("fileUploadBtn").files[0];
 		if (file) {
-			var fileSizeTotal = fileSizeCalculator(file.size);
+			fileSizeTotal = fileSizeCalculator(file.size);
 
 			document.getElementById("fileName").innerHTML = "Name: " + file.name;
 			document.getElementById("fileSize").innerHTML = "Size: " + fileSizeTotal;
@@ -92,7 +93,7 @@ function fileSelected() {
 
 function uploadFile() {
 	var filesToUpload = document.getElementById("fileUploadBtn").files;
-	for (y = 0; y < filesToUpload.length; y++) {
+	for (var y = 0; y < filesToUpload.length; y++) {
 		var formData = new FormData();
 		formData.append("fileToUpload", filesToUpload[y]);
 		var xmlHttpRequest = new XMLHttpRequest();
