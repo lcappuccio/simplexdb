@@ -31,20 +31,23 @@
 			<ul class="nav navbar-nav">
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span
-							class="glyphicon glyphicon-import"></span> Upload Files<span class="caret"></span></a>
+							class="glyphicon glyphicon-import"></span> Upload Files <strong class="caret"></strong></a>
 					<ul class="dropdown-menu">
-						<form class="form" id="form1" enctype="multipart/form-data" method="post" action="save">
-							<div class="form-group">
-								<input type="file" name="fileToUpload" multiple="multiple" id="fileUploadBtn"
-								       class="form-control" onchange="fileSelected();"/>
+						<form class="form-group" enctype="multipart/form-data" method="post" action="save"
+						      style="padding: 20px 20px 20px 20px">
+							<div class="btn-group btn-group-justified">
+								<div class="btn-group">
+									<input class="btn btn-default" id="fileUploadBtn" name="fileToUpload"
+									       type="file" multiple="multiple" onchange="fileSelected();"/>
+								</div>
+								<div class="btn-group">
+									<input class="btn btn-default" id="uploadBtn" value="Upload" type="button"
+									       onclick="uploadFile()"/>
+								</div>
 							</div>
 							<div id="fileName"></div>
 							<div id="fileSize"></div>
 							<div id="fileType"></div>
-							<div class="form-group">
-								<input type="button" id="uploadBtn" onclick="uploadFile()" class="form-control"
-								       value="Upload"/>
-							</div>
 						</form>
 					</ul>
 				</li>
