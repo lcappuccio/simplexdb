@@ -36,10 +36,10 @@ function saveData(data) {
 		url: "/simplexdb/findbyid/" + data,
 		type: "GET",
 		statusCode: {
-			302: function (response) {
+			302: function () {
 				document.getElementById("saveBtn_" + data).style.backgroundColor = "green";
 			},
-			404: function (response) {
+			404: function () {
 				document.getElementById("saveBtn_" + data).style.backgroundColor = "red";
 			}
 		}
@@ -50,7 +50,7 @@ function deleteData(data) {
 	$.ajax({
 		url: "/simplexdb/delete/" + data,
 		type: "DELETE",
-		success: function (response) {
+		success: function () {
 			document.getElementById("saveBtn_" + data).disabled = true;
 			document.getElementById("deleteBtn_" + data).disabled = true;
 		}
