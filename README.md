@@ -79,7 +79,7 @@ It is basically a thymeleaf template with some simple javascript code and bootst
 
 ## Monitoring
 
-Actuators are deployed (e.g.):
+Actuators are deployed (e.g.), verify `management.port` in `application.properties`:
 
 * [autoconfig](http://localhost:8080/autoconfig)
 * [beans](http://localhost:8080/beans)
