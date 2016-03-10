@@ -81,7 +81,8 @@ public class BerkeleyDbService implements DatabaseApi {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
 				Data data = (Data) is.readObject();
-				foundData.add(new Data(data.getInternalId(), data.getName(), dbData.getData()));
+				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), dbData.getData()));
+				is.close();
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
 			}

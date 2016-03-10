@@ -15,6 +15,7 @@ public class Data implements Serializable {
 	private final String internalId;
 	private final String name;
 	private final String size;
+	private final Long date;
 	@JsonIgnore
 	private final byte[] content;
 
@@ -23,6 +24,7 @@ public class Data implements Serializable {
 		this.name = name;
 		this.content = content;
 		this.size = calculateSize();
+		this.date = System.currentTimeMillis();
 	}
 
 	public Data(final String internalId, final String name, final byte[] content) {
@@ -30,6 +32,15 @@ public class Data implements Serializable {
 		this.name = name;
 		this.content = content;
 		this.size = calculateSize();
+		this.date = System.currentTimeMillis();
+	}
+
+	public Data(final String internalId, final String name, final Long date, final byte[] content) {
+		this.internalId = internalId;
+		this.name = name;
+		this.content = content;
+		this.size = calculateSize();
+		this.date = date;
 	}
 
 	public String getInternalId() {
@@ -46,6 +57,10 @@ public class Data implements Serializable {
 
 	public String getSize() {
 		return size;
+	}
+
+	public Long getDate() {
+		return date;
 	}
 
 	private String calculateSize() {
