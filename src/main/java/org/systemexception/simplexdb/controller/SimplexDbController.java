@@ -110,6 +110,7 @@ public class SimplexDbController {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
 		for (Data data : dataIdList) {
+			// TODO LC Error here, findById invokes findAll that is invoked by export that invokes findAll!
 			storageService.saveFile(databaseService.findById(data.getInternalId()).get());
 		}
 		logger.info(LogMessages.EXPORT_FINISH.toString());
