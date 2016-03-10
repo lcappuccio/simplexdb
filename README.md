@@ -96,3 +96,4 @@ Further info: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-
 # ToDo
 - Authentication
 - Spring actuators integration in UI
+- Pending MapDB 3.0 release
