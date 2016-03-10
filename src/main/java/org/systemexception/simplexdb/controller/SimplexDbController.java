@@ -74,6 +74,7 @@ public class SimplexDbController {
 	@ResponseBody
 	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + id);
+		// TODO LC Error here as well
 		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

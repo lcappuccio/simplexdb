@@ -70,6 +70,7 @@ public class BerkeleyDbService implements DatabaseApi {
 	}
 
 	@Override
+	// TODO LC Investigate indexes
 	public List<Data> findAll() throws DatabaseException {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		Cursor databaseCursor = database.openCursor(null, null);
