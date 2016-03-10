@@ -12,48 +12,48 @@ import java.util.UUID;
  */
 public class Data implements Serializable {
 
-	private final String dataInternalId;
-	private final String dataName;
-	private final String dataSize;
+	private final String internalId;
+	private final String name;
+	private final String size;
 	@JsonIgnore
-	private final byte[] dataData;
+	private final byte[] content;
 
-	public Data(final String dataName, final byte[] dataData) {
-		this.dataInternalId = UUID.randomUUID().toString();
-		this.dataName = dataName;
-		this.dataData = dataData;
-		this.dataSize = calculateSize();
+	public Data(final String name, final byte[] content) {
+		this.internalId = UUID.randomUUID().toString();
+		this.name = name;
+		this.content = content;
+		this.size = calculateSize();
 	}
 
-	public Data(final String dataInternalId, final String dataName, final byte[] dataData) {
-		this.dataInternalId = dataInternalId;
-		this.dataName = dataName;
-		this.dataData = dataData;
-		this.dataSize = calculateSize();
+	public Data(final String internalId, final String name, final byte[] content) {
+		this.internalId = internalId;
+		this.name = name;
+		this.content = content;
+		this.size = calculateSize();
 	}
 
-	public String getDataInternalId() {
-		return dataInternalId;
+	public String getInternalId() {
+		return internalId;
 	}
 
-	public String getDataName() {
-		return dataName;
+	public String getName() {
+		return name;
 	}
 
-	public byte[] getDataData() {
-		return dataData;
+	public byte[] getContent() {
+		return content;
 	}
 
-	public String getDataSize() {
-		return dataSize;
+	public String getSize() {
+		return size;
 	}
 
 	private String calculateSize() {
 		float Kb = 1024;
 		float Mb = 1024 * Kb;
-		float size = (float) dataData.length;
+		float size = (float) content.length;
 		if (size < Kb) {
-			return dataData.length + " Byte";
+			return content.length + " Byte";
 		}
 		if (size < Mb) {
 			return (size / Kb) + " KB";
@@ -68,8 +68,8 @@ public class Data implements Serializable {
 
 		Data data = (Data) o;
 
-		if (dataName != null ? !dataName.equals(data.dataName) : data.dataName != null) return false;
-		return Arrays.equals(dataData, data.dataData);
+		if (name != null ? !name.equals(data.name) : data.name != null) return false;
+		return Arrays.equals(content, data.content);
 
 	}
 

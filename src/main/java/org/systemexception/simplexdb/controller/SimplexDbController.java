@@ -110,7 +110,7 @@ public class SimplexDbController {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
 		for (Data data : dataIdList) {
-			storageService.saveFile(databaseService.findById(data.getDataInternalId()).get());
+			storageService.saveFile(databaseService.findById(data.getInternalId()).get());
 		}
 		logger.info(LogMessages.EXPORT_FINISH.toString());
 		return new ResponseEntity<>(HttpStatus.OK);

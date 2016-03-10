@@ -38,13 +38,13 @@ public class MapDbService implements DatabaseApi {
 
 	@Override
 	public boolean save(Data data) {
-		logger.info(LogMessages.SAVE + data.getDataName());
-		if (databaseMap.containsKey(data.getDataInternalId())) {
-			logger.info(LogMessages.SAVE_CONFLICT + data.getDataName());
+		logger.info(LogMessages.SAVE + data.getName());
+		if (databaseMap.containsKey(data.getInternalId())) {
+			logger.info(LogMessages.SAVE_CONFLICT + data.getName());
 			return false;
 		} else {
-			databaseMap.put(data.getDataInternalId(), data);
-			logger.info(LogMessages.SAVED + data.getDataName());
+			databaseMap.put(data.getInternalId(), data);
+			logger.info(LogMessages.SAVED + data.getName());
 			return true;
 		}
 	}
@@ -54,8 +54,8 @@ public class MapDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<Data> foundData = new ArrayList<>();
 		for (String dataId : databaseMap.keySet()) {
-			foundData.add(new Data(dataId, databaseMap.get(dataId).getDataName(),
-					databaseMap.get(dataId).getDataData()));
+			foundData.add(new Data(dataId, databaseMap.get(dataId).getName(),
+					databaseMap.get(dataId).getContent()));
 		}
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
 		return foundData;
@@ -66,8 +66,8 @@ public class MapDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_ID + dataId);
 		if (databaseMap.containsKey(dataId)) {
 			logger.info(LogMessages.FOUND_ID + dataId);
-			return Optional.of(new Data(dataId, databaseMap.get(dataId).getDataName(),
-					databaseMap.get(dataId).getDataData()));
+			return Optional.of(new Data(dataId, databaseMap.get(dataId).getName(),
+					databaseMap.get(dataId).getContent()));
 		} else {
 			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return Optional.empty();
@@ -79,7 +79,7 @@ public class MapDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_MATCH + match);
 		ArrayList<Data> foundItems = new ArrayList<>();
 		for (String dataId : databaseMap.keySet()) {
-			if (databaseMap.get(dataId).getDataName().contains(match)) {
+			if (databaseMap.get(dataId).getName().contains(match)) {
 				foundItems.add(databaseMap.get(dataId));
 			}
 		}

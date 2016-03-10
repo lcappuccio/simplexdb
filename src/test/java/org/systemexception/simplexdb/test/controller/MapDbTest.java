@@ -25,13 +25,13 @@ public class MapDbTest extends AbstractControllerTest {
 	public void setUp() throws DatabaseException {
 		TEST_DATABASE_FILENAME = "target" + File.separator + "test_berkeley.db";
 		mockData = mock(Data.class);
-		when(mockData.getDataInternalId()).thenReturn("123");
-		when(mockData.getDataName()).thenReturn("123");
-		when(mockData.getDataData()).thenReturn("123".getBytes());
+		when(mockData.getInternalId()).thenReturn("123");
+		when(mockData.getName()).thenReturn("123");
+		when(mockData.getContent()).thenReturn("123".getBytes());
 		databaseService = mock(MapDbService.class);
 		storageService = mock(StorageService.class);
-		when(databaseService.findById(mockData.getDataName())).thenReturn(Optional.of(mockData));
-		when(databaseService.delete(mockData.getDataName())).thenReturn(true);
+		when(databaseService.findById(mockData.getName())).thenReturn(Optional.of(mockData));
+		when(databaseService.delete(mockData.getName())).thenReturn(true);
 		when(databaseService.save(any())).thenReturn(true);
 		simplexDbController = new SimplexDbController();
 		MockitoAnnotations.initMocks(this);
