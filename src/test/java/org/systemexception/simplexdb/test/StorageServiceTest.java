@@ -66,14 +66,14 @@ public class StorageServiceTest {
 	@Test
 	public void saveDataExists() {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataName());
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
 		assertTrue(testDataFile.exists());
 	}
 
 	@Test
 	public void historify() throws IOException {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getDataName());
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
 		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(testData);
 		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis()) + "_" +

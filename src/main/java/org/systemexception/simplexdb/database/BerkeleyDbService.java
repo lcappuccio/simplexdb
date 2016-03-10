@@ -48,8 +48,8 @@ public class BerkeleyDbService implements DatabaseApi {
 
 	@Override
 	public boolean save(Data data) throws DatabaseException {
-		logger.info(LogMessages.SAVE + data.getDataName());
-		DatabaseEntry dbKey = new DatabaseEntry(data.getDataInternalId().getBytes());
+		logger.info(LogMessages.SAVE + data.getName());
+		DatabaseEntry dbKey = new DatabaseEntry(data.getInternalId().getBytes());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(out);
@@ -64,7 +64,7 @@ public class BerkeleyDbService implements DatabaseApi {
 			return false;
 		} else {
 			database.put(null, dbKey, dbData);
-			logger.info(LogMessages.SAVED + data.getDataName());
+			logger.info(LogMessages.SAVED + data.getName());
 			return true;
 		}
 	}
@@ -81,7 +81,8 @@ public class BerkeleyDbService implements DatabaseApi {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
 				Data data = (Data) is.readObject();
-				foundData.add(new Data(data.getDataInternalId(), data.getDataName(), dbData.getData()));
+				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), dbData.getData()));
+				is.close();
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
 			}
@@ -96,10 +97,10 @@ public class BerkeleyDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_ID + dataId);
 		List<Data> allData = findAll();
 		for (final Data data : allData) {
-			if (dataId.equals(data.getDataInternalId())) {
+			if (dataId.equals(data.getInternalId())) {
 				logger.info(LogMessages.FOUND_ID + dataId);
 				try {
-					ByteArrayInputStream in = new ByteArrayInputStream(data.getDataData());
+					ByteArrayInputStream in = new ByteArrayInputStream(data.getContent());
 					ObjectInputStream is = new ObjectInputStream(in);
 					Data innerData = (Data) is.readObject();
 					return Optional.of(innerData);
@@ -118,7 +119,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		List<Data> allData = findAll();
 		ArrayList<Data> foundItems = new ArrayList<>();
 		for (final Data data : allData) {
-			if (data.getDataName().contains(match)) {
+			if (data.getName().contains(match)) {
 				foundItems.add(data);
 			}
 		}

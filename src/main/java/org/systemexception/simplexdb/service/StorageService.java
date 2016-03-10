@@ -38,13 +38,13 @@ public class StorageService implements StorageServiceApi {
 
 	@Override
 	public void saveFile(Data data) {
-		File dataFile = new File(storageFolder + File.separator + data.getDataName());
+		File dataFile = new File(storageFolder + File.separator + data.getName());
 		historifyFile(dataFile);
 		try (FileOutputStream fos = new FileOutputStream(dataFile)) {
-			fos.write(data.getDataData());
-			logger.info(data.getDataName() + LogMessages.STORAGE_SAVE);
+			fos.write(data.getContent());
+			logger.info(data.getName() + LogMessages.STORAGE_SAVE);
 		} catch (IOException e) {
-			logger.error(data.getDataName() + LogMessages.STORAGE_SAVE_FAILED + e.getMessage());
+			logger.error(data.getName() + LogMessages.STORAGE_SAVE_FAILED + e.getMessage());
 		}
 	}
 
