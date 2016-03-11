@@ -66,7 +66,7 @@ public class Application {
 		return new ApiInfo(
 				"SimplexDB",
 				"REST API with embedded Database",
-				"1.0.1-SNAPSHOT",
+				null,
 				null,
 				"leo@systemexception.org",
 				"GPL v3",
