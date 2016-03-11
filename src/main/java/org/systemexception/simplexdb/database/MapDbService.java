@@ -53,6 +53,7 @@ public class MapDbService implements DatabaseApi {
 	public List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<Data> foundData = new ArrayList<>();
+		// TODO LC Heap Space error here
 		for (String dataId : databaseMap.keySet()) {
 			foundData.add(databaseMap.get(dataId));
 		}

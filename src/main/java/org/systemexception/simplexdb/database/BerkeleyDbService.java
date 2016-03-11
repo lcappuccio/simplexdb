@@ -83,6 +83,7 @@ public class BerkeleyDbService implements DatabaseApi {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
+				// TODO LC Heap Space error here
 				Data data = (Data) is.readObject();
 				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), dbData.getData()));
 				is.close();
