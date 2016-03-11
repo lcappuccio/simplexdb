@@ -79,7 +79,7 @@ It is basically a thymeleaf template with some simple javascript code and bootst
 
 ## Monitoring
 
-Actuators are deployed (e.g.):
+Actuators are deployed (e.g.), verify `management.port` in `application.properties`:
 
 * [autoconfig](http://localhost:8080/autoconfig)
 * [beans](http://localhost:8080/beans)
@@ -96,3 +96,6 @@ Further info: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-
 # ToDo
 - Authentication
 - Spring actuators integration in UI
+- Pending MapDB 3.0 release
+- Format date and size in html view
+- "in progress" spinner for export operations and frontend disabled during export

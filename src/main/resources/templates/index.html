@@ -65,23 +65,25 @@
 		<tr>
 			<th>ID</th>
 			<th>Name</th>
+			<th>Date</th>
 			<th>Size</th>
 			<th></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="data: ${datalist}">
-			<td th:text="${data.dataInternalId}"></td>
-			<td th:text="${data.dataName}"></td>
-			<td th:text="${data.dataSize}"></td>
+			<td th:text="${data.internalId}"></td>
+			<td th:text="${data.name}"></td>
+			<td th:text="${data.date}"></td>
+			<td th:text="${data.size}"></td>
 			<td>
 				<button type="submit" class="btn btn-default"
-				        th:id="'saveBtn_' + ${data.dataInternalId}"
-				        th:onclick="'saveData(\'' + ${data.dataInternalId} + '\');'">Export
+				        th:id="'saveBtn_' + ${data.internalId}"
+				        th:onclick="'saveData(\'' + ${data.internalId} + '\');'">Export
 				</button>
 				<button type="submit" class="btn btn-danger"
-				        th:id="'deleteBtn_' + ${data.dataInternalId}"
-				        th:onclick="'deleteData(\'' + ${data.dataInternalId} + '\');'">Delete
+				        th:id="'deleteBtn_' + ${data.internalId}"
+				        th:onclick="'deleteData(\'' + ${data.internalId} + '\');'">Delete
 				</button>
 			</td>
 		</tr>

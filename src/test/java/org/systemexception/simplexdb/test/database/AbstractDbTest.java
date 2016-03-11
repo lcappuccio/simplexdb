@@ -57,22 +57,22 @@ public abstract class AbstractDbTest {
 	public void deleteExistingData() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
-		assertTrue(sut.delete(data.getDataInternalId()));
+		assertTrue(sut.delete(data.getInternalId()));
 	}
 
 	@Test
 	public void dontDeleteNonExistingData() throws DatabaseException {
 		Data data = getDataForDatabase("id");
-		assertFalse(sut.delete(data.getDataName()));
+		assertFalse(sut.delete(data.getName()));
 	}
 
 	@Test
 	public void findExistingData() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
-		Data foundData = sut.findById(data.getDataInternalId()).get();
+		Data foundData = sut.findById(data.getInternalId()).get();
 		assertEquals(foundData, data);
-		assertEquals(data.getDataSize(), foundData.getDataSize());
+		assertEquals(data.getSize(), foundData.getSize());
 	}
 
 	@Test(expected = NoSuchElementException.class)
@@ -97,10 +97,10 @@ public abstract class AbstractDbTest {
 		assertTrue(foundItems.size() == 0);
 	}
 
-	protected Data getDataForDatabase(String id) {
+	private Data getDataForDatabase(String id) {
 		byte[] dataContent = ("data" + id).getBytes();
 		String dataId = "data" + id;
-		return new Data(dataId, dataId, dataContent);
+		return new Data(dataId, dataId, System.currentTimeMillis(), dataContent);
 	}
 
 }

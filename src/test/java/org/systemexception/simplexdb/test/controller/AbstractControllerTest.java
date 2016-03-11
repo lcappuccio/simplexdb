@@ -46,7 +46,7 @@ public abstract class AbstractControllerTest {
 	@Autowired
 	protected SimplexDbController simplexDbController;
 	protected MockMvc sut;
-	protected final static String ENDPOINT = "/simplexdb/", REQUEST_PARAM = "fileToUpload";
+	private final static String ENDPOINT = "/simplexdb/", REQUEST_PARAM = "fileToUpload";
 	protected Data mockData;
 
 	@Test
@@ -88,18 +88,18 @@ public abstract class AbstractControllerTest {
 
 	@Test
 	public void find_id_and_save() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getDataName()))
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getName()))
 				.andExpect(status().is(HttpStatus.FOUND.value()));
-		verify(databaseService).findById(mockData.getDataName());
+		verify(databaseService).findById(mockData.getName());
 		verify(storageService).saveFile(mockData);
 	}
 
 	@Test
 	public void dont_find_id() throws Exception {
-		when(databaseService.findById(mockData.getDataName())).thenReturn(Optional.empty());
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getDataName()))
+		when(databaseService.findById(mockData.getName())).thenReturn(Optional.empty());
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getName()))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
-		verify(databaseService).findById(mockData.getDataName());
+		verify(databaseService).findById(mockData.getName());
 	}
 
 	@Test
@@ -110,17 +110,17 @@ public abstract class AbstractControllerTest {
 
 	@Test
 	public void delete_existing() throws Exception {
-		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getDataName()))
+		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getName()))
 				.andExpect(status().is(HttpStatus.OK.value()));
-		verify(databaseService).delete(mockData.getDataName());
+		verify(databaseService).delete(mockData.getName());
 	}
 
 	@Test
 	public void delete_not_existing() throws Exception {
-		when(databaseService.delete(mockData.getDataName())).thenReturn(false);
-		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getDataName()))
+		when(databaseService.delete(mockData.getName())).thenReturn(false);
+		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getName()))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
-		verify(databaseService).delete(mockData.getDataName());
+		verify(databaseService).delete(mockData.getName());
 	}
 
 	@Test

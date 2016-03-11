@@ -85,7 +85,7 @@
               <collectionProp name="HTTPFileArgs.files">
                 <elementProp name="${file_path}/${filename}" elementType="HTTPFileArg">
                   <stringProp name="File.path">${file_path}/${filename}</stringProp>
-                  <stringProp name="File.paramname">file</stringProp>
+                  <stringProp name="File.paramname">fileToUpload</stringProp>
                   <stringProp name="File.mimetype"></stringProp>
                 </elementProp>
               </collectionProp>

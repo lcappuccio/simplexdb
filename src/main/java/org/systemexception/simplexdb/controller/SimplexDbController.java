@@ -1,6 +1,7 @@
 package org.systemexception.simplexdb.controller;
 
 import com.sleepycat.je.DatabaseException;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,9 @@ import java.util.Optional;
  * @date 05/12/15 00:55
  */
 @Controller
-@EnableSwagger2
 @RequestMapping(value = Endpoints.CONTEXT)
+@EnableSwagger2
+@Api(basePath = Endpoints.CONTEXT, description = "SimplexDB REST API")
 public class SimplexDbController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -108,7 +110,7 @@ public class SimplexDbController {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
 		for (Data data : dataIdList) {
-			storageService.saveFile(databaseService.findById(data.getDataInternalId()).get());
+			storageService.saveFile(databaseService.findById(data.getInternalId()).get());
 		}
 		logger.info(LogMessages.EXPORT_FINISH.toString());
 		return new ResponseEntity<>(HttpStatus.OK);
