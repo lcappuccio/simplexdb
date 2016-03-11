@@ -55,19 +55,6 @@ public class Data implements Serializable {
 		return date;
 	}
 
-	private String calculateSize() {
-		float Kb = 1024;
-		float Mb = 1024 * Kb;
-		float size = (float) content.length;
-		if (size < Kb) {
-			return content.length + " Byte";
-		}
-		if (size < Mb) {
-			return (size / Kb) + " KB";
-		}
-		return (size / Mb) + " MB";
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
