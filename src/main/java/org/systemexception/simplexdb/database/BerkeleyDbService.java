@@ -79,11 +79,11 @@ public class BerkeleyDbService implements DatabaseApi {
 		List<Data> foundData = new ArrayList<>();
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
+		// TODO LC Heap Space error here, the cursor goes to memory, the data goes to memory, everything goes to memory
 		while (databaseCursor.getNext(dbKey, dbData, DEFAULT).equals(OperationStatus.SUCCESS)) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
-				// TODO LC Heap Space error here
 				Data data = (Data) is.readObject();
 				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 				is.close();
@@ -104,7 +104,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 		DatabaseEntry dbData = new DatabaseEntry();
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_COMMITTED);
-		if(operationStatus.equals(OperationStatus.SUCCESS)) {
+		if (operationStatus.equals(OperationStatus.SUCCESS)) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
