@@ -30,7 +30,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping(value = Endpoints.CONTEXT)
 @EnableSwagger2
-@Api(basePath = Endpoints.CONTEXT, value = "SimplexDB", description = "SimplexDB REST API")
+@Api(basePath = Endpoints.CONTEXT, description = "SimplexDB REST API")
 public class SimplexDbController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
