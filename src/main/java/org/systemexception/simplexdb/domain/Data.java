@@ -23,7 +23,7 @@ public class Data implements Serializable {
 		this.internalId = UUID.randomUUID().toString();
 		this.name = name;
 		this.content = content;
-		this.size = Long.valueOf(content.length);
+		this.size = (long) content.length;
 		this.date = System.currentTimeMillis();
 	}
 
@@ -31,7 +31,7 @@ public class Data implements Serializable {
 		this.internalId = internalId;
 		this.name = name;
 		this.content = content;
-		this.size = Long.valueOf(content.length);
+		this.size = (long) content.length;
 		this.date = date;
 	}
 
