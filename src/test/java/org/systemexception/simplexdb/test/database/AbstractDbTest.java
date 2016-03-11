@@ -97,7 +97,7 @@ public abstract class AbstractDbTest {
 		assertTrue(foundItems.size() == 0);
 	}
 
-	protected Data getDataForDatabase(String id) {
+	private Data getDataForDatabase(String id) {
 		byte[] dataContent = ("data" + id).getBytes();
 		String dataId = "data" + id;
 		return new Data(dataId, dataId, System.currentTimeMillis(), dataContent);
