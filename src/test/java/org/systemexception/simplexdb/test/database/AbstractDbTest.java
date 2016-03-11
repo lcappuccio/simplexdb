@@ -100,7 +100,7 @@ public abstract class AbstractDbTest {
 	protected Data getDataForDatabase(String id) {
 		byte[] dataContent = ("data" + id).getBytes();
 		String dataId = "data" + id;
-		return new Data(dataId, dataId, dataContent);
+		return new Data(dataId, dataId, System.currentTimeMillis(), dataContent);
 	}
 
 }

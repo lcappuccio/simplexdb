@@ -14,7 +14,7 @@ public class Data implements Serializable {
 
 	private final String internalId;
 	private final String name;
-	private final String size;
+	private final Long size;
 	private final Long date;
 	@JsonIgnore
 	private final byte[] content;
@@ -23,15 +23,7 @@ public class Data implements Serializable {
 		this.internalId = UUID.randomUUID().toString();
 		this.name = name;
 		this.content = content;
-		this.size = calculateSize();
-		this.date = System.currentTimeMillis();
-	}
-
-	public Data(final String internalId, final String name, final byte[] content) {
-		this.internalId = internalId;
-		this.name = name;
-		this.content = content;
-		this.size = calculateSize();
+		this.size = Long.valueOf(content.length);
 		this.date = System.currentTimeMillis();
 	}
 
@@ -39,7 +31,7 @@ public class Data implements Serializable {
 		this.internalId = internalId;
 		this.name = name;
 		this.content = content;
-		this.size = calculateSize();
+		this.size = Long.valueOf(content.length);
 		this.date = date;
 	}
 
@@ -55,25 +47,12 @@ public class Data implements Serializable {
 		return content;
 	}
 
-	public String getSize() {
+	public Long getSize() {
 		return size;
 	}
 
 	public Long getDate() {
 		return date;
-	}
-
-	private String calculateSize() {
-		float Kb = 1024;
-		float Mb = 1024 * Kb;
-		float size = (float) content.length;
-		if (size < Kb) {
-			return content.length + " Byte";
-		}
-		if (size < Mb) {
-			return (size / Kb) + " KB";
-		}
-		return (size / Mb) + " MB";
 	}
 
 	@Override
@@ -84,8 +63,8 @@ public class Data implements Serializable {
 		Data data = (Data) o;
 
 		if (name != null ? !name.equals(data.name) : data.name != null) return false;
+		if (size != null ? !size.equals(data.size) : data.size != null) return false;
 		return Arrays.equals(content, data.content);
 
 	}
-
 }
