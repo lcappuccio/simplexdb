@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sleepycat.je.LockMode.DEFAULT;
+import static com.sleepycat.je.LockMode.READ_COMMITTED;
 import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
 
 /**
@@ -55,6 +56,8 @@ public class BerkeleyDbService implements DatabaseApi {
 			ObjectOutputStream os = new ObjectOutputStream(out);
 			os.writeObject(data);
 			out.toByteArray();
+			os.close();
+			out.close();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
@@ -70,20 +73,21 @@ public class BerkeleyDbService implements DatabaseApi {
 	}
 
 	@Override
-	// TODO LC Investigate indexes
 	public List<Data> findAll() throws DatabaseException {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		Cursor databaseCursor = database.openCursor(null, null);
 		List<Data> foundData = new ArrayList<>();
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
+		// TODO LC Heap Space error here, the cursor goes to memory, the data goes to memory, everything goes to memory
 		while (databaseCursor.getNext(dbKey, dbData, DEFAULT).equals(OperationStatus.SUCCESS)) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
 				Data data = (Data) is.readObject();
-				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), dbData.getData()));
+				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), "0".getBytes()));
 				is.close();
+				in.close();
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
 			}
@@ -96,20 +100,25 @@ public class BerkeleyDbService implements DatabaseApi {
 	@Override
 	public Optional<Data> findById(String dataId) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + dataId);
-		List<Data> allData = findAll();
-		for (final Data data : allData) {
-			if (dataId.equals(data.getInternalId())) {
-				logger.info(LogMessages.FOUND_ID + dataId);
-				try {
-					ByteArrayInputStream in = new ByteArrayInputStream(data.getContent());
-					ObjectInputStream is = new ObjectInputStream(in);
-					Data innerData = (Data) is.readObject();
-					return Optional.of(innerData);
-				} catch (IOException | ClassNotFoundException e) {
-					logger.error(e.getMessage());
-				}
+		Cursor databaseCursor = database.openCursor(null, null);
+		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
+		DatabaseEntry dbData = new DatabaseEntry();
+		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_COMMITTED);
+		if (operationStatus.equals(OperationStatus.SUCCESS)) {
+			try {
+				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+				ObjectInputStream is = new ObjectInputStream(in);
+				Data data = (Data) is.readObject();
+				is.close();
+				in.close();
+				return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
+			} catch (IOException | ClassNotFoundException e) {
+				logger.error(e.getMessage());
+			} finally {
+				databaseCursor.close();
 			}
 		}
+		databaseCursor.close();
 		logger.info(LogMessages.FOUND_NOT_ID + dataId);
 		return Optional.empty();
 	}
