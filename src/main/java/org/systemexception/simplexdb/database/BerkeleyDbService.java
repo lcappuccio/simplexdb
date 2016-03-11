@@ -57,6 +57,7 @@ public class BerkeleyDbService implements DatabaseApi {
 			os.writeObject(data);
 			out.toByteArray();
 			os.close();
+			out.close();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
