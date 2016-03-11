@@ -98,3 +98,4 @@ Further info: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-
 - Spring actuators integration in UI
 - Pending MapDB 3.0 release
 - Format date and size in html view
+- "in progress" spinner for export operations and frontend disabled during export
