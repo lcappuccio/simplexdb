@@ -74,7 +74,6 @@ public class SimplexDbController {
 	@ResponseBody
 	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + id);
-		// TODO LC Error here as well
 		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -111,7 +110,6 @@ public class SimplexDbController {
 		logger.info(LogMessages.EXPORT_START.toString());
 		List<Data> dataIdList = databaseService.findAll();
 		for (Data data : dataIdList) {
-			// TODO LC Error here, findById invokes findAll that is invoked by export that invokes findAll!
 			storageService.saveFile(databaseService.findById(data.getInternalId()).get());
 		}
 		logger.info(LogMessages.EXPORT_FINISH.toString());
