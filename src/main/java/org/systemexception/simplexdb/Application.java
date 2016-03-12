@@ -41,7 +41,7 @@ public class Application {
 	}
 
 	@Bean
-	public DatabaseApi databaseService() throws DatabaseException {
+	public DatabaseApi databaseService() {
 		if ("mapdb".equals(databaseType)) {
 			return new MapDbService(databaseFilename);
 		}

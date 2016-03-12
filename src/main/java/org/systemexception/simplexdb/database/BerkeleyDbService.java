@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sleepycat.je.LockMode.DEFAULT;
 import static com.sleepycat.je.LockMode.READ_COMMITTED;
 import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
 
@@ -26,7 +25,7 @@ public class BerkeleyDbService implements DatabaseApi {
 	private final Database database;
 	private final String databaseName;
 
-	public BerkeleyDbService(final String databaseName) throws DatabaseException {
+	public BerkeleyDbService(final String databaseName) {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
@@ -37,7 +36,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		if (!productionDatabaseFile.exists()) {
 			boolean mkdir = productionDatabaseFile.mkdir();
 			if (!mkdir) {
-				throw new DatabaseException();
+				logger.error("Database directory creation failed");
 			}
 		}
 		environment = new Environment(new File(databaseName), envConfig);
@@ -80,7 +79,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
 		// TODO LC Heap Space error here, the cursor goes to memory, the data goes to memory, everything goes to memory
-		while (databaseCursor.getNext(dbKey, dbData, DEFAULT).equals(OperationStatus.SUCCESS)) {
+		while (databaseCursor.getNext(dbKey, dbData, READ_UNCOMMITTED).equals(OperationStatus.SUCCESS)) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
