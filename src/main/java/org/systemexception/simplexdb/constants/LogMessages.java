@@ -27,7 +27,8 @@ public enum LogMessages {
 	STORAGE_SAVE_FAILED(" failed to save, exception: "),
 	STORAGE_RENAME(" renamed to "),
 	STORAGE_RENAME_FAILED(" failed to rename"),
-	STORAGE_RENAME_EXCEPTION(" failed to rename, exception: ");
+	STORAGE_RENAME_EXCEPTION(" failed to rename, exception: "),
+	MEMORY_OCCUPATION_HIT("Memory occupation limit hit");
 
 	private final String message;
 

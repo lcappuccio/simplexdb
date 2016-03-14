@@ -95,6 +95,9 @@ public class BerkeleyDbService implements DatabaseApi {
 				logger.error(e.getMessage());
 			}
 		}
+		if (usedMemory > maxMemoryOccupation) {
+			logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
+		}
 		databaseCursor.close();
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
 		return foundData;

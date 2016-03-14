@@ -64,6 +64,9 @@ public class MapDbService implements DatabaseApi {
 			foundData.add(data);
 			usedMemory += data.getContent().length;
 		}
+		if (usedMemory > maxMemoryOccupation) {
+			logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
+		}
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
 		return foundData;
 	}
