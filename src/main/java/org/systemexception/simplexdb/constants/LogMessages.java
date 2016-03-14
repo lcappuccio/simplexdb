@@ -10,8 +10,6 @@ public enum LogMessages {
 	CREATE_DATABASE("Open database "),
 	DELETE("Delete id: "),
 	DELETED("Deleted id: "),
-	EXPORT_START("Export started"),
-	EXPORT_FINISH("Export finished"),
 	FIND_ALL_IDS("Find all ids"),
 	FIND_MATCH("Find matching: "),
 	FIND_ID("Find id: "),

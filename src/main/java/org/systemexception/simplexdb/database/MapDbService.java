@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
@@ -26,13 +27,16 @@ public class MapDbService implements DatabaseApi {
 	private final HTreeMap<String, Data> databaseMap;
 	private final String databaseName;
 	private final Long maxMemoryOccupation;
+	private final StorageServiceApi storageService;
 
-	public MapDbService(final String databaseName, final Long maxMemoryOccupation) {
+	public MapDbService(final StorageServiceApi storageService, final String databaseName,
+	                    final Long maxMemoryOccupation) {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		database = makeDatabase();
 		databaseMap = database.hashMap("dataCollection");
 		this.maxMemoryOccupation = maxMemoryOccupation;
+		this.storageService = storageService;
 	}
 
 	private DB makeDatabase() {
@@ -76,7 +80,9 @@ public class MapDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_ID + dataId);
 		if (databaseMap.containsKey(dataId)) {
 			logger.info(LogMessages.FOUND_ID + dataId);
-			return Optional.of(databaseMap.get(dataId));
+			Data data = databaseMap.get(dataId);
+			storageService.saveFile(data);
+			return Optional.of(data);
 		} else {
 			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return Optional.empty();
@@ -84,6 +90,7 @@ public class MapDbService implements DatabaseApi {
 	}
 
 	@Override
+	// TODO LC Add memory occupation checks
 	public List<Data> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		ArrayList<Data> foundItems = new ArrayList<>();

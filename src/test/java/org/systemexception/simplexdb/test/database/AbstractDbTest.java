@@ -4,12 +4,15 @@ import com.sleepycat.je.DatabaseException;
 import org.junit.Test;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.service.StorageService;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author leo
@@ -19,6 +22,7 @@ public abstract class AbstractDbTest {
 
 	protected DatabaseApi sut;
 	protected static String TEST_DATABASE_FILENAME;
+	protected StorageServiceApi storageServiceApi = mock(StorageService.class);
 
 	@Test
 	public void databaseCreated() {

@@ -1,13 +1,18 @@
 package org.systemexception.simplexdb.database;
 
+import com.sleepycat.collections.StoredSortedMap;
 import com.sleepycat.je.*;
+import com.sleepycat.je.util.DbDump;
+import org.mapdb.BTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +30,10 @@ public class BerkeleyDbService implements DatabaseApi {
 	private final Database database;
 	private final String databaseName;
 	private final Long maxMemoryOccupation;
+	private StorageServiceApi storageService;
 
-	public BerkeleyDbService(final String databaseName, final Long maxMemoryOccupation) {
+	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
+	                         final Long maxMemoryOccupation) {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
@@ -46,6 +53,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		databaseConfig.setTransactional(true);
 		database = environment.openDatabase(null, databaseName, databaseConfig);
 		this.maxMemoryOccupation = maxMemoryOccupation;
+		this.storageService = storageService;
 	}
 
 	@Override
@@ -117,6 +125,7 @@ public class BerkeleyDbService implements DatabaseApi {
 				Data data = (Data) is.readObject();
 				is.close();
 				in.close();
+				storageService.saveFile(data);
 				return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
@@ -130,6 +139,7 @@ public class BerkeleyDbService implements DatabaseApi {
 	}
 
 	@Override
+	// TODO LC Add memory occupation checks
 	public List<Data> findByFilename(String match) throws DatabaseException {
 		logger.info(LogMessages.FIND_MATCH + match);
 		List<Data> allData = findAll();
