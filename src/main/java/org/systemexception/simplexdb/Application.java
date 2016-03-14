@@ -48,12 +48,12 @@ public class Application {
 	}
 
 	@Bean
-	public DatabaseApi databaseService() {
+	public DatabaseApi databaseService() throws IOException {
 		if ("mapdb".equals(databaseType)) {
-			return new MapDbService(databaseFilename, maxMemoryOccupation);
+			return new MapDbService(storageService(), databaseFilename, maxMemoryOccupation);
 		}
 		if ("berkeleydb".equals(databaseType)) {
-			return new BerkeleyDbService(databaseFilename, maxMemoryOccupation);
+			return new BerkeleyDbService(storageService(), databaseFilename, maxMemoryOccupation);
 		}
 		throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
 	}

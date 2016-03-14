@@ -28,7 +28,7 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 			databaseFile.delete();
 		}
 		databaseFile.mkdir();
-		sut = new BerkeleyDbService(TEST_DATABASE_FILENAME, 1000L);
+		sut = new BerkeleyDbService(storageServiceApi, TEST_DATABASE_FILENAME, 1000L);
 	}
 
 	@After

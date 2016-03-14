@@ -19,8 +19,6 @@ import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -91,7 +89,6 @@ public abstract class AbstractControllerTest {
 		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getName()))
 				.andExpect(status().is(HttpStatus.FOUND.value()));
 		verify(databaseService).findById(mockData.getName());
-		verify(storageService).saveFile(mockData);
 	}
 
 	@Test
@@ -121,16 +118,5 @@ public abstract class AbstractControllerTest {
 		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getName()))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 		verify(databaseService).delete(mockData.getName());
-	}
-
-	@Test
-	public void export() throws Exception {
-		List<Data> dataIdList = new ArrayList<>();
-		dataIdList.add(mockData);
-		when(databaseService.findAll()).thenReturn(dataIdList);
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.EXPORT)).andExpect(status()
-				.is(HttpStatus.OK.value()));
-		verify(databaseService).findAll();
-		verify(storageService).saveFile(any());
 	}
 }

@@ -16,7 +16,6 @@ import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
-import org.systemexception.simplexdb.service.StorageServiceApi;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
@@ -34,9 +33,6 @@ import java.util.Optional;
 public class SimplexDbController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	@Autowired
-	private StorageServiceApi storageService;
 
 	@Autowired
 	private DatabaseApi databaseService;
@@ -78,7 +74,6 @@ public class SimplexDbController {
 		if (data.equals(Optional.empty())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			storageService.saveFile(data.get());
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 	}
@@ -102,17 +97,5 @@ public class SimplexDbController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-	}
-
-	@RequestMapping(value = Endpoints.EXPORT, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-	@ResponseBody
-	public ResponseEntity<HttpStatus> export() throws DatabaseException {
-		logger.info(LogMessages.EXPORT_START.toString());
-		List<Data> dataIdList = databaseService.findAll();
-		for (Data data : dataIdList) {
-			storageService.saveFile(databaseService.findById(data.getInternalId()).get());
-		}
-		logger.info(LogMessages.EXPORT_FINISH.toString());
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
