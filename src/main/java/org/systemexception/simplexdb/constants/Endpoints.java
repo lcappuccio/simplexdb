@@ -13,7 +13,6 @@ public class Endpoints {
 	public static final String FINDBYID = "/findbyid";
 	public static final String FINDBYNAME = "/findbyname";
 	public static final String DELETE = "/delete";
-	public static final String EXPORT = "/export";
 
 	public static final String ID_WITH_EXTENSION = "/{id:.+}";
 }
