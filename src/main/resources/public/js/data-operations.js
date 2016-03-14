@@ -57,15 +57,6 @@ function deleteData(data) {
 	});
 }
 
-function exportData() {
-	$.ajax({
-		url: "/simplexdb/export/",
-		type: "GET",
-		success() {
-		}
-	});
-}
-
 function fileSelected() {
 	var files = document.getElementById("fileUploadBtn").files;
 	var fileSizeTotal = 0;
