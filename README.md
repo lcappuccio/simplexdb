@@ -33,6 +33,7 @@ Have a look at the properties file and specify the mandatory parameters:
 - database.type
 - database.filename
 - storage.folder
+- database.memory.occupation: this setting is used to configure the maximum amount of records used by the findAll endpoint, tune it with JVM parameters otherwise there will be OOM exceptions
 
 Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
 
@@ -64,7 +65,7 @@ environment.
 
 Replace $action with:
 - **save**: stores a file in the database
-- **findall**: obtain a full list of the stored data (ids only) in JSON format
+- **findall**: obtain a full list of the stored data in JSON format, see `database.memory.occupation`
 - **findbyid**: will download and save to disk the file with the corresponding id, if the same id was previously saved
 the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **findbyname**: obtain a full list of the stored data in JSON format with name matching the searched string

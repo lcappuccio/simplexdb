@@ -1,6 +1,8 @@
 package org.systemexception.simplexdb;
 
-import com.sleepycat.je.DatabaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -27,6 +29,8 @@ import java.io.IOException;
 @SpringBootApplication
 public class Application {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Value("${database.filename}")
 	private String databaseFilename;
 
@@ -36,6 +40,9 @@ public class Application {
 	@Value("${database.type}")
 	private String databaseType;
 
+	@Value("${database.memory.occupation}")
+	private Long maxMemoryOccupation;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
@@ -43,13 +50,12 @@ public class Application {
 	@Bean
 	public DatabaseApi databaseService() {
 		if ("mapdb".equals(databaseType)) {
-			return new MapDbService(databaseFilename);
+			return new MapDbService(databaseFilename, maxMemoryOccupation);
 		}
 		if ("berkeleydb".equals(databaseType)) {
-			return new BerkeleyDbService(databaseFilename);
+			return new BerkeleyDbService(databaseFilename, maxMemoryOccupation);
 		}
-		// Use a default
-		return new MapDbService(databaseFilename);
+		throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
 	}
 
 	@Bean
