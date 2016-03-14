@@ -136,7 +136,6 @@ public class BerkeleyDbService implements DatabaseApi {
 	}
 
 	@Override
-	// TODO LC Add memory occupation checks
 	public List<Data> findByFilename(String match) throws DatabaseException {
 		logger.info(LogMessages.FIND_MATCH + match);
 		List<Data> allData = findAll();

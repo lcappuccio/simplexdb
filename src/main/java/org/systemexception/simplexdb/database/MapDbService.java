@@ -90,7 +90,6 @@ public class MapDbService implements DatabaseApi {
 	}
 
 	@Override
-	// TODO LC Add memory occupation checks
 	public List<Data> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		ArrayList<Data> foundItems = new ArrayList<>();
