@@ -22,7 +22,7 @@ public abstract class AbstractDbTest {
 
 	protected DatabaseApi sut;
 	protected static String TEST_DATABASE_FILENAME;
-	protected StorageServiceApi storageServiceApi = mock(StorageService.class);
+	protected final StorageServiceApi storageServiceApi = mock(StorageService.class);
 
 	@Test
 	public void databaseCreated() {

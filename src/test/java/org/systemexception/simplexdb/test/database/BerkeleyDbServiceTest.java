@@ -4,9 +4,11 @@ import com.sleepycat.je.DatabaseException;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.systemexception.simplexdb.database.BerkeleyDbService;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -21,7 +23,7 @@ import java.util.stream.Stream;
 public class BerkeleyDbServiceTest extends AbstractDbTest {
 
 	@Before
-	public void setUp() throws DatabaseException {
+	public void setUp() throws FileNotFoundException {
 		TEST_DATABASE_FILENAME = "target" + File.separator + "test_berkeley.db";
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		if (databaseFile.exists()) {
@@ -39,5 +41,10 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 		walk.forEach(item -> item.toFile().delete());
 		FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
 		assert(!databaseFile.exists());
+	}
+
+	@Test(expected = FileNotFoundException.class)
+	public void dont_create_bad_dir() throws FileNotFoundException {
+		sut = new BerkeleyDbService(storageServiceApi, "//\\|/", 1000L);
 	}
 }

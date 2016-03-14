@@ -1,9 +1,6 @@
 package org.systemexception.simplexdb.database;
 
-import com.sleepycat.collections.StoredSortedMap;
 import com.sleepycat.je.*;
-import com.sleepycat.je.util.DbDump;
-import org.mapdb.BTreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
@@ -12,7 +9,6 @@ import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +29,7 @@ public class BerkeleyDbService implements DatabaseApi {
 	private StorageServiceApi storageService;
 
 	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
-	                         final Long maxMemoryOccupation) {
+	                         final Long maxMemoryOccupation) throws FileNotFoundException {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
@@ -45,6 +41,7 @@ public class BerkeleyDbService implements DatabaseApi {
 			boolean mkdir = productionDatabaseFile.mkdir();
 			if (!mkdir) {
 				logger.error("Database directory creation failed");
+				throw new FileNotFoundException("Database directory creation failed");
 			}
 		}
 		environment = new Environment(new File(databaseName), envConfig);
