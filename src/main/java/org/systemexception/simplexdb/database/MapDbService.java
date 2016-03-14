@@ -11,6 +11,7 @@ import org.systemexception.simplexdb.domain.Data;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +25,14 @@ public class MapDbService implements DatabaseApi {
 	private final DB database;
 	private final HTreeMap<String, Data> databaseMap;
 	private final String databaseName;
+	private final Long maxMemoryOccupation;
 
-	public MapDbService(final String databaseName) {
+	public MapDbService(final String databaseName, final Long maxMemoryOccupation) {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		database = makeDatabase();
 		databaseMap = database.hashMap("dataCollection");
+		this.maxMemoryOccupation = maxMemoryOccupation;
 	}
 
 	private DB makeDatabase() {
@@ -53,9 +56,13 @@ public class MapDbService implements DatabaseApi {
 	public List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<Data> foundData = new ArrayList<>();
-		// TODO LC Heap Space error here
-		for (String dataId : databaseMap.keySet()) {
-			foundData.add(databaseMap.get(dataId));
+		Long usedMemory = 0L;
+		Iterator<String> iterator = databaseMap.keySet().iterator();
+		while (iterator.hasNext() && usedMemory < maxMemoryOccupation) {
+			String next = iterator.next();
+			Data data = databaseMap.get(next);
+			foundData.add(data);
+			usedMemory += data.getContent().length;
 		}
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
 		return foundData;

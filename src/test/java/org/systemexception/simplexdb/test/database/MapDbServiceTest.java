@@ -21,7 +21,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 		if (databaseFile.exists()) {
 			databaseFile.delete();
 		}
-		sut = new MapDbService(TEST_DATABASE_FILENAME);
+		sut = new MapDbService(TEST_DATABASE_FILENAME, 1000L);
 	}
 
 	@AfterClass

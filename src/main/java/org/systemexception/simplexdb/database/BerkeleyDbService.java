@@ -11,12 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sleepycat.je.LockMode.DEFAULT;
 import static com.sleepycat.je.LockMode.READ_COMMITTED;
 import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
 
 /**
- * @author leo
+ * @author le
  * @date 28/02/16 11:55
  */
 public class BerkeleyDbService implements DatabaseApi {
@@ -25,8 +24,9 @@ public class BerkeleyDbService implements DatabaseApi {
 	private final Environment environment;
 	private final Database database;
 	private final String databaseName;
+	private final Long maxMemoryOccupation;
 
-	public BerkeleyDbService(final String databaseName) throws DatabaseException {
+	public BerkeleyDbService(final String databaseName, final Long maxMemoryOccupation) {
 		this.databaseName = databaseName;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
@@ -37,7 +37,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		if (!productionDatabaseFile.exists()) {
 			boolean mkdir = productionDatabaseFile.mkdir();
 			if (!mkdir) {
-				throw new DatabaseException();
+				logger.error("Database directory creation failed");
 			}
 		}
 		environment = new Environment(new File(databaseName), envConfig);
@@ -45,6 +45,7 @@ public class BerkeleyDbService implements DatabaseApi {
 		databaseConfig.setAllowCreate(true);
 		databaseConfig.setTransactional(true);
 		database = environment.openDatabase(null, databaseName, databaseConfig);
+		this.maxMemoryOccupation = maxMemoryOccupation;
 	}
 
 	@Override
@@ -79,15 +80,17 @@ public class BerkeleyDbService implements DatabaseApi {
 		List<Data> foundData = new ArrayList<>();
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
-		// TODO LC Heap Space error here, the cursor goes to memory, the data goes to memory, everything goes to memory
-		while (databaseCursor.getNext(dbKey, dbData, DEFAULT).equals(OperationStatus.SUCCESS)) {
+		Long usedMemory = 0L;
+		while (databaseCursor.getNext(dbKey, dbData, READ_UNCOMMITTED).equals(OperationStatus.SUCCESS) &&
+				usedMemory < maxMemoryOccupation) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
 				Data data = (Data) is.readObject();
-				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), "0".getBytes()));
+				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 				is.close();
 				in.close();
+				usedMemory += data.getContent().length;
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
 			}
