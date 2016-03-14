@@ -97,6 +97,33 @@ function uploadFile() {
 	}
 }
 
-$(document).ready(function () {
-	$("#dataTable").DataTable();
-});
+function drawTable(data) {
+	var tableData = '';
+	$("#dataTable tbody").empty();
+	for (var i = 0; i < data.length; i++) {
+		var rowData = "<tr>";
+		rowData += "<td>" + data[i].internalId + "</td>";
+		rowData += "<td>" + data[i].name + "</td>";
+		rowData += "<td>" + data[i].date + "</td>";
+		rowData += "<td>" + data[i].size + "</td>";
+		rowData += "<td><button type=submit class='btn btn-default' id=saveBtn_" + data[i].internalId +
+			" onclick=saveData('" + data[i].internalId + "');>Save</button>";
+		rowData += "<button type=submit class='btn btn-danger' id=deleteBtn_" + data[i].internalId +
+			" onclick=deleteData('" + data[i].internalId + "');>Delete</button></td></tr>";
+		tableData += rowData;
+	}
+	$("#dataTable tbody").append(tableData);
+}
+
+function findByName() {
+	var findByNameString = document.getElementById("findByNameTextField").value;
+	if (findByNameString.length == 0) {
+		$.get("/simplexdb/findall", function (data) {
+			drawTable(data);
+		});
+	} else {
+		$.get("/simplexdb/findbyname/" + findByNameString, function (data) {
+			drawTable(data);
+		});
+	}
+}
