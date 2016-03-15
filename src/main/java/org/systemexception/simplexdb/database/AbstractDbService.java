@@ -1,6 +1,5 @@
 package org.systemexception.simplexdb.database;
 
-import com.sleepycat.je.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.domain.Data;
@@ -21,37 +20,37 @@ public class AbstractDbService implements DatabaseApi {
 	protected StorageServiceApi storageService;
 
 	@Override
-	public boolean save(Data data) throws DatabaseException {
+	public boolean save(Data data) {
 		return false;
 	}
 
 	@Override
-	public List<Data> findAll() throws DatabaseException {
+	public List<Data> findAll() {
 		return null;
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) throws DatabaseException {
+	public Optional<Data> findById(String dataId) {
 		return null;
 	}
 
 	@Override
-	public List<Data> findByFilename(String match) throws DatabaseException {
+	public List<Data> findByFilename(String match) {
 		return null;
 	}
 
 	@Override
-	public boolean delete(String dataId) throws DatabaseException {
+	public boolean delete(String dataId) {
 		return false;
 	}
 
 	@Override
-	public void close() throws DatabaseException {
-
+	public void close() {
+		// See implementation
 	}
 
 	@Override
 	public void commit() {
-
+		// See implementation
 	}
 }
