@@ -5,7 +5,7 @@ import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.systemexception.simplexdb.database.BerkeleyDbService;
+import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
 
 import java.io.File;
 import java.io.FileNotFoundException;

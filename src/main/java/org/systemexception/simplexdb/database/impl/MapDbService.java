@@ -1,11 +1,10 @@
-package org.systemexception.simplexdb.database;
+package org.systemexception.simplexdb.database.impl;
 
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
+import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
@@ -20,14 +19,10 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:45
  */
-public class MapDbService implements DatabaseApi {
+public class MapDbService extends AbstractDbService {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DB database;
 	private final HTreeMap<String, Data> databaseMap;
-	private final String databaseName;
-	private final Long maxMemoryOccupation;
-	private final StorageServiceApi storageService;
 
 	public MapDbService(final StorageServiceApi storageService, final String databaseName,
 	                    final Long maxMemoryOccupation) {

@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.simplexdb.controller.SimplexDbController;
-import org.systemexception.simplexdb.database.MapDbService;
+import org.systemexception.simplexdb.database.impl.MapDbService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageService;
 
