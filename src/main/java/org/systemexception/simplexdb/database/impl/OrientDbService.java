@@ -43,19 +43,23 @@ public class OrientDbService extends AbstractDbService {
 
 	@Override
 	public boolean save(Data data) {
+		logger.info(LogMessages.SAVE + data.getName());
 		database.activateOnCurrentThread();
 		database.getEntityManager().registerEntityClass(Data.class);
 		for (Data innerData : database.browseClass(Data.class)) {
 			if (innerData.getInternalId().equals(data.getInternalId())) {
+				logger.info(LogMessages.SAVE_CONFLICT + data.getName());
 				return false;
 			}
 		}
+		logger.info(LogMessages.SAVED + data.getName());
 		database.save(data);
 		return true;
 	}
 
 	@Override
 	public List<Data> findAll() {
+		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		database.activateOnCurrentThread();
 		List<Data> dataList = new ArrayList<>();
 		for (Data data : database.browseClass(Data.class)) {
@@ -67,11 +71,13 @@ public class OrientDbService extends AbstractDbService {
 			outData.setSize(data.getSize());
 			dataList.add(outData);
 		}
+		logger.info(LogMessages.FOUND_ID.toString() + dataList.size());
 		return dataList;
 	}
 
 	@Override
 	public Optional<Data> findById(String dataId) {
+		logger.info(LogMessages.FIND_ID + dataId);
 		database.activateOnCurrentThread();
 		database.getEntityManager().registerEntityClass(Data.class);
 		for (Data data : database.browseClass(Data.class)) {
@@ -82,14 +88,17 @@ public class OrientDbService extends AbstractDbService {
 				outData.setDate(data.getDate());
 				outData.setName(data.getName());
 				outData.setSize(data.getSize());
+				logger.info(LogMessages.FOUND_ID + dataId);
 				return Optional.of(outData);
 			}
 		}
+		logger.info(LogMessages.FOUND_NOT_ID + dataId);
 		return Optional.empty();
 	}
 
 	@Override
 	public List<Data> findByFilename(final String match) {
+		logger.info(LogMessages.FIND_MATCH + match);
 		database.activateOnCurrentThread();
 		List<Data> foundData = new ArrayList<>();
 		for (Data data : database.browseClass(Data.class)) {
@@ -103,19 +112,23 @@ public class OrientDbService extends AbstractDbService {
 				foundData.add(outData);
 			}
 		}
+		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
 		return foundData;
 	}
 
 	@Override
 	public boolean delete(String dataId) {
+		logger.info(LogMessages.DELETE + dataId);
 		database.activateOnCurrentThread();
 		database.getEntityManager().registerEntityClass(Data.class);
 		for (Data data : database.browseClass(Data.class)) {
 			if (dataId.equals(data.getInternalId())) {
 				database.delete(data);
+				logger.info(LogMessages.DELETED + dataId);
 				return true;
 			}
 		}
+		logger.info(LogMessages.FOUND_NOT_ID + dataId);
 		return false;
 	}
 
