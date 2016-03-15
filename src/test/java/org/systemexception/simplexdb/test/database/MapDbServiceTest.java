@@ -1,6 +1,5 @@
 package org.systemexception.simplexdb.test.database;
 
-import com.sleepycat.je.DatabaseException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,7 +33,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 	}
 
 	@After
-	public void tearDown() throws DatabaseException {
+	public void tearDown() {
 		sut.close();
 	}
 

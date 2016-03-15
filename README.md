@@ -18,6 +18,7 @@ lightest possible database with a REST interface.
 ## Supported Databases
 - **MapDB**
 - **BerkeleyDB**
+- **OrientDB**
 
 ## Usage
 
@@ -92,6 +93,7 @@ Further info: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-
 - Uploaded with the JMeter plan running on the same machine
 - **MapDB**: Throughput: 50 files/sec, 13Kb/sec
 - **Berkeley DB**: Throughput: 125 files/sec, 33Kb/sec
+- **Orient DB**: To test
 
 # ToDo
 - Authentication
