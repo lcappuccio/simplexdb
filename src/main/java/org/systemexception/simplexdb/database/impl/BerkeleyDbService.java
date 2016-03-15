@@ -26,6 +26,8 @@ public class BerkeleyDbService extends AbstractDbService {
 	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
 	                         final Long maxMemoryOccupation) throws FileNotFoundException {
 		this.databaseName = databaseName;
+		this.maxMemoryOccupation = maxMemoryOccupation;
+		this.storageService = storageService;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
 		envConfig.setConfigParam("je.log.fileMax", "256000000");
@@ -44,8 +46,6 @@ public class BerkeleyDbService extends AbstractDbService {
 		databaseConfig.setAllowCreate(true);
 		databaseConfig.setTransactional(true);
 		database = environment.openDatabase(null, databaseName, databaseConfig);
-		this.maxMemoryOccupation = maxMemoryOccupation;
-		this.storageService = storageService;
 	}
 
 	@Override

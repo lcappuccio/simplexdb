@@ -27,11 +27,11 @@ public class MapDbService extends AbstractDbService {
 	public MapDbService(final StorageServiceApi storageService, final String databaseName,
 	                    final Long maxMemoryOccupation) {
 		this.databaseName = databaseName;
+		this.maxMemoryOccupation = maxMemoryOccupation;
+		this.storageService = storageService;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		database = makeDatabase();
 		databaseMap = database.hashMap("dataCollection");
-		this.maxMemoryOccupation = maxMemoryOccupation;
-		this.storageService = storageService;
 	}
 
 	private DB makeDatabase() {
