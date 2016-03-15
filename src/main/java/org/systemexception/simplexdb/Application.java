@@ -9,9 +9,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.systemexception.simplexdb.database.BerkeleyDbService;
+import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
 import org.systemexception.simplexdb.database.DatabaseApi;
-import org.systemexception.simplexdb.database.MapDbService;
+import org.systemexception.simplexdb.database.impl.MapDbService;
+import org.systemexception.simplexdb.database.impl.OrientDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 import springfox.documentation.service.ApiInfo;
@@ -54,6 +55,9 @@ public class Application {
 		}
 		if ("berkeleydb".equals(databaseType)) {
 			return new BerkeleyDbService(storageService(), databaseFilename, maxMemoryOccupation);
+		}
+		if ("orientdb".equals(databaseType)) {
+			return new OrientDbService(storageService(), databaseFilename, maxMemoryOccupation);
 		}
 		throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
 	}

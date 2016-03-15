@@ -1,9 +1,8 @@
-package org.systemexception.simplexdb.database;
+package org.systemexception.simplexdb.database.impl;
 
 import com.sleepycat.je.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
+import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
@@ -19,18 +18,16 @@ import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
  * @author le
  * @date 28/02/16 11:55
  */
-public class BerkeleyDbService implements DatabaseApi {
+public class BerkeleyDbService extends AbstractDbService {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final Environment environment;
 	private final Database database;
-	private final String databaseName;
-	private final Long maxMemoryOccupation;
-	private StorageServiceApi storageService;
 
 	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
 	                         final Long maxMemoryOccupation) throws FileNotFoundException {
 		this.databaseName = databaseName;
+		this.maxMemoryOccupation = maxMemoryOccupation;
+		this.storageService = storageService;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
 		envConfig.setConfigParam("je.log.fileMax", "256000000");
@@ -49,8 +46,6 @@ public class BerkeleyDbService implements DatabaseApi {
 		databaseConfig.setAllowCreate(true);
 		databaseConfig.setTransactional(true);
 		database = environment.openDatabase(null, databaseName, databaseConfig);
-		this.maxMemoryOccupation = maxMemoryOccupation;
-		this.storageService = storageService;
 	}
 
 	@Override
