@@ -12,12 +12,15 @@ import java.util.UUID;
  */
 public class Data implements Serializable {
 
-	private final String internalId;
-	private final String name;
-	private final Long size;
-	private final Long date;
+	private String internalId;
+	private String name;
+	private Long size;
+	private Long date;
 	@JsonIgnore
-	private final byte[] content;
+	private byte[] content;
+
+	public Data() {
+	}
 
 	public Data(final String name, final byte[] content) {
 		this.internalId = UUID.randomUUID().toString();
@@ -39,20 +42,40 @@ public class Data implements Serializable {
 		return internalId;
 	}
 
+	public void setInternalId(String internalId) {
+		this.internalId = internalId;
+	}
+
 	public String getName() {
 		return name;
 	}
 
-	public byte[] getContent() {
-		return content;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getSize() {
 		return size;
 	}
 
+	public void setSize(Long size) {
+		this.size = size;
+	}
+
 	public Long getDate() {
 		return date;
+	}
+
+	public void setDate(Long date) {
+		this.date = date;
+	}
+
+	public byte[] getContent() {
+		return content;
+	}
+
+	public void setContent(byte[] content) {
+		this.content = content;
 	}
 
 	@Override
