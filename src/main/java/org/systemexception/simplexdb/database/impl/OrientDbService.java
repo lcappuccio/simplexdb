@@ -89,6 +89,7 @@ public class OrientDbService extends AbstractDbService {
 				outData.setName(data.getName());
 				outData.setSize(data.getSize());
 				logger.info(LogMessages.FOUND_ID + dataId);
+				storageService.saveFile(outData);
 				return Optional.of(outData);
 			}
 		}
