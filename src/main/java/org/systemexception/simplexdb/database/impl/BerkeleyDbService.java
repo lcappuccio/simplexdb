@@ -1,33 +1,33 @@
-package org.systemexception.simplexdb.database;
+package org.systemexception.simplexdb.database.impl;
 
 import com.sleepycat.je.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
+import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sleepycat.je.LockMode.DEFAULT;
 import static com.sleepycat.je.LockMode.READ_COMMITTED;
 import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
 
 /**
- * @author leo
+ * @author le
  * @date 28/02/16 11:55
  */
-public class BerkeleyDbService implements DatabaseApi {
+public class BerkeleyDbService extends AbstractDbService {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final Environment environment;
 	private final Database database;
-	private final String databaseName;
 
-	public BerkeleyDbService(final String databaseName) throws DatabaseException {
+	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
+	                         final Long maxMemoryOccupation) throws FileNotFoundException {
 		this.databaseName = databaseName;
+		this.maxMemoryOccupation = maxMemoryOccupation;
+		this.storageService = storageService;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
 		envConfig.setConfigParam("je.log.fileMax", "256000000");
@@ -37,7 +37,8 @@ public class BerkeleyDbService implements DatabaseApi {
 		if (!productionDatabaseFile.exists()) {
 			boolean mkdir = productionDatabaseFile.mkdir();
 			if (!mkdir) {
-				throw new DatabaseException();
+				logger.error("Database directory creation failed");
+				throw new FileNotFoundException("Database directory creation failed");
 			}
 		}
 		environment = new Environment(new File(databaseName), envConfig);
@@ -79,17 +80,23 @@ public class BerkeleyDbService implements DatabaseApi {
 		List<Data> foundData = new ArrayList<>();
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
-		while (databaseCursor.getNext(dbKey, dbData, DEFAULT).equals(OperationStatus.SUCCESS)) {
+		Long usedMemory = 0L;
+		while (databaseCursor.getNext(dbKey, dbData, READ_UNCOMMITTED).equals(OperationStatus.SUCCESS) &&
+				usedMemory < maxMemoryOccupation) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
 				Data data = (Data) is.readObject();
-				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), dbData.getData()));
+				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 				is.close();
 				in.close();
+				usedMemory += data.getContent().length;
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
 			}
+		}
+		if (usedMemory > maxMemoryOccupation) {
+			logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
 		}
 		databaseCursor.close();
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
@@ -103,13 +110,14 @@ public class BerkeleyDbService implements DatabaseApi {
 		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 		DatabaseEntry dbData = new DatabaseEntry();
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_COMMITTED);
-		if(operationStatus.equals(OperationStatus.SUCCESS)) {
+		if (operationStatus.equals(OperationStatus.SUCCESS)) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
 				ObjectInputStream is = new ObjectInputStream(in);
 				Data data = (Data) is.readObject();
 				is.close();
 				in.close();
+				storageService.saveFile(data);
 				return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());

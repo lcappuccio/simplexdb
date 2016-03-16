@@ -1,15 +1,17 @@
 package org.systemexception.simplexdb;
 
-import com.sleepycat.je.DatabaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.systemexception.simplexdb.database.BerkeleyDbService;
+import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
 import org.systemexception.simplexdb.database.DatabaseApi;
-import org.systemexception.simplexdb.database.MapDbService;
+import org.systemexception.simplexdb.database.impl.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 import springfox.documentation.service.ApiInfo;
@@ -27,6 +29,8 @@ import java.io.IOException;
 @SpringBootApplication
 public class Application {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Value("${database.filename}")
 	private String databaseFilename;
 
@@ -36,20 +40,22 @@ public class Application {
 	@Value("${database.type}")
 	private String databaseType;
 
+	@Value("${database.memory.occupation}")
+	private Long maxMemoryOccupation;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Bean
-	public DatabaseApi databaseService() throws DatabaseException {
+	public DatabaseApi databaseService() throws IOException {
 		if ("mapdb".equals(databaseType)) {
-			return new MapDbService(databaseFilename);
+			return new MapDbService(storageService(), databaseFilename, maxMemoryOccupation);
 		}
 		if ("berkeleydb".equals(databaseType)) {
-			return new BerkeleyDbService(databaseFilename);
+			return new BerkeleyDbService(storageService(), databaseFilename, maxMemoryOccupation);
 		}
-		// Use a default
-		return new MapDbService(databaseFilename);
+		throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
 	}
 
 	@Bean

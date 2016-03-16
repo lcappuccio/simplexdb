@@ -10,8 +10,6 @@ public enum LogMessages {
 	CREATE_DATABASE("Open database "),
 	DELETE("Delete id: "),
 	DELETED("Deleted id: "),
-	EXPORT_START("Export started"),
-	EXPORT_FINISH("Export finished"),
 	FIND_ALL_IDS("Find all ids"),
 	FIND_MATCH("Find matching: "),
 	FIND_ID("Find id: "),
@@ -27,7 +25,8 @@ public enum LogMessages {
 	STORAGE_SAVE_FAILED(" failed to save, exception: "),
 	STORAGE_RENAME(" renamed to "),
 	STORAGE_RENAME_FAILED(" failed to rename"),
-	STORAGE_RENAME_EXCEPTION(" failed to rename, exception: ");
+	STORAGE_RENAME_EXCEPTION(" failed to rename, exception: "),
+	MEMORY_OCCUPATION_HIT("Memory occupation limit hit");
 
 	private final String message;
 

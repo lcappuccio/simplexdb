@@ -1,16 +1,17 @@
-package org.systemexception.simplexdb.database;
+package org.systemexception.simplexdb.database.impl;
 
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
+import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,15 +19,16 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:45
  */
-public class MapDbService implements DatabaseApi {
+public class MapDbService extends AbstractDbService {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DB database;
 	private final HTreeMap<String, Data> databaseMap;
-	private final String databaseName;
 
-	public MapDbService(final String databaseName) {
+	public MapDbService(final StorageServiceApi storageService, final String databaseName,
+	                    final Long maxMemoryOccupation) {
 		this.databaseName = databaseName;
+		this.maxMemoryOccupation = maxMemoryOccupation;
+		this.storageService = storageService;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		database = makeDatabase();
 		databaseMap = database.hashMap("dataCollection");
@@ -53,8 +55,16 @@ public class MapDbService implements DatabaseApi {
 	public List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<Data> foundData = new ArrayList<>();
-		for (String dataId : databaseMap.keySet()) {
-			foundData.add(databaseMap.get(dataId));
+		Long usedMemory = 0L;
+		Iterator<String> iterator = databaseMap.keySet().iterator();
+		while (iterator.hasNext() && usedMemory < maxMemoryOccupation) {
+			String next = iterator.next();
+			Data data = databaseMap.get(next);
+			foundData.add(data);
+			usedMemory += data.getContent().length;
+		}
+		if (usedMemory > maxMemoryOccupation) {
+			logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
 		}
 		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
 		return foundData;
@@ -65,7 +75,9 @@ public class MapDbService implements DatabaseApi {
 		logger.info(LogMessages.FIND_ID + dataId);
 		if (databaseMap.containsKey(dataId)) {
 			logger.info(LogMessages.FOUND_ID + dataId);
-			return Optional.of(databaseMap.get(dataId));
+			Data data = databaseMap.get(dataId);
+			storageService.saveFile(data);
+			return Optional.of(data);
 		} else {
 			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return Optional.empty();

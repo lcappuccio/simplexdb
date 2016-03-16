@@ -1,15 +1,27 @@
 package org.systemexception.simplexdb.test.database;
 
 import com.sleepycat.je.DatabaseException;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
+import org.systemexception.simplexdb.service.StorageService;
+import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author leo
@@ -19,6 +31,28 @@ public abstract class AbstractDbTest {
 
 	protected DatabaseApi sut;
 	protected static String TEST_DATABASE_FILENAME;
+	protected final StorageServiceApi storageServiceApi = mock(StorageService.class);
+
+	@After
+	public void tearDown() throws IOException {
+		sut.close();
+		File databaseFile = new File(TEST_DATABASE_FILENAME);
+		Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
+		walk.forEach(item -> item.toFile().delete());
+		FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
+		assert(!databaseFile.exists());
+	}
+
+	@AfterClass
+	public static void destroySut() throws IOException {
+		File databaseFile = new File(TEST_DATABASE_FILENAME);
+		if (databaseFile.exists()) {
+			Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
+			walk.forEach(item -> item.toFile().delete());
+			FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
+			assert(!databaseFile.exists());
+		}
+	}
 
 	@Test
 	public void databaseCreated() {

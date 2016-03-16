@@ -33,6 +33,7 @@ Have a look at the properties file and specify the mandatory parameters:
 - database.type
 - database.filename
 - storage.folder
+- database.memory.occupation: this setting is used to configure the maximum amount of records used by the findAll endpoint, tune it with JVM parameters otherwise there will be OOM exceptions
 
 Additional properties: [Spring Docs](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
 
@@ -64,12 +65,11 @@ environment.
 
 Replace $action with:
 - **save**: stores a file in the database
-- **findall**: obtain a full list of the stored data (ids only) in JSON format
+- **findall**: obtain a full list of the stored data in JSON format, see `database.memory.occupation`
 - **findbyid**: will download and save to disk the file with the corresponding id, if the same id was previously saved
 the old file will be renamed as `YYYYMMDDHHmmSS_$filename`
 - **findbyname**: obtain a full list of the stored data in JSON format with name matching the searched string
 - **delete**: deletes the specified id entry from the database
-- **export**: will write to disk all data currently stored in the database
 
 Automated documentation provided by Swagger: [API Documentation](http://localhost:8080/swagger-ui.html)
 
@@ -97,5 +97,3 @@ Further info: [Spring Reference](http://docs.spring.io/spring-boot/docs/current-
 - Authentication
 - Spring actuators integration in UI
 - Pending MapDB 3.0 release
-- Format date and size in html view
-- "in progress" spinner for export operations and frontend disabled during export
