@@ -1,3 +1,7 @@
+function formatDate(dateValue) {
+	return moment(new Date(dateValue)).format('YYYY/MM/DD HH:mm:ss');
+}
+
 function uploadProgress(evt) {
 	if (evt.lengthComputable) {
 		var percentComplete = Math.round(evt.loaded * 100 / evt.total);
@@ -104,7 +108,7 @@ function drawTable(data) {
 		var rowData = "<tr>";
 		rowData += "<td>" + data[i].internalId + "</td>";
 		rowData += "<td>" + data[i].name + "</td>";
-		rowData += "<td>" + data[i].date + "</td>";
+		rowData += "<td>" + formatDate(data[i].date) + "</td>";
 		rowData += "<td>" + data[i].size + "</td>";
 		rowData += "<td><button type=submit class='btn btn-default' id=saveBtn_" + data[i].internalId +
 			" onclick=saveData('" + data[i].internalId + "');>Save</button>";
