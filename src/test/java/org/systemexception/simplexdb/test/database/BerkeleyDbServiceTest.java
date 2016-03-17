@@ -2,10 +2,15 @@ package org.systemexception.simplexdb.test.database;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
+import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author leo
@@ -27,5 +32,22 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 	@Test(expected = FileNotFoundException.class)
 	public void dont_create_bad_dir() throws FileNotFoundException {
 		sut = new BerkeleyDbService(storageServiceApi, "//\\|/", 1000L);
+	}
+
+	@Test
+	public void rebuild_index() {
+		sut.save(getDataForDatabase("dataId"));
+		sut.rebuildIndex();
+	}
+
+	@Test
+	public void limit_memory() throws FileNotFoundException {
+		DatabaseApi innerSut;
+		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_test_db", 1L);
+		innerSut.save(getDataForDatabase("dataId"));
+		List<Data> dataId = innerSut.findByFilename("dataId");
+
+		assertTrue(dataId.size() == 1);
+		assertTrue("WARNING".equals(dataId.get(0).getInternalId()));
 	}
 }

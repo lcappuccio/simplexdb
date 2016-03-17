@@ -66,7 +66,7 @@ public class BerkeleyDbService extends AbstractDbService {
 		}
 		DatabaseEntry dbData = new DatabaseEntry(out.toByteArray());
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
-		if (!operationStatus.equals(OperationStatus.NOTFOUND)) {
+		if (operationStatus.equals(OperationStatus.SUCCESS)) {
 			return false;
 		} else {
 			database.put(null, dbKey, dbData);
@@ -109,7 +109,6 @@ public class BerkeleyDbService extends AbstractDbService {
 	@Override
 	public Optional<Data> findById(String dataId) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + dataId);
-		Cursor databaseCursor = database.openCursor(null, null);
 		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 		DatabaseEntry dbData = new DatabaseEntry();
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
@@ -124,11 +123,8 @@ public class BerkeleyDbService extends AbstractDbService {
 				return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
-			} finally {
-				databaseCursor.close();
 			}
 		}
-		databaseCursor.close();
 		logger.info(LogMessages.FOUND_NOT_ID + dataId);
 		return Optional.empty();
 	}
@@ -201,7 +197,8 @@ public class BerkeleyDbService extends AbstractDbService {
 		// Do nothing;
 	}
 
-	private void rebuildIndex() {
+	@Override
+	public void rebuildIndex() {
 		logger.info(LogMessages.INDEX_BUILD_START.toString());
 		Cursor databaseCursor = database.openCursor(null, null);
 		DatabaseEntry dbKey = new DatabaseEntry();
@@ -217,7 +214,8 @@ public class BerkeleyDbService extends AbstractDbService {
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
 			}
-		}	databaseCursor.close();
+		}
+		databaseCursor.close();
 		logger.info(LogMessages.INDEX_BUILD_END.toString());
 	}
 }
