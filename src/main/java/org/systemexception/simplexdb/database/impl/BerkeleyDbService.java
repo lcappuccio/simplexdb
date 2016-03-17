@@ -146,7 +146,8 @@ public class BerkeleyDbService extends AbstractDbService {
 						Data data = (Data) is.readObject();
 						usedMemory += data.getContent().length;
 						if (data.getName().contains(match)) {
-							foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
+							foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(),
+									data.getContent()));
 						}
 						is.close();
 						in.close();
