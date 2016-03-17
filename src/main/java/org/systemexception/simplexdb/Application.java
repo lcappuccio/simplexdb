@@ -3,10 +3,8 @@ package org.systemexception.simplexdb;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
 import org.systemexception.simplexdb.database.impl.MapDbService;
@@ -22,8 +20,6 @@ import java.io.IOException;
  * @author leo
  * @date 04/12/15 23:27
  */
-@ComponentScan
-@EnableAutoConfiguration
 @SpringBootApplication
 public class Application {
 	

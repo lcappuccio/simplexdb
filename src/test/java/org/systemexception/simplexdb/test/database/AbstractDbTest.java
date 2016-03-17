@@ -40,7 +40,7 @@ public abstract class AbstractDbTest {
 		Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
 		walk.forEach(item -> item.toFile().delete());
 		FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
-		assert(!databaseFile.exists());
+		assertFalse(databaseFile.exists());
 	}
 
 	@AfterClass
@@ -50,7 +50,7 @@ public abstract class AbstractDbTest {
 			Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
 			walk.forEach(item -> item.toFile().delete());
 			FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
-			assert(!databaseFile.exists());
+			assertFalse(databaseFile.exists());
 		}
 	}
 
@@ -80,7 +80,7 @@ public abstract class AbstractDbTest {
 	@Test
 	public void get_data_id_list() throws DatabaseException {
 		int dataToAdd = 10;
-		for (int i = 0; i < dataToAdd; i ++) {
+		for (int i = 0; i < dataToAdd; i++) {
 			Data data = getDataForDatabase(String.valueOf(i));
 			sut.save(data);
 		}
@@ -119,7 +119,7 @@ public abstract class AbstractDbTest {
 	@Test
 	public void find_matches() throws DatabaseException {
 		int dataToAdd = 5;
-		for (int i = 0; i < dataToAdd; i ++) {
+		for (int i = 0; i < dataToAdd; i++) {
 			Data data = getDataForDatabase(String.valueOf(i));
 			sut.save(data);
 		}
