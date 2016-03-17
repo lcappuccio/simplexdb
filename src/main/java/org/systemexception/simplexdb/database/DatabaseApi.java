@@ -55,4 +55,9 @@ public interface DatabaseApi {
 	 * Commit
 	 */
 	void commit();
+
+	/**
+	 * Rebuild index
+	 */
+	void rebuildIndex();
 }

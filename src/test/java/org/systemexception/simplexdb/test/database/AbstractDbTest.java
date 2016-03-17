@@ -55,13 +55,13 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void databaseCreated() {
+	public void database_created() {
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		assertTrue(databaseFile.exists());
 	}
 
 	@Test
-	public void addRecord() throws DatabaseException {
+	public void add_record() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
 		sut.commit();
@@ -69,7 +69,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void dontAddDuplicateRecord() throws DatabaseException {
+	public void dont_add_duplicate_record() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
 		assertTrue(saved);
@@ -78,7 +78,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void getDataIdList() throws DatabaseException {
+	public void get_data_id_list() throws DatabaseException {
 		int dataToAdd = 10;
 		for (int i = 0; i < dataToAdd; i ++) {
 			Data data = getDataForDatabase(String.valueOf(i));
@@ -88,20 +88,20 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void deleteExistingData() throws DatabaseException {
+	public void delete_existing_data() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 		assertTrue(sut.delete(data.getInternalId()));
 	}
 
 	@Test
-	public void dontDeleteNonExistingData() throws DatabaseException {
+	public void dont_delete_non_existing_data() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		assertFalse(sut.delete(data.getName()));
 	}
 
 	@Test
-	public void findExistingData() throws DatabaseException {
+	public void find_existing_data() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 		Data foundData = sut.findById(data.getInternalId()).get();
@@ -110,14 +110,14 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test(expected = NoSuchElementException.class)
-	public void dontFindNonExistingData() throws DatabaseException {
+	public void dont_find_non_existing_data() throws DatabaseException {
 		String nonExistingId = "nonExistingId";
 		Data emptyData = sut.findById(nonExistingId).get();
 		assertTrue(null == emptyData);
 	}
 
 	@Test
-	public void findMatches() throws DatabaseException {
+	public void find_matches() throws DatabaseException {
 		int dataToAdd = 5;
 		for (int i = 0; i < dataToAdd; i ++) {
 			Data data = getDataForDatabase(String.valueOf(i));
@@ -131,7 +131,7 @@ public abstract class AbstractDbTest {
 		assertTrue(foundItems.size() == 0);
 	}
 
-	private Data getDataForDatabase(String id) {
+	protected Data getDataForDatabase(String id) {
 		byte[] dataContent = ("data" + id).getBytes();
 		String dataId = "data" + id;
 		return new Data(dataId, dataId, System.currentTimeMillis(), dataContent);
