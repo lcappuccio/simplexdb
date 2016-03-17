@@ -8,10 +8,10 @@ import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sleepycat.je.LockMode.READ_COMMITTED;
 import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
 
 /**
@@ -22,6 +22,7 @@ public class BerkeleyDbService extends AbstractDbService {
 
 	private final Environment environment;
 	private final Database database;
+	private HashMap<String, String> indexFileNames = new HashMap<>();
 
 	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
 	                         final Long maxMemoryOccupation) throws FileNotFoundException {
@@ -46,6 +47,7 @@ public class BerkeleyDbService extends AbstractDbService {
 		databaseConfig.setAllowCreate(true);
 		databaseConfig.setTransactional(true);
 		database = environment.openDatabase(null, databaseName, databaseConfig);
+		rebuildIndex();
 	}
 
 	@Override
@@ -64,10 +66,11 @@ public class BerkeleyDbService extends AbstractDbService {
 		}
 		DatabaseEntry dbData = new DatabaseEntry(out.toByteArray());
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
-		if (!operationStatus.equals(OperationStatus.NOTFOUND)) {
+		if (operationStatus.equals(OperationStatus.SUCCESS)) {
 			return false;
 		} else {
 			database.put(null, dbKey, dbData);
+			indexFileNames.put(data.getInternalId(), data.getName());
 			logger.info(LogMessages.SAVED + data.getName());
 			return true;
 		}
@@ -106,10 +109,9 @@ public class BerkeleyDbService extends AbstractDbService {
 	@Override
 	public Optional<Data> findById(String dataId) throws DatabaseException {
 		logger.info(LogMessages.FIND_ID + dataId);
-		Cursor databaseCursor = database.openCursor(null, null);
 		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 		DatabaseEntry dbData = new DatabaseEntry();
-		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_COMMITTED);
+		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
 		if (operationStatus.equals(OperationStatus.SUCCESS)) {
 			try {
 				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
@@ -121,11 +123,8 @@ public class BerkeleyDbService extends AbstractDbService {
 				return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 			} catch (IOException | ClassNotFoundException e) {
 				logger.error(e.getMessage());
-			} finally {
-				databaseCursor.close();
 			}
 		}
-		databaseCursor.close();
 		logger.info(LogMessages.FOUND_NOT_ID + dataId);
 		return Optional.empty();
 	}
@@ -133,15 +132,41 @@ public class BerkeleyDbService extends AbstractDbService {
 	@Override
 	public List<Data> findByFilename(String match) throws DatabaseException {
 		logger.info(LogMessages.FIND_MATCH + match);
-		List<Data> allData = findAll();
-		ArrayList<Data> foundItems = new ArrayList<>();
-		for (final Data data : allData) {
-			if (data.getName().contains(match)) {
-				foundItems.add(data);
+		List<Data> foundData = new ArrayList<>();
+		Long usedMemory = 0L;
+		for (String dataId : indexFileNames.keySet()) {
+			if (indexFileNames.get(dataId).contains(match)) {
+				DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
+				DatabaseEntry dbData = new DatabaseEntry();
+				OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
+				if (operationStatus.equals(OperationStatus.SUCCESS)) {
+					try {
+						ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+						ObjectInputStream is = new ObjectInputStream(in);
+						Data data = (Data) is.readObject();
+						usedMemory += data.getContent().length;
+						if (data.getName().contains(match)) {
+							foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
+						}
+						is.close();
+						in.close();
+					} catch (IOException | ClassNotFoundException e) {
+						logger.error(e.getMessage());
+					}
+				}
+			}
+			if (usedMemory > maxMemoryOccupation) {
+				logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
+				foundData.clear();
+				Data warningData = new Data();
+				warningData.setInternalId("WARNING");
+				warningData.setName("Please narrow your search");
+				foundData.add(warningData);
+				return foundData;
 			}
 		}
-		logger.info(LogMessages.FOUND_MATCHING.toString() + foundItems.size());
-		return foundItems;
+		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
+		return foundData;
 	}
 
 	@Override
@@ -170,5 +195,27 @@ public class BerkeleyDbService extends AbstractDbService {
 	@Override
 	public void commit() {
 		// Do nothing;
+	}
+
+	@Override
+	public void rebuildIndex() {
+		logger.info(LogMessages.INDEX_BUILD_START.toString());
+		Cursor databaseCursor = database.openCursor(null, null);
+		DatabaseEntry dbKey = new DatabaseEntry();
+		DatabaseEntry dbData = new DatabaseEntry();
+		while (databaseCursor.getNext(dbKey, dbData, READ_UNCOMMITTED).equals(OperationStatus.SUCCESS)) {
+			try {
+				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+				ObjectInputStream is = new ObjectInputStream(in);
+				Data data = (Data) is.readObject();
+				indexFileNames.put(new String(dbKey.getData()), data.getName());
+				is.close();
+				in.close();
+			} catch (IOException | ClassNotFoundException e) {
+				logger.error(e.getMessage());
+			}
+		}
+		databaseCursor.close();
+		logger.info(LogMessages.INDEX_BUILD_END.toString());
 	}
 }

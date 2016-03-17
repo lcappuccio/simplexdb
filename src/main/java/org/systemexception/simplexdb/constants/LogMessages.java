@@ -26,7 +26,9 @@ public enum LogMessages {
 	STORAGE_RENAME(" renamed to "),
 	STORAGE_RENAME_FAILED(" failed to rename"),
 	STORAGE_RENAME_EXCEPTION(" failed to rename, exception: "),
-	MEMORY_OCCUPATION_HIT("Memory occupation limit hit");
+	MEMORY_OCCUPATION_HIT("Memory occupation limit hit"),
+	INDEX_BUILD_START("Rebuilding index"),
+	INDEX_BUILD_END("Rebuilt index");
 
 	private final String message;
 
