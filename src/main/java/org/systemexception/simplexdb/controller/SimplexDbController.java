@@ -37,7 +37,7 @@ public class SimplexDbController {
 	private DatabaseApi databaseService;
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<HttpStatus> save(@RequestParam("fileToUpload") final MultipartFile dataFile)
+	public ResponseEntity<HttpStatus> save(@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
 			throws IOException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
