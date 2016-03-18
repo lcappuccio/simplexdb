@@ -43,11 +43,21 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 	@Test
 	public void limit_memory() throws FileNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_test_db", 1L);
+		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_berkeley_test_db", 1L);
 		innerSut.save(getDataForDatabase("dataId"));
 		List<Data> dataId = innerSut.findByFilename("dataId");
 
 		assertTrue(dataId.size() == 1);
 		assertTrue("WARNING".equals(dataId.get(0).getInternalId()));
+	}
+
+	@Test
+	public void limit_memory_find_all() throws FileNotFoundException {
+		DatabaseApi innerSut;
+		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_test_db", 1L);
+		innerSut.save(getDataForDatabase("dataId"));
+		List<Data> dataId = innerSut.findAll();
+
+		assertTrue(dataId.size() == 1);
 	}
 }

@@ -22,7 +22,7 @@ public class BerkeleyDbService extends AbstractDbService {
 
 	private final Environment environment;
 	private final Database database;
-	private HashMap<String, String> indexFileNames = new HashMap<>();
+	private final HashMap<String, String> indexFileNames = new HashMap<>();
 
 	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
 	                         final Long maxMemoryOccupation) throws FileNotFoundException {
@@ -146,7 +146,8 @@ public class BerkeleyDbService extends AbstractDbService {
 						Data data = (Data) is.readObject();
 						usedMemory += data.getContent().length;
 						if (data.getName().contains(match)) {
-							foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
+							foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(),
+									data.getContent()));
 						}
 						is.close();
 						in.close();
@@ -156,12 +157,7 @@ public class BerkeleyDbService extends AbstractDbService {
 				}
 			}
 			if (usedMemory > maxMemoryOccupation) {
-				logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
-				foundData.clear();
-				Data warningData = new Data();
-				warningData.setInternalId("WARNING");
-				warningData.setName("Please narrow your search");
-				foundData.add(warningData);
+				memoryOccupationHit(foundData);
 				return foundData;
 			}
 		}
@@ -190,11 +186,6 @@ public class BerkeleyDbService extends AbstractDbService {
 		environment.cleanLog();
 		environment.close();
 		logger.info(LogMessages.CLOSE_DATABASE + databaseName);
-	}
-
-	@Override
-	public void commit() {
-		// Do nothing;
 	}
 
 	@Override

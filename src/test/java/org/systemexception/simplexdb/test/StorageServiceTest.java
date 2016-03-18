@@ -15,6 +15,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -32,12 +33,13 @@ public class StorageServiceTest {
 		File toRemove = new File(STORAGE_FOLDER);
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();
-			for (String file: files) {
+			for (String file : files) {
 				new File(STORAGE_FOLDER + File.separator + file).delete();
 			}
 		}
 		toRemove.delete();
-		assert(!toRemove.exists());
+
+		assertFalse(toRemove.exists());
 	}
 
 	@AfterClass
@@ -45,12 +47,13 @@ public class StorageServiceTest {
 		File toRemove = new File(STORAGE_FOLDER);
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();
-			for (String file: files) {
+			for (String file : files) {
 				new File(STORAGE_FOLDER + File.separator + file).delete();
 			}
 		}
 		toRemove.delete();
-		assert(!toRemove.exists());
+
+		assertFalse(toRemove.exists());
 	}
 
 	@Before
@@ -67,6 +70,7 @@ public class StorageServiceTest {
 	public void saveDataExists() {
 		sut.saveFile(testData);
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
+
 		assertTrue(testDataFile.exists());
 	}
 
