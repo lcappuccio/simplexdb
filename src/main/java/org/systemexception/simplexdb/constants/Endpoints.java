@@ -15,4 +15,5 @@ public class Endpoints {
 	public static final String DELETE = "/delete";
 
 	public static final String ID_WITH_EXTENSION = "/{id:.+}";
+	public static final String FILE_TO_UPLOAD = "fileToUpload";
 }

@@ -40,6 +40,7 @@ public abstract class AbstractDbTest {
 		Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
 		walk.forEach(item -> item.toFile().delete());
 		FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
+
 		assertFalse(databaseFile.exists());
 	}
 
@@ -50,6 +51,7 @@ public abstract class AbstractDbTest {
 			Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
 			walk.forEach(item -> item.toFile().delete());
 			FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
+
 			assertFalse(databaseFile.exists());
 		}
 	}
@@ -57,6 +59,7 @@ public abstract class AbstractDbTest {
 	@Test
 	public void database_created() {
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
+
 		assertTrue(databaseFile.exists());
 	}
 
@@ -64,7 +67,7 @@ public abstract class AbstractDbTest {
 	public void add_record() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
-		sut.commit();
+
 		assertTrue(saved);
 	}
 
@@ -74,6 +77,7 @@ public abstract class AbstractDbTest {
 		boolean saved = sut.save(data);
 		assertTrue(saved);
 		boolean notSaved = sut.save(data);
+
 		assertFalse(notSaved);
 	}
 
@@ -91,12 +95,14 @@ public abstract class AbstractDbTest {
 	public void delete_existing_data() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
+
 		assertTrue(sut.delete(data.getInternalId()));
 	}
 
 	@Test
 	public void dont_delete_non_existing_data() throws DatabaseException {
 		Data data = getDataForDatabase("id");
+
 		assertFalse(sut.delete(data.getName()));
 	}
 
@@ -105,6 +111,7 @@ public abstract class AbstractDbTest {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 		Data foundData = sut.findById(data.getInternalId()).get();
+
 		assertEquals(foundData, data);
 		assertEquals(data.getSize(), foundData.getSize());
 	}
@@ -113,6 +120,7 @@ public abstract class AbstractDbTest {
 	public void dont_find_non_existing_data() throws DatabaseException {
 		String nonExistingId = "nonExistingId";
 		Data emptyData = sut.findById(nonExistingId).get();
+
 		assertTrue(null == emptyData);
 	}
 
@@ -123,12 +131,30 @@ public abstract class AbstractDbTest {
 			Data data = getDataForDatabase(String.valueOf(i));
 			sut.save(data);
 		}
+
 		List<Data> foundItems = sut.findByFilename("1");
 		assertTrue(foundItems.size() == 1);
+
 		foundItems = sut.findByFilename("data");
 		assertTrue(foundItems.size() == 5);
+
 		foundItems = sut.findByFilename("NON_EXISTING_ID");
 		assertTrue(foundItems.size() == 0);
+	}
+
+	@Test
+	public void data_integrity() {
+		Data data = new Data("123","dataName",123456L,"dataContent".getBytes());
+		sut.save(data);
+		Data dataFech = sut.findById("123").get();
+		Data dataCopy = new Data();
+		dataCopy.setInternalId(dataFech.getInternalId());
+		dataCopy.setName(dataFech.getName());
+		dataCopy.setDate(dataFech.getDate());
+		dataCopy.setSize(dataFech.getSize());
+		dataCopy.setContent(dataFech.getContent());
+
+		assertEquals(data, dataCopy);
 	}
 
 	protected Data getDataForDatabase(String id) {

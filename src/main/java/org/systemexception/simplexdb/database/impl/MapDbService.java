@@ -47,6 +47,8 @@ public class MapDbService extends AbstractDbService {
 		} else {
 			databaseMap.put(data.getInternalId(), data);
 			logger.info(LogMessages.SAVED + data.getName());
+			database.commit();
+			logger.info(LogMessages.COMMIT_MESSAGE.toString());
 			return true;
 		}
 	}
@@ -87,14 +89,21 @@ public class MapDbService extends AbstractDbService {
 	@Override
 	public List<Data> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
-		ArrayList<Data> foundItems = new ArrayList<>();
+		ArrayList<Data> foundData = new ArrayList<>();
+		Long usedMemory = 0L;
 		for (String dataId : databaseMap.keySet()) {
 			if (databaseMap.get(dataId).getName().contains(match)) {
-				foundItems.add(databaseMap.get(dataId));
+				Data data = databaseMap.get(dataId);
+				usedMemory += data.getContent().length;
+				foundData.add(data);
+			}
+			if (usedMemory > maxMemoryOccupation) {
+				memoryOccupationHit(foundData);
+				return foundData;
 			}
 		}
-		logger.info(LogMessages.FOUND_MATCHING.toString() + foundItems.size());
-		return foundItems;
+		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
+		return foundData;
 	}
 
 	@Override
@@ -104,17 +113,13 @@ public class MapDbService extends AbstractDbService {
 			databaseMap.remove(dataId);
 			database.delete(dataId);
 			logger.info(LogMessages.DELETED + dataId);
+			database.commit();
+			logger.info(LogMessages.COMMIT_MESSAGE.toString());
 			return true;
 		} else {
 			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return false;
 		}
-	}
-
-	@Override
-	public void commit() {
-		database.commit();
-		logger.info(LogMessages.COMMIT_MESSAGE.toString());
 	}
 
 	@PreDestroy

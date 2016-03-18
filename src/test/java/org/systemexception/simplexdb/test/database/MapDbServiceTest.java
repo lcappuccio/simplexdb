@@ -3,11 +3,17 @@ package org.systemexception.simplexdb.test.database;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Test;
+import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.impl.MapDbService;
+import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author leo
@@ -32,6 +38,27 @@ public class MapDbServiceTest extends AbstractDbTest {
 			databaseFile.delete();
 		}
 		assertFalse(databaseFile.exists());
+	}
+
+	@Test
+	public void limit_memory() throws FileNotFoundException {
+		DatabaseApi innerSut;
+		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_1", 1L);
+		innerSut.save(getDataForDatabase("dataId"));
+		List<Data> dataId = innerSut.findByFilename("dataId");
+
+		assertTrue(dataId.size() == 1);
+		assertTrue("WARNING".equals(dataId.get(0).getInternalId()));
+	}
+
+	@Test
+	public void limit_memory_findall() throws FileNotFoundException {
+		DatabaseApi innerSut;
+		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_2", 1L);
+		innerSut.save(getDataForDatabase("dataId"));
+		List<Data> dataId = innerSut.findAll();
+
+		assertTrue(dataId.size() == 1);
 	}
 
 	@After
