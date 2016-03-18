@@ -22,7 +22,7 @@ public class BerkeleyDbService extends AbstractDbService {
 
 	private final Environment environment;
 	private final Database database;
-	private HashMap<String, String> indexFileNames = new HashMap<>();
+	private final HashMap<String, String> indexFileNames = new HashMap<>();
 
 	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
 	                         final Long maxMemoryOccupation) throws FileNotFoundException {
