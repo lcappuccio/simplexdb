@@ -44,7 +44,7 @@ public abstract class AbstractControllerTest {
 	@Autowired
 	protected SimplexDbController simplexDbController;
 	protected MockMvc sut;
-	private final static String ENDPOINT = "/simplexdb/", REQUEST_PARAM = "fileToUpload";
+	private final static String ENDPOINT = Endpoints.CONTEXT, REQUEST_PARAM = "fileToUpload";
 	protected Data mockData;
 
 	@Test
