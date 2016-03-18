@@ -13,6 +13,7 @@ import org.systemexception.simplexdb.service.StorageService;
 import java.io.File;
 import java.util.Optional;
 
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 /**
@@ -44,6 +45,6 @@ public class MapDbTest extends AbstractControllerTest {
 		if (databaseFile.exists()) {
 			databaseFile.delete();
 		}
-		assert (!databaseFile.exists());
+		assertFalse(databaseFile.exists());
 	}
 }
