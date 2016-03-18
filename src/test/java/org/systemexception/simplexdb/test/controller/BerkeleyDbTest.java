@@ -4,6 +4,7 @@ import com.sleepycat.je.DatabaseException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.simplexdb.controller.SimplexDbController;
 import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.when;
  * @author leo
  * @date 28/02/16 17:29
  */
+@TestPropertySource(locations = "classpath:test-berkeleydb.properties")
 public class BerkeleyDbTest extends AbstractControllerTest {
 
 	@Before
