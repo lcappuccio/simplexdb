@@ -159,6 +159,7 @@ public class BerkeleyDbService extends AbstractDbService {
 			if (usedMemory > maxMemoryOccupation) {
 				if (usedMemory > maxMemoryOccupation) {
 					memoryOccupationHit(foundData);
+					return foundData;
 				}
 			}
 		}
