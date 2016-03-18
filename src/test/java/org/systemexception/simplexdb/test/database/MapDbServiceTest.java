@@ -43,12 +43,22 @@ public class MapDbServiceTest extends AbstractDbTest {
 	@Test
 	public void limit_memory() throws FileNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db", 1L);
+		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_1", 1L);
 		innerSut.save(getDataForDatabase("dataId"));
 		List<Data> dataId = innerSut.findByFilename("dataId");
 
 		assertTrue(dataId.size() == 1);
 		assertTrue("WARNING".equals(dataId.get(0).getInternalId()));
+	}
+
+	@Test
+	public void limit_memory_findall() throws FileNotFoundException {
+		DatabaseApi innerSut;
+		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_2", 1L);
+		innerSut.save(getDataForDatabase("dataId"));
+		List<Data> dataId = innerSut.findAll();
+
+		assertTrue(dataId.size() == 1);
 	}
 
 	@After

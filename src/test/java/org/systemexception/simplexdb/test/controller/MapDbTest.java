@@ -4,7 +4,6 @@ import com.sleepycat.je.DatabaseException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.simplexdb.controller.SimplexDbController;
 import org.systemexception.simplexdb.database.impl.MapDbService;
@@ -21,7 +20,6 @@ import static org.mockito.Mockito.*;
  * @author leo
  * @date 05/12/15 21:53
  */
-@TestPropertySource(locations = "classpath:test-mapdb.properties")
 public class MapDbTest extends AbstractControllerTest {
 
 	@Before
