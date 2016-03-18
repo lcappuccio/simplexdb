@@ -98,7 +98,6 @@
 					<excludes>
 						<exclude>**/Application.*</exclude>
 						<exclude>**/Endpoints.*</exclude>
-						<exclude>**/LogMessages.*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
