@@ -7,6 +7,8 @@ import org.systemexception.simplexdb.database.impl.MapDbService;
 
 import java.io.File;
 
+import static org.junit.Assert.assertFalse;
+
 /**
  * @author leo
  * @date 05/12/15 01:58
@@ -29,7 +31,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 		if (databaseFile.exists()) {
 			databaseFile.delete();
 		}
-		assert(!databaseFile.exists());
+		assertFalse(databaseFile.exists());
 	}
 
 	@After
