@@ -38,6 +38,7 @@ public class StorageServiceTest {
 			}
 		}
 		toRemove.delete();
+
 		assertFalse(toRemove.exists());
 	}
 
@@ -51,6 +52,7 @@ public class StorageServiceTest {
 			}
 		}
 		toRemove.delete();
+
 		assertFalse(toRemove.exists());
 	}
 
@@ -68,6 +70,7 @@ public class StorageServiceTest {
 	public void saveDataExists() {
 		sut.saveFile(testData);
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
+
 		assertTrue(testDataFile.exists());
 	}
 
