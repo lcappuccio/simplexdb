@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,7 @@ import java.util.Optional;
  * @author leo
  * @date 05/12/15 00:55
  */
-@RestController
+@Controller
 @RequestMapping(value = Endpoints.CONTEXT)
 @EnableSwagger2
 @Api(basePath = Endpoints.CONTEXT, description = "SimplexDB REST API")
@@ -51,6 +52,7 @@ public class SimplexDbController {
 	}
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	public ResponseEntity<List<Data>> findAll() throws DatabaseException {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return new ResponseEntity<>(databaseService.findAll(), HttpStatus.OK);
@@ -64,6 +66,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
 	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) {
 		logger.info(LogMessages.FIND_ID + id);
 		Optional<Data> data = databaseService.findById(id);
@@ -76,6 +79,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
 	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
@@ -83,6 +87,7 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,
 			produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
 		logger.info(LogMessages.DELETE + id);
 		boolean deleted = databaseService.delete(id);
