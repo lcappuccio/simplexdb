@@ -50,11 +50,6 @@ public class AbstractDbService implements DatabaseApi {
 	}
 
 	@Override
-	public void commit() {
-		// See implementation
-	}
-
-	@Override
 	public void rebuildIndex() {
 		// See implementation
 	}

@@ -52,11 +52,6 @@ public interface DatabaseApi {
 	void close();
 
 	/**
-	 * Commit
-	 */
-	void commit();
-
-	/**
 	 * Rebuild index
 	 */
 	void rebuildIndex();

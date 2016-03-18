@@ -47,6 +47,8 @@ public class MapDbService extends AbstractDbService {
 		} else {
 			databaseMap.put(data.getInternalId(), data);
 			logger.info(LogMessages.SAVED + data.getName());
+			database.commit();
+			logger.info(LogMessages.COMMIT_MESSAGE.toString());
 			return true;
 		}
 	}
@@ -104,17 +106,13 @@ public class MapDbService extends AbstractDbService {
 			databaseMap.remove(dataId);
 			database.delete(dataId);
 			logger.info(LogMessages.DELETED + dataId);
+			database.commit();
+			logger.info(LogMessages.COMMIT_MESSAGE.toString());
 			return true;
 		} else {
 			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return false;
 		}
-	}
-
-	@Override
-	public void commit() {
-		database.commit();
-		logger.info(LogMessages.COMMIT_MESSAGE.toString());
 	}
 
 	@PreDestroy

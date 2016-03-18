@@ -194,11 +194,6 @@ public class BerkeleyDbService extends AbstractDbService {
 	}
 
 	@Override
-	public void commit() {
-		// Do nothing;
-	}
-
-	@Override
 	public void rebuildIndex() {
 		logger.info(LogMessages.INDEX_BUILD_START.toString());
 		Cursor databaseCursor = database.openCursor(null, null);

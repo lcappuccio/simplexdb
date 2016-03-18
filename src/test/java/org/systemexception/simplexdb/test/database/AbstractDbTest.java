@@ -64,7 +64,6 @@ public abstract class AbstractDbTest {
 	public void add_record() throws DatabaseException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
-		sut.commit();
 		assertTrue(saved);
 	}
 
