@@ -89,14 +89,20 @@ public class MapDbService extends AbstractDbService {
 	@Override
 	public List<Data> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
-		ArrayList<Data> foundItems = new ArrayList<>();
+		ArrayList<Data> foundData = new ArrayList<>();
+		Long usedMemory = 0L;
 		for (String dataId : databaseMap.keySet()) {
 			if (databaseMap.get(dataId).getName().contains(match)) {
-				foundItems.add(databaseMap.get(dataId));
+				Data data = databaseMap.get(dataId);
+				usedMemory += data.getContent().length;
+				foundData.add(data);
+			}
+			if (usedMemory > maxMemoryOccupation) {
+				memoryOccupationHit(foundData);
 			}
 		}
-		logger.info(LogMessages.FOUND_MATCHING.toString() + foundItems.size());
-		return foundItems;
+		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
+		return foundData;
 	}
 
 	@Override

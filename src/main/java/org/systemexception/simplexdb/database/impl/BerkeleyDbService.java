@@ -157,13 +157,9 @@ public class BerkeleyDbService extends AbstractDbService {
 				}
 			}
 			if (usedMemory > maxMemoryOccupation) {
-				logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
-				foundData.clear();
-				Data warningData = new Data();
-				warningData.setInternalId("WARNING");
-				warningData.setName("Please narrow your search");
-				foundData.add(warningData);
-				return foundData;
+				if (usedMemory > maxMemoryOccupation) {
+					memoryOccupationHit(foundData);
+				}
 			}
 		}
 		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
