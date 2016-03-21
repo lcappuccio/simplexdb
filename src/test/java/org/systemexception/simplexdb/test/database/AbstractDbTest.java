@@ -107,7 +107,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void find_existing_data() throws DatabaseException {
+	public void find_existing_data() throws DatabaseException, IOException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 		Data foundData = sut.findById(data.getInternalId()).get();
@@ -117,7 +117,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test(expected = NoSuchElementException.class)
-	public void dont_find_non_existing_data() throws DatabaseException {
+	public void dont_find_non_existing_data() throws DatabaseException, IOException {
 		String nonExistingId = "nonExistingId";
 		Data emptyData = sut.findById(nonExistingId).get();
 
@@ -143,7 +143,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void data_integrity() {
+	public void data_integrity() throws IOException {
 		Data data = new Data("123","dataName",123456L,"dataContent".getBytes());
 		sut.save(data);
 		Data dataFech = sut.findById("123").get();

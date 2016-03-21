@@ -37,32 +37,25 @@ public class StorageService implements StorageServiceApi {
 	}
 
 	@Override
-	public void saveFile(Data data) {
+	public void saveFile(Data data) throws IOException {
 		File dataFile = new File(storageFolder + File.separator + data.getName());
 		historifyFile(dataFile);
-		try (FileOutputStream fos = new FileOutputStream(dataFile)) {
-			fos.write(data.getContent());
-			logger.info(data.getName() + LogMessages.STORAGE_SAVE);
-		} catch (IOException e) {
-			logger.error(data.getName() + LogMessages.STORAGE_SAVE_FAILED + e.getMessage());
-		}
+		FileOutputStream fos = new FileOutputStream(dataFile);
+		fos.write(data.getContent());
+		logger.info(data.getName() + LogMessages.STORAGE_SAVE);
 	}
 
-	private void historifyFile(File file) {
+	private void historifyFile(File file) throws IOException {
 		if (file.exists()) {
 			BasicFileAttributes attrs;
-			try {
-				attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
-				long fileTime = attrs.creationTime().toMillis();
-				String historifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
-				boolean renamedOk = file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
-				if (renamedOk) {
-					logger.info(file.getName() + LogMessages.STORAGE_RENAME + historifiedFilename);
-				} else {
-					logger.error(file.getName() + LogMessages.STORAGE_RENAME_FAILED);
-				}
-			} catch (IOException e) {
-				logger.error(file.getName() + LogMessages.STORAGE_RENAME_EXCEPTION + e.getMessage());
+			attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
+			long fileTime = attrs.creationTime().toMillis();
+			String historifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
+			boolean renamedOk = file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
+			if (renamedOk) {
+				logger.info(file.getName() + LogMessages.STORAGE_RENAME + historifiedFilename);
+			} else {
+				logger.error(file.getName() + LogMessages.STORAGE_RENAME_FAILED);
 			}
 		}
 	}

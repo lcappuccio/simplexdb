@@ -6,6 +6,7 @@ import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class AbstractDbService implements DatabaseApi {
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) {
+	public Optional<Data> findById(String dataId) throws IOException {
 		return null;
 	}
 

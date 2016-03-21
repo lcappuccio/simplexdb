@@ -3,6 +3,7 @@ package org.systemexception.simplexdb.database;
 import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.domain.Data;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public interface DatabaseApi {
 	 *
 	 * @param dataId the internal data id of the object to search and eventually extract to file
 	 */
-	Optional<Data> findById(String dataId);
+	Optional<Data> findById(String dataId) throws IOException;
 
 	/**
 	 * List records matching string

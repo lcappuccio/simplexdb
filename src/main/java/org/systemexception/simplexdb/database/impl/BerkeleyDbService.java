@@ -107,7 +107,7 @@ public class BerkeleyDbService extends AbstractDbService {
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) throws DatabaseException {
+	public Optional<Data> findById(String dataId) throws DatabaseException, IOException {
 		logger.info(LogMessages.FIND_ID + dataId);
 		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 		DatabaseEntry dbData = new DatabaseEntry();
@@ -121,7 +121,7 @@ public class BerkeleyDbService extends AbstractDbService {
 				in.close();
 				storageService.saveFile(data);
 				return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (ClassNotFoundException e) {
 				logger.error(e.getMessage());
 			}
 		}
@@ -168,8 +168,7 @@ public class BerkeleyDbService extends AbstractDbService {
 	@Override
 	public boolean delete(String dataId) throws DatabaseException {
 		logger.info(LogMessages.DELETE + dataId);
-		Optional<Data> dataById = findById(dataId);
-		if (dataById.isPresent()) {
+		if (indexFileNames.containsKey(dataId)) {
 			DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 			database.delete(null, dbKey);
 			logger.info(LogMessages.DELETED + dataId);
