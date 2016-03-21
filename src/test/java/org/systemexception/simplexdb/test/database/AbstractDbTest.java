@@ -64,7 +64,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void add_record() throws DatabaseException {
+	public void add_record() throws DatabaseException, IOException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
 
@@ -72,7 +72,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void dont_add_duplicate_record() throws DatabaseException {
+	public void dont_add_duplicate_record() throws DatabaseException, IOException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
 		assertTrue(saved);
@@ -82,7 +82,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void get_data_id_list() throws DatabaseException {
+	public void get_data_id_list() throws DatabaseException, IOException, ClassNotFoundException {
 		int dataToAdd = 10;
 		for (int i = 0; i < dataToAdd; i++) {
 			Data data = getDataForDatabase(String.valueOf(i));
@@ -92,7 +92,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void delete_existing_data() throws DatabaseException {
+	public void delete_existing_data() throws DatabaseException, IOException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 
@@ -107,7 +107,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void find_existing_data() throws DatabaseException {
+	public void find_existing_data() throws DatabaseException, IOException, ClassNotFoundException {
 		Data data = getDataForDatabase("id");
 		sut.save(data);
 		Data foundData = sut.findById(data.getInternalId()).get();
@@ -117,7 +117,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test(expected = NoSuchElementException.class)
-	public void dont_find_non_existing_data() throws DatabaseException {
+	public void dont_find_non_existing_data() throws DatabaseException, IOException, ClassNotFoundException {
 		String nonExistingId = "nonExistingId";
 		Data emptyData = sut.findById(nonExistingId).get();
 
@@ -125,7 +125,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void find_matches() throws DatabaseException {
+	public void find_matches() throws DatabaseException, IOException, ClassNotFoundException {
 		int dataToAdd = 5;
 		for (int i = 0; i < dataToAdd; i++) {
 			Data data = getDataForDatabase(String.valueOf(i));
@@ -143,7 +143,7 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void data_integrity() {
+	public void data_integrity() throws IOException, ClassNotFoundException {
 		Data data = new Data("123","dataName",123456L,"dataContent".getBytes());
 		sut.save(data);
 		Data dataFech = sut.findById("123").get();

@@ -40,7 +40,7 @@ public class Application {
 	}
 
 	@Bean
-	public DatabaseApi databaseService() throws IOException {
+	public DatabaseApi databaseService() throws IOException, ClassNotFoundException {
 		if ("mapdb".equals(databaseType)) {
 			return new MapDbService(storageService(), databaseFilename, maxMemoryOccupation);
 		}
