@@ -23,7 +23,6 @@ public enum LogMessages {
 	STORAGE_FOLDER("Create folder: "),
 	STORAGE_SAVE(" saved"),
 	STORAGE_RENAME(" renamed to "),
-	STORAGE_RENAME_FAILED(" failed to rename"),
 	MEMORY_OCCUPATION_HIT("Memory occupation limit hit"),
 	INDEX_BUILD_START("Rebuilding index"),
 	INDEX_BUILD_END("Rebuilt index");
