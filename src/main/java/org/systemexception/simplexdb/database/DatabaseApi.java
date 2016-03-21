@@ -19,26 +19,26 @@ public interface DatabaseApi {
 	 *
 	 * @param data the data object to save to database
 	 */
-	boolean save(Data data);
+	boolean save(Data data) throws IOException;
 
 	/**
 	 * List all records on database
 	 */
-	List<Data> findAll();
+	List<Data> findAll() throws IOException, ClassNotFoundException;
 
 	/**
 	 * List and eventually save single record on database
 	 *
 	 * @param dataId the internal data id of the object to search and eventually extract to file
 	 */
-	Optional<Data> findById(String dataId) throws IOException;
+	Optional<Data> findById(String dataId) throws IOException, ClassNotFoundException;
 
 	/**
 	 * List records matching string
 	 *
 	 * @param match string to search in database (see org.systemexception.simplexdb.domain.Data#dataName)
 	 */
-	List<Data> findByFilename(String match);
+	List<Data> findByFilename(String match) throws IOException, ClassNotFoundException;
 
 	/**
 	 * Remove record from database
@@ -55,5 +55,5 @@ public interface DatabaseApi {
 	/**
 	 * Rebuild index
 	 */
-	void rebuildIndex();
+	void rebuildIndex() throws IOException, ClassNotFoundException;
 }

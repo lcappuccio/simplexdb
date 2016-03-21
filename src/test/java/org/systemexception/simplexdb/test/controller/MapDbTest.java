@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class MapDbTest extends AbstractControllerTest {
 
 	@Before
-	public void setUp() throws DatabaseException, IOException {
+	public void setUp() throws DatabaseException, IOException, ClassNotFoundException {
 		TEST_DATABASE_FILENAME = "target" + File.separator + "test_berkeley.db";
 		mockData = mock(Data.class);
 		when(mockData.getInternalId()).thenReturn("123");

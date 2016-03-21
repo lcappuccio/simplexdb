@@ -53,13 +53,13 @@ public class SimplexDbController {
 
 	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Data>> findAll() throws DatabaseException {
+	public ResponseEntity<List<Data>> findAll() throws DatabaseException, IOException, ClassNotFoundException {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		return new ResponseEntity<>(databaseService.findAll(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
-	public String viewAll(Model model) throws DatabaseException {
+	public String viewAll(Model model) throws DatabaseException, IOException, ClassNotFoundException {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}
@@ -67,7 +67,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) throws IOException {
+	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) throws IOException, ClassNotFoundException {
 		logger.info(LogMessages.FIND_ID + id);
 		Optional<Data> data = databaseService.findById(id);
 		if (data.equals(Optional.empty())) {
@@ -80,7 +80,7 @@ public class SimplexDbController {
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) {
+	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws IOException, ClassNotFoundException {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}

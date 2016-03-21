@@ -22,22 +22,22 @@ public class AbstractDbService implements DatabaseApi {
 	protected StorageServiceApi storageService;
 
 	@Override
-	public boolean save(Data data) {
+	public boolean save(Data data) throws IOException {
 		return false;
 	}
 
 	@Override
-	public List<Data> findAll() {
+	public List<Data> findAll() throws IOException, ClassNotFoundException {
 		return null;
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) throws IOException {
+	public Optional<Data> findById(String dataId) throws IOException, ClassNotFoundException {
 		return null;
 	}
 
 	@Override
-	public List<Data> findByFilename(String match) {
+	public List<Data> findByFilename(String match) throws IOException, ClassNotFoundException {
 		return null;
 	}
 
@@ -52,7 +52,7 @@ public class AbstractDbService implements DatabaseApi {
 	}
 
 	@Override
-	public void rebuildIndex() {
+	public void rebuildIndex() throws IOException, ClassNotFoundException {
 		// See implementation
 	}
 
