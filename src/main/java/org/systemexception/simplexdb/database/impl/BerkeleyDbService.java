@@ -25,7 +25,7 @@ public class BerkeleyDbService extends AbstractDbService {
 	private final HashMap<String, String> indexFileNames = new HashMap<>();
 
 	public BerkeleyDbService(final StorageServiceApi storageService, final String databaseName,
-	                         final Long maxMemoryOccupation) throws FileNotFoundException {
+	                         final Long maxMemoryOccupation) throws IOException, ClassNotFoundException {
 		this.databaseName = databaseName;
 		this.maxMemoryOccupation = maxMemoryOccupation;
 		this.storageService = storageService;
@@ -51,19 +51,15 @@ public class BerkeleyDbService extends AbstractDbService {
 	}
 
 	@Override
-	public boolean save(Data data) throws DatabaseException {
+	public boolean save(Data data) throws DatabaseException, IOException {
 		logger.info(LogMessages.SAVE + data.getName());
 		DatabaseEntry dbKey = new DatabaseEntry(data.getInternalId().getBytes());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try {
-			ObjectOutputStream os = new ObjectOutputStream(out);
-			os.writeObject(data);
-			out.toByteArray();
-			os.close();
-			out.close();
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-		}
+		ObjectOutputStream os = new ObjectOutputStream(out);
+		os.writeObject(data);
+		out.toByteArray();
+		os.close();
+		out.close();
 		DatabaseEntry dbData = new DatabaseEntry(out.toByteArray());
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
 		if (operationStatus.equals(OperationStatus.SUCCESS)) {
@@ -77,7 +73,7 @@ public class BerkeleyDbService extends AbstractDbService {
 	}
 
 	@Override
-	public List<Data> findAll() throws DatabaseException {
+	public List<Data> findAll() throws DatabaseException, IOException, ClassNotFoundException {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		Cursor databaseCursor = database.openCursor(null, null);
 		List<Data> foundData = new ArrayList<>();
@@ -86,17 +82,13 @@ public class BerkeleyDbService extends AbstractDbService {
 		Long usedMemory = 0L;
 		while (databaseCursor.getNext(dbKey, dbData, READ_UNCOMMITTED).equals(OperationStatus.SUCCESS) &&
 				usedMemory < maxMemoryOccupation) {
-			try {
-				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
-				ObjectInputStream is = new ObjectInputStream(in);
-				Data data = (Data) is.readObject();
-				foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
-				is.close();
-				in.close();
-				usedMemory += data.getContent().length;
-			} catch (IOException | ClassNotFoundException e) {
-				logger.error(e.getMessage());
-			}
+			ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+			ObjectInputStream is = new ObjectInputStream(in);
+			Data data = (Data) is.readObject();
+			foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
+			is.close();
+			in.close();
+			usedMemory += data.getContent().length;
 		}
 		if (usedMemory > maxMemoryOccupation) {
 			logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
@@ -107,30 +99,26 @@ public class BerkeleyDbService extends AbstractDbService {
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) throws DatabaseException {
+	public Optional<Data> findById(String dataId) throws DatabaseException, IOException, ClassNotFoundException {
 		logger.info(LogMessages.FIND_ID + dataId);
 		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 		DatabaseEntry dbData = new DatabaseEntry();
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
 		if (operationStatus.equals(OperationStatus.SUCCESS)) {
-			try {
-				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
-				ObjectInputStream is = new ObjectInputStream(in);
-				Data data = (Data) is.readObject();
-				is.close();
-				in.close();
-				storageService.saveFile(data);
-				return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
-			} catch (IOException | ClassNotFoundException e) {
-				logger.error(e.getMessage());
-			}
+			ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+			ObjectInputStream is = new ObjectInputStream(in);
+			Data data = (Data) is.readObject();
+			is.close();
+			in.close();
+			storageService.saveFile(data);
+			return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 		}
 		logger.info(LogMessages.FOUND_NOT_ID + dataId);
 		return Optional.empty();
 	}
 
 	@Override
-	public List<Data> findByFilename(String match) throws DatabaseException {
+	public List<Data> findByFilename(String match) throws DatabaseException, IOException, ClassNotFoundException {
 		logger.info(LogMessages.FIND_MATCH + match);
 		List<Data> foundData = new ArrayList<>();
 		Long usedMemory = 0L;
@@ -140,25 +128,20 @@ public class BerkeleyDbService extends AbstractDbService {
 				DatabaseEntry dbData = new DatabaseEntry();
 				OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
 				if (operationStatus.equals(OperationStatus.SUCCESS)) {
-					try {
-						ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
-						ObjectInputStream is = new ObjectInputStream(in);
-						Data data = (Data) is.readObject();
-						usedMemory += data.getContent().length;
-						if (data.getName().contains(match)) {
-							foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(),
-									data.getContent()));
-						}
-						is.close();
-						in.close();
-					} catch (IOException | ClassNotFoundException e) {
-						logger.error(e.getMessage());
+					ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+					ObjectInputStream is = new ObjectInputStream(in);
+					Data data = (Data) is.readObject();
+					usedMemory += data.getContent().length;
+					if (data.getName().contains(match)) {
+						foundData.add(new Data(data.getInternalId(), data.getName(), data.getDate(),
+								data.getContent()));
 					}
+					is.close();
+					in.close();
 				}
 			}
 			if (usedMemory > maxMemoryOccupation) {
-				memoryOccupationHit(foundData);
-				return foundData;
+				return memoryOccupationHit(foundData);
 			}
 		}
 		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
@@ -168,8 +151,7 @@ public class BerkeleyDbService extends AbstractDbService {
 	@Override
 	public boolean delete(String dataId) throws DatabaseException {
 		logger.info(LogMessages.DELETE + dataId);
-		Optional<Data> dataById = findById(dataId);
-		if (dataById.isPresent()) {
+		if (indexFileNames.containsKey(dataId)) {
 			DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 			database.delete(null, dbKey);
 			logger.info(LogMessages.DELETED + dataId);
@@ -189,22 +171,18 @@ public class BerkeleyDbService extends AbstractDbService {
 	}
 
 	@Override
-	public void rebuildIndex() {
+	public void rebuildIndex() throws IOException, ClassNotFoundException {
 		logger.info(LogMessages.INDEX_BUILD_START.toString());
 		Cursor databaseCursor = database.openCursor(null, null);
 		DatabaseEntry dbKey = new DatabaseEntry();
 		DatabaseEntry dbData = new DatabaseEntry();
 		while (databaseCursor.getNext(dbKey, dbData, READ_UNCOMMITTED).equals(OperationStatus.SUCCESS)) {
-			try {
-				ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
-				ObjectInputStream is = new ObjectInputStream(in);
-				Data data = (Data) is.readObject();
-				indexFileNames.put(new String(dbKey.getData()), data.getName());
-				is.close();
-				in.close();
-			} catch (IOException | ClassNotFoundException e) {
-				logger.error(e.getMessage());
-			}
+			ByteArrayInputStream in = new ByteArrayInputStream(dbData.getData());
+			ObjectInputStream is = new ObjectInputStream(in);
+			Data data = (Data) is.readObject();
+			indexFileNames.put(new String(dbKey.getData()), data.getName());
+			is.close();
+			in.close();
 		}
 		databaseCursor.close();
 		logger.info(LogMessages.INDEX_BUILD_END.toString());

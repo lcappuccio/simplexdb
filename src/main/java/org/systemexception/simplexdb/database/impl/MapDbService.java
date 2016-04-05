@@ -10,6 +10,7 @@ import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import javax.annotation.PreDestroy;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -73,7 +74,7 @@ public class MapDbService extends AbstractDbService {
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) {
+	public Optional<Data> findById(String dataId) throws IOException {
 		logger.info(LogMessages.FIND_ID + dataId);
 		if (databaseMap.containsKey(dataId)) {
 			logger.info(LogMessages.FOUND_ID + dataId);
@@ -98,8 +99,7 @@ public class MapDbService extends AbstractDbService {
 				foundData.add(data);
 			}
 			if (usedMemory > maxMemoryOccupation) {
-				memoryOccupationHit(foundData);
-				return foundData;
+				return memoryOccupationHit(foundData);
 			}
 		}
 		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());

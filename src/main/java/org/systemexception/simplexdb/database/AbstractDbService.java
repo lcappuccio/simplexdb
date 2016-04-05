@@ -6,6 +6,7 @@ import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,22 +22,22 @@ public class AbstractDbService implements DatabaseApi {
 	protected StorageServiceApi storageService;
 
 	@Override
-	public boolean save(Data data) {
+	public boolean save(Data data) throws IOException {
 		return false;
 	}
 
 	@Override
-	public List<Data> findAll() {
+	public List<Data> findAll() throws IOException, ClassNotFoundException {
 		return null;
 	}
 
 	@Override
-	public Optional<Data> findById(String dataId) {
+	public Optional<Data> findById(String dataId) throws IOException, ClassNotFoundException {
 		return null;
 	}
 
 	@Override
-	public List<Data> findByFilename(String match) {
+	public List<Data> findByFilename(String match) throws IOException, ClassNotFoundException {
 		return null;
 	}
 
@@ -51,7 +52,7 @@ public class AbstractDbService implements DatabaseApi {
 	}
 
 	@Override
-	public void rebuildIndex() {
+	public void rebuildIndex() throws IOException, ClassNotFoundException {
 		// See implementation
 	}
 
@@ -59,7 +60,7 @@ public class AbstractDbService implements DatabaseApi {
 	 * Checks if memory occupation limit has been hit when searching for filename
 	 *
 	 * @param dataList will be cleared and a single warning item will be returned
-	 * @return
+	 * @return datalist with warning message
 	 */
 	protected List<Data> memoryOccupationHit(List<Data> dataList) {
 		logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
