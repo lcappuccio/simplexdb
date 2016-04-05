@@ -60,7 +60,7 @@ public class AbstractDbService implements DatabaseApi {
 	 * Checks if memory occupation limit has been hit when searching for filename
 	 *
 	 * @param dataList will be cleared and a single warning item will be returned
-	 * @return
+	 * @return datalist with warning message
 	 */
 	protected List<Data> memoryOccupationHit(List<Data> dataList) {
 		logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
