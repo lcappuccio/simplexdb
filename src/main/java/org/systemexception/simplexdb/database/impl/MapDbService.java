@@ -99,8 +99,7 @@ public class MapDbService extends AbstractDbService {
 				foundData.add(data);
 			}
 			if (usedMemory > maxMemoryOccupation) {
-				memoryOccupationHit(foundData);
-				return foundData;
+				return memoryOccupationHit(foundData);
 			}
 		}
 		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());

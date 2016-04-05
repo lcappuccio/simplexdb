@@ -141,8 +141,7 @@ public class BerkeleyDbService extends AbstractDbService {
 				}
 			}
 			if (usedMemory > maxMemoryOccupation) {
-				memoryOccupationHit(foundData);
-				return foundData;
+				return memoryOccupationHit(foundData);
 			}
 		}
 		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
