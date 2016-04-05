@@ -8,6 +8,7 @@ import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class BerkeleyDbServiceTest extends AbstractDbTest {
 
 	@Before
-	public void setUp() throws FileNotFoundException {
+	public void setUp() throws IOException, ClassNotFoundException {
 		TEST_DATABASE_FILENAME = "target" + File.separator + "test_berkeley.db";
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		if (databaseFile.exists()) {
@@ -30,18 +31,18 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 	}
 
 	@Test(expected = FileNotFoundException.class)
-	public void dont_create_bad_dir() throws FileNotFoundException {
+	public void dont_create_bad_dir() throws IOException, ClassNotFoundException {
 		sut = new BerkeleyDbService(storageServiceApi, "//\\|/", 1000L);
 	}
 
 	@Test
-	public void rebuild_index() {
+	public void rebuild_index() throws IOException, ClassNotFoundException {
 		sut.save(getDataForDatabase("dataId"));
 		sut.rebuildIndex();
 	}
 
 	@Test
-	public void limit_memory() throws FileNotFoundException {
+	public void limit_memory() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
 		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_berkeley_test_db", 1L);
 		innerSut.save(getDataForDatabase("dataId"));
@@ -52,7 +53,7 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 	}
 
 	@Test
-	public void limit_memory_find_all() throws FileNotFoundException {
+	public void limit_memory_find_all() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
 		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_test_db", 1L);
 		innerSut.save(getDataForDatabase("dataId"));

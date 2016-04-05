@@ -9,7 +9,7 @@ import org.systemexception.simplexdb.database.impl.MapDbService;
 import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -41,7 +41,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 	}
 
 	@Test
-	public void limit_memory() throws FileNotFoundException {
+	public void limit_memory() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
 		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_1", 1L);
 		innerSut.save(getDataForDatabase("dataId"));
@@ -52,7 +52,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 	}
 
 	@Test
-	public void limit_memory_findall() throws FileNotFoundException {
+	public void limit_memory_findall() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
 		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_2", 1L);
 		innerSut.save(getDataForDatabase("dataId"));

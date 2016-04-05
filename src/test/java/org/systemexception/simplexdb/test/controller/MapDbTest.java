@@ -11,6 +11,7 @@ import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageService;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class MapDbTest extends AbstractControllerTest {
 
 	@Before
-	public void setUp() throws DatabaseException {
+	public void setUp() throws DatabaseException, IOException, ClassNotFoundException {
 		TEST_DATABASE_FILENAME = "target" + File.separator + "test_berkeley.db";
 		mockData = mock(Data.class);
 		when(mockData.getInternalId()).thenReturn("123");

@@ -3,6 +3,8 @@ package org.systemexception.simplexdb.service;
 import org.springframework.stereotype.Service;
 import org.systemexception.simplexdb.domain.Data;
 
+import java.io.IOException;
+
 /**
  * @author leo
  * @date 08/12/15 22:15
@@ -15,5 +17,5 @@ public interface StorageServiceApi {
 	 *
 	 * @param data the Data domain object
 	 */
-	void saveFile(Data data);
+	void saveFile(Data data) throws IOException;
 }

@@ -67,7 +67,7 @@ public class StorageServiceTest {
 	}
 
 	@Test
-	public void saveDataExists() {
+	public void saveDataExists() throws IOException {
 		sut.saveFile(testData);
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
 
