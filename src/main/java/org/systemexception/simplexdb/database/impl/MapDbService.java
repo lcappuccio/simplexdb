@@ -34,7 +34,7 @@ public class MapDbService extends AbstractDbService {
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		database = makeDatabase();
 		databaseMap = database.hashMap("dataCollection").keySerializer(Serializer.STRING)
-				.valueSerializer(Serializer.JAVA).create();
+				.valueSerializer(Serializer.JAVA).createOrOpen();
 	}
 
 	private DB makeDatabase() {
