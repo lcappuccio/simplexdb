@@ -3,6 +3,7 @@ package org.systemexception.simplexdb.database.impl;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
+import org.mapdb.Serializer;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.domain.Data;
@@ -32,7 +33,8 @@ public class MapDbService extends AbstractDbService {
 		this.storageService = storageService;
 		logger.info(LogMessages.CREATE_DATABASE + databaseName);
 		database = makeDatabase();
-		databaseMap = database.hashMap("dataCollection");
+		databaseMap = database.hashMap("dataCollection").keySerializer(Serializer.STRING)
+				.valueSerializer(Serializer.JAVA).create();
 	}
 
 	private DB makeDatabase() {
@@ -92,7 +94,7 @@ public class MapDbService extends AbstractDbService {
 		logger.info(LogMessages.FIND_MATCH + match);
 		ArrayList<Data> foundData = new ArrayList<>();
 		Long usedMemory = 0L;
-		for (String dataId : databaseMap.keySet()) {
+		for (Object dataId : databaseMap.keySet()) {
 			if (databaseMap.get(dataId).getName().contains(match)) {
 				Data data = databaseMap.get(dataId);
 				usedMemory += data.getContent().length;
@@ -111,7 +113,6 @@ public class MapDbService extends AbstractDbService {
 		logger.info(LogMessages.DELETE + dataId);
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
-			database.delete(dataId);
 			logger.info(LogMessages.DELETED + dataId);
 			database.commit();
 			logger.info(LogMessages.COMMIT_MESSAGE.toString());
