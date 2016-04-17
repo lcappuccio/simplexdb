@@ -111,6 +111,7 @@ public class BerkeleyDbService extends AbstractDbService {
 			is.close();
 			in.close();
 			storageService.saveFile(data);
+			logger.info(LogMessages.FOUND_ID + dataId);
 			return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 		}
 		logger.info(LogMessages.FOUND_NOT_ID + dataId);
