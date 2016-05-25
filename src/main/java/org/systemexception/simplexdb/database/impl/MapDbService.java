@@ -66,7 +66,7 @@ public class MapDbService extends AbstractDbService {
 			String next = iterator.next();
 			Data data = databaseMap.get(next);
 			foundData.add(data);
-			usedMemory += data.getContent().length;
+			usedMemory += data != null ? data.getContent().length : 0;
 		}
 		if (usedMemory > maxMemoryOccupation) {
 			logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
@@ -82,7 +82,7 @@ public class MapDbService extends AbstractDbService {
 			logger.info(LogMessages.FOUND_ID + dataId);
 			Data data = databaseMap.get(dataId);
 			storageService.saveFile(data);
-			return Optional.of(data);
+			return Optional.ofNullable(data);
 		} else {
 			logger.info(LogMessages.FOUND_NOT_ID + dataId);
 			return Optional.empty();
@@ -97,7 +97,7 @@ public class MapDbService extends AbstractDbService {
 		for (Object dataId : databaseMap.keySet()) {
 			if (databaseMap.get(dataId).getName().contains(match)) {
 				Data data = databaseMap.get(dataId);
-				usedMemory += data.getContent().length;
+				usedMemory += data != null ? data.getContent().length : 0;
 				foundData.add(data);
 			}
 			if (usedMemory > maxMemoryOccupation) {
