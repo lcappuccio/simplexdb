@@ -103,7 +103,7 @@ function uploadFile() {
 
 function drawTable(data) {
 	var tableData = '';
-	$("#dataTable tbody").empty();
+	$("#dataTable").find("tbody").empty();
 	for (var i = 0; i < data.length; i++) {
 		var rowData = "<tr>";
 		rowData += "<td>" + data[i].internalId + "</td>";
@@ -116,7 +116,7 @@ function drawTable(data) {
 			" onclick=deleteData('" + data[i].internalId + "');>Delete</button></td></tr>";
 		tableData += rowData;
 	}
-	$("#dataTable tbody").append(tableData);
+	$("#dataTable").find("tbody").append(tableData);
 }
 
 function findByName() {
