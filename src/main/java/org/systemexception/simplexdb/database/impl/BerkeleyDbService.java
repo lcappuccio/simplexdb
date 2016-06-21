@@ -15,7 +15,7 @@ import java.util.Optional;
 import static com.sleepycat.je.LockMode.READ_UNCOMMITTED;
 
 /**
- * @author le
+ * @author leo
  * @date 28/02/16 11:55
  */
 public class BerkeleyDbService extends AbstractDbService {
