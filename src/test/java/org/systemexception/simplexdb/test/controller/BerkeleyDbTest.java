@@ -37,7 +37,7 @@ public class BerkeleyDbTest extends AbstractControllerTest {
 		when(databaseService.findById(mockData.getName())).thenReturn(Optional.of(mockData));
 		when(databaseService.delete(mockData.getName())).thenReturn(true);
 		when(databaseService.save(any())).thenReturn(true);
-		simplexDbController = new SimplexDbController();
+		simplexDbController = new SimplexDbController(databaseService);
 		MockitoAnnotations.initMocks(this);
 		sut = MockMvcBuilders.standaloneSetup(simplexDbController).build();
 	}
