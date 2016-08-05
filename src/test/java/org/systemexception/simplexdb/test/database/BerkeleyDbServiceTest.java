@@ -2,6 +2,7 @@ package org.systemexception.simplexdb.test.database;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
 import org.systemexception.simplexdb.domain.Data;
@@ -49,7 +50,7 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 		List<Data> dataId = innerSut.findByFilename("dataId");
 
 		assertTrue(dataId.size() == 1);
-		assertTrue("WARNING".equals(dataId.get(0).getInternalId()));
+		assertTrue(AbstractDbService.WARNING_MESSAGE_MEMORY_OCCUPATION.equals(dataId.get(0).getInternalId()));
 	}
 
 	@Test

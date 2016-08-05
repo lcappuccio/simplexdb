@@ -86,7 +86,7 @@ public class StorageServiceTest {
 
 	private String convertTime(long time) {
 		Date date = new Date(time);
-		Format format = new SimpleDateFormat("yyyyMMddHHmmss");
+		Format format = new SimpleDateFormat(StorageService.DATE_TIME_FORMAT);
 		return format.format(date);
 	}
 }

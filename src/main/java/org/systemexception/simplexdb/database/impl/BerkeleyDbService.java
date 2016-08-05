@@ -38,8 +38,9 @@ public class BerkeleyDbService extends AbstractDbService {
 		if (!productionDatabaseFile.exists()) {
 			boolean mkdir = productionDatabaseFile.mkdir();
 			if (!mkdir) {
-				logger.error("Database directory creation failed");
-				throw new FileNotFoundException("Database directory creation failed");
+				String errorMessage = "Database directory creation failed";
+				logger.error(errorMessage);
+				throw new FileNotFoundException(errorMessage);
 			}
 		}
 		environment = new Environment(new File(databaseName), envConfig);

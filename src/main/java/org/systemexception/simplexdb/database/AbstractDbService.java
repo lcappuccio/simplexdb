@@ -20,6 +20,7 @@ public class AbstractDbService implements DatabaseApi {
 	protected String databaseName;
 	protected Long maxMemoryOccupation;
 	protected StorageServiceApi storageService;
+	public static final String WARNING_MESSAGE_MEMORY_OCCUPATION = "WARNING";
 
 	@Override
 	public boolean save(Data data) throws IOException {
@@ -66,7 +67,7 @@ public class AbstractDbService implements DatabaseApi {
 		logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
 		dataList.clear();
 		Data warningData = new Data();
-		warningData.setInternalId("WARNING");
+		warningData.setInternalId(WARNING_MESSAGE_MEMORY_OCCUPATION);
 		warningData.setName("Please narrow your search");
 		dataList.add(warningData);
 		return dataList;
