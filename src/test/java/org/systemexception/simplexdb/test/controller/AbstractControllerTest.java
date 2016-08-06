@@ -37,20 +37,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:application.properties")
 public abstract class AbstractControllerTest {
 
-	protected static String TEST_DATABASE_FILENAME;
+	protected static String TEST_DATABASE_FULLPATH;
 	protected DatabaseApi databaseService;
 	protected StorageService storageService;
 	@InjectMocks
 	@Autowired
 	protected SimplexDbController simplexDbController;
 	protected MockMvc sut;
-	private final static String ENDPOINT = Endpoints.CONTEXT, REQUEST_PARAM = Endpoints.FILE_TO_UPLOAD;
+	private final static String ENDPOINT = Endpoints.CONTEXT, REQUEST_PARAM = Endpoints.FILE_TO_UPLOAD,
+			FILE_TEXT_FORMAT = "text/plain", FILE_TEXT_DATA = "some data in the file", URL_SEPARATOR = "/";
 	protected Data mockData;
 
 	@Test
 	public void save() throws Exception {
-		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(), "text/plain",
-				"some data".getBytes());
+		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(),
+				FILE_TEXT_FORMAT, FILE_TEXT_DATA.getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
 				.andExpect(status().is(HttpStatus.CREATED.value()));
 		String dataId = dataFile.getOriginalFilename();
@@ -61,8 +62,8 @@ public abstract class AbstractControllerTest {
 	@Test
 	public void save_conflict() throws Exception {
 		when(databaseService.save(any())).thenReturn(false);
-		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(), "text/plain",
-				"some data".getBytes());
+		MockMultipartFile dataFile = new MockMultipartFile(REQUEST_PARAM, UUID.randomUUID().toString(),
+				FILE_TEXT_FORMAT, FILE_TEXT_DATA.getBytes());
 		sut.perform(MockMvcRequestBuilders.fileUpload(ENDPOINT + Endpoints.SAVE).file(dataFile))
 				.andExpect(status().is(HttpStatus.CONFLICT.value()));
 		String dataId = dataFile.getOriginalFilename();
@@ -86,7 +87,7 @@ public abstract class AbstractControllerTest {
 
 	@Test
 	public void find_id_and_save() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getName()))
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + URL_SEPARATOR + mockData.getName()))
 				.andExpect(status().is(HttpStatus.FOUND.value()));
 		verify(databaseService).findById(mockData.getName());
 	}
@@ -94,20 +95,20 @@ public abstract class AbstractControllerTest {
 	@Test
 	public void dont_find_id() throws Exception {
 		when(databaseService.findById(mockData.getName())).thenReturn(Optional.empty());
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + "/" + mockData.getName()))
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYID + URL_SEPARATOR + mockData.getName()))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 		verify(databaseService).findById(mockData.getName());
 	}
 
 	@Test
 	public void find_match() throws Exception {
-		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYNAME + "/" + any()));
+		sut.perform(MockMvcRequestBuilders.get(ENDPOINT + Endpoints.FINDBYNAME + URL_SEPARATOR + any()));
 		verify(databaseService).findByFilename(any());
 	}
 
 	@Test
 	public void delete_existing() throws Exception {
-		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getName()))
+		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + URL_SEPARATOR + mockData.getName()))
 				.andExpect(status().is(HttpStatus.OK.value()));
 		verify(databaseService).delete(mockData.getName());
 	}
@@ -115,7 +116,7 @@ public abstract class AbstractControllerTest {
 	@Test
 	public void delete_not_existing() throws Exception {
 		when(databaseService.delete(mockData.getName())).thenReturn(false);
-		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + "/" + mockData.getName()))
+		sut.perform(MockMvcRequestBuilders.delete(ENDPOINT + Endpoints.DELETE + URL_SEPARATOR + mockData.getName()))
 				.andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 		verify(databaseService).delete(mockData.getName());
 	}

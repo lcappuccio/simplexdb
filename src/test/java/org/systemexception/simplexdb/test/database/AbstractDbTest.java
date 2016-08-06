@@ -30,27 +30,28 @@ import static org.mockito.Mockito.mock;
 public abstract class AbstractDbTest {
 
 	protected DatabaseApi sut;
-	protected static String TEST_DATABASE_FILENAME;
+	protected static String TEST_DATABASE_FULLPATH;
 	protected final StorageServiceApi storageServiceApi = mock(StorageService.class);
+	public static final String TARGET_FOLDER = "target", TEST_DATABASE_ID = "dataId";
 
 	@After
 	public void tearDown() throws IOException {
 		sut.close();
-		File databaseFile = new File(TEST_DATABASE_FILENAME);
-		Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
+		File databaseFile = new File(TEST_DATABASE_FULLPATH);
+		Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FULLPATH), FileVisitOption.FOLLOW_LINKS);
 		walk.forEach(item -> item.toFile().delete());
-		FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
+		FileUtils.deleteDirectory(new File(TEST_DATABASE_FULLPATH));
 
 		assertFalse(databaseFile.exists());
 	}
 
 	@AfterClass
 	public static void destroySut() throws IOException {
-		File databaseFile = new File(TEST_DATABASE_FILENAME);
+		File databaseFile = new File(TEST_DATABASE_FULLPATH);
 		if (databaseFile.exists()) {
-			Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FILENAME), FileVisitOption.FOLLOW_LINKS);
+			Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FULLPATH), FileVisitOption.FOLLOW_LINKS);
 			walk.forEach(item -> item.toFile().delete());
-			FileUtils.deleteDirectory(new File(TEST_DATABASE_FILENAME));
+			FileUtils.deleteDirectory(new File(TEST_DATABASE_FULLPATH));
 
 			assertFalse(databaseFile.exists());
 		}
@@ -58,7 +59,7 @@ public abstract class AbstractDbTest {
 
 	@Test
 	public void database_created() {
-		File databaseFile = new File(TEST_DATABASE_FILENAME);
+		File databaseFile = new File(TEST_DATABASE_FULLPATH);
 
 		assertTrue(databaseFile.exists());
 	}
