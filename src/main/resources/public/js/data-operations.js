@@ -1,3 +1,11 @@
+var uploadBtn = "uploadBtn";
+var deleteBtn = "deleteBtn_";
+var fileUploadBtn = "fileUploadBtn";
+var saveBtn = "saveBtn_";
+var fileNameElement = "fileName";
+var fileSizeElement = "fileSize";
+var fileTypeElement = "fileType";
+
 function formatDate(dateValue) {
 	return moment(new Date(dateValue)).format('YYYY/MM/DD HH:mm:ss');
 }
@@ -5,23 +13,23 @@ function formatDate(dateValue) {
 function uploadProgress(evt) {
 	if (evt.lengthComputable) {
 		var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-		document.getElementById("uploadBtn").value = "Progress: " + percentComplete.toString() + "%";
+		document.getElementById(uploadBtn).value = "Progress: " + percentComplete.toString() + "%";
 	}
 	else {
-		document.getElementById("uploadBtn").value = "Progress: Unable to compute";
+		document.getElementById(uploadBtn).value = "Progress: Unable to compute";
 	}
 }
 
 function uploadComplete() {
-	document.getElementById("uploadBtn").value = "Upload";
+	document.getElementById(uploadBtn).value = "Upload";
 }
 
 function uploadFailed() {
-	document.getElementById("uploadBtn").value = "Failed";
+	document.getElementById(uploadBtn).value = "Failed";
 }
 
 function uploadCanceled() {
-	document.getElementById("uploadBtn").value = "Canceled";
+	document.getElementById(uploadBtn).value = "Canceled";
 }
 
 function fileSizeCalculator(fileSize) {
@@ -41,10 +49,10 @@ function saveData(data) {
 		type: "GET",
 		statusCode: {
 			302() {
-				document.getElementById("saveBtn_" + data).style.backgroundColor = "green";
+				document.getElementById(saveBtn + data).style.backgroundColor = "green";
 			},
 			404() {
-				document.getElementById("saveBtn_" + data).style.backgroundColor = "red";
+				document.getElementById(saveBtn + data).style.backgroundColor = "red";
 			}
 		}
 	});
@@ -55,39 +63,39 @@ function deleteData(data) {
 		url: "/simplexdb/delete/" + data,
 		type: "DELETE",
 		success() {
-			document.getElementById("saveBtn_" + data).disabled = true;
-			document.getElementById("deleteBtn_" + data).disabled = true;
+			document.getElementById(saveBtn + data).disabled = true;
+			document.getElementById(deleteBtn + data).disabled = true;
 		}
 	});
 }
 
 function fileSelected() {
-	var files = document.getElementById("fileUploadBtn").files;
+	var files = document.getElementById(fileUploadBtn).files;
 	var fileSizeTotal = 0;
 	if (files.length > 1) {
-		document.getElementById("fileName").innerHTML = "File count: " + files.length;
-		document.getElementById("fileType").innerHTML = "Type: multiple";
+		document.getElementById(fileNameElement).innerHTML = "File count: " + files.length;
+		document.getElementById(fileTypeElement).innerHTML = "Type: multiple";
 		var fileSize = 0;
 		for (var x = 0; x < files.length; x++) {
 			fileSize += files[x].size;
 		}
 		fileSizeTotal = fileSizeCalculator(fileSize);
 
-		document.getElementById("fileSize").innerHTML = "Size: " + fileSizeTotal;
+		document.getElementById(fileSizeElement).innerHTML = "Size: " + fileSizeTotal;
 	} else {
-		var file = document.getElementById("fileUploadBtn").files[0];
+		var file = document.getElementById(fileUploadBtn).files[0];
 		if (file) {
 			fileSizeTotal = fileSizeCalculator(file.size);
 
-			document.getElementById("fileName").innerHTML = "Name: " + file.name;
-			document.getElementById("fileSize").innerHTML = "Size: " + fileSizeTotal;
-			document.getElementById("fileType").innerHTML = "Type: " + file.type;
+			document.getElementById(fileNameElement).innerHTML = "Name: " + file.name;
+			document.getElementById(fileSizeElement).innerHTML = "Size: " + fileSizeTotal;
+			document.getElementById(fileTypeElement).innerHTML = "Type: " + file.type;
 		}
 	}
 }
 
 function uploadFile() {
-	var filesToUpload = document.getElementById("fileUploadBtn").files;
+	var filesToUpload = document.getElementById(fileUploadBtn).files;
 	for (var y = 0; y < filesToUpload.length; y++) {
 		var formData = new FormData();
 		formData.append("fileToUpload", filesToUpload[y]);
@@ -111,9 +119,9 @@ function drawTable(data) {
 		rowData += "<td>" + data[i].name + "</td>";
 		rowData += "<td>" + formatDate(data[i].date) + "</td>";
 		rowData += "<td>" + data[i].size + "</td>";
-		rowData += "<td><button type=submit class='btn btn-default' id=saveBtn_" + data[i].internalId +
+		rowData += "<td><button type=submit class='btn btn-default' id=" + saveBtn + data[i].internalId +
 			" onclick=saveData('" + data[i].internalId + "');>Save</button>";
-		rowData += "<button type=submit class='btn btn-danger' id=deleteBtn_" + data[i].internalId +
+		rowData += "<button type=submit class='btn btn-danger' id=" + deleteBtn + data[i].internalId +
 			" onclick=deleteData('" + data[i].internalId + "');>Delete</button></td></tr>";
 		tableData += rowData;
 	}
