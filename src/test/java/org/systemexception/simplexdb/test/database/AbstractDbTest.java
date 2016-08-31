@@ -29,9 +29,9 @@ import static org.mockito.Mockito.mock;
  */
 public abstract class AbstractDbTest {
 
-	protected DatabaseApi sut;
-	protected static String TEST_DATABASE_FULLPATH;
-	protected final StorageServiceApi storageServiceApi = mock(StorageService.class);
+	DatabaseApi sut;
+	static String TEST_DATABASE_FULLPATH;
+	final StorageServiceApi storageServiceApi = mock(StorageService.class);
 	public static final String TARGET_FOLDER = "target", TEST_DATABASE_ID = "dataId";
 
 	@After

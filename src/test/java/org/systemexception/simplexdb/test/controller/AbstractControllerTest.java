@@ -2,7 +2,6 @@ package org.systemexception.simplexdb.test.controller;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -35,16 +34,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:application.properties")
 public abstract class AbstractControllerTest {
 
-	protected static String TEST_DATABASE_FULLPATH;
-	protected DatabaseApi databaseService;
-	protected StorageService storageService;
-	@InjectMocks
+	static String TEST_DATABASE_FULLPATH;
+	DatabaseApi databaseService;
+	StorageService storageService;
+	MockMvc sut;
+	Data mockData;
 	@Autowired
 	protected SimplexDbController simplexDbController;
-	protected MockMvc sut;
 	private final static String ENDPOINT = Endpoints.CONTEXT, REQUEST_PARAM = Endpoints.FILE_TO_UPLOAD,
 			FILE_TEXT_FORMAT = "text/plain", FILE_TEXT_DATA = "some data in the file", URL_SEPARATOR = "/";
-	protected Data mockData;
 
 	@Test
 	public void save() throws Exception {
