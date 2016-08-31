@@ -2,6 +2,7 @@ package org.systemexception.simplexdb.test.database;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
 import org.systemexception.simplexdb.domain.Data;
@@ -19,15 +20,17 @@ import static org.junit.Assert.assertTrue;
  */
 public class BerkeleyDbServiceTest extends AbstractDbTest {
 
+	public static final String TEST_DATABASE_FILENAME = "test_berkeley.db";
+
 	@Before
 	public void setUp() throws IOException, ClassNotFoundException {
-		TEST_DATABASE_FILENAME = "target" + File.separator + "test_berkeley.db";
-		File databaseFile = new File(TEST_DATABASE_FILENAME);
+		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + File.separator + TEST_DATABASE_FILENAME;
+		File databaseFile = new File(TEST_DATABASE_FULLPATH);
 		if (databaseFile.exists()) {
 			databaseFile.delete();
 		}
 		databaseFile.mkdir();
-		sut = new BerkeleyDbService(storageServiceApi, TEST_DATABASE_FILENAME, 1000L);
+		sut = new BerkeleyDbService(storageServiceApi, TEST_DATABASE_FULLPATH, 1000L);
 	}
 
 	@Test(expected = FileNotFoundException.class)
@@ -37,26 +40,28 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 
 	@Test
 	public void rebuild_index() throws IOException, ClassNotFoundException {
-		sut.save(getDataForDatabase("dataId"));
+		sut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		sut.rebuildIndex();
 	}
 
 	@Test
 	public void limit_memory() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_berkeley_test_db", 1L);
-		innerSut.save(getDataForDatabase("dataId"));
-		List<Data> dataId = innerSut.findByFilename("dataId");
+		innerSut = new BerkeleyDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + File.separator +
+				"low_mem_berkeley_test_db", 1L);
+		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
+		List<Data> dataId = innerSut.findByFilename(AbstractDbTest.TEST_DATABASE_ID);
 
 		assertTrue(dataId.size() == 1);
-		assertTrue("WARNING".equals(dataId.get(0).getInternalId()));
+		assertTrue(AbstractDbService.WARNING_MESSAGE_MEMORY_OCCUPATION.equals(dataId.get(0).getInternalId()));
 	}
 
 	@Test
 	public void limit_memory_find_all() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new BerkeleyDbService(storageServiceApi, "target" + File.separator + "low_mem_test_db", 1L);
-		innerSut.save(getDataForDatabase("dataId"));
+		innerSut = new BerkeleyDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + File.separator +
+				"low_mem_test_db", 1L);
+		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		List<Data> dataId = innerSut.findAll();
 
 		assertTrue(dataId.size() == 1);

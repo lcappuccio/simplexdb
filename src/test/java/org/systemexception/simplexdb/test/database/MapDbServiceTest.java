@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
+import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.database.impl.MapDbService;
 import org.systemexception.simplexdb.domain.Data;
@@ -21,9 +22,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class MapDbServiceTest extends AbstractDbTest {
 
+	public static final String TEST_DATABASE_FILENAME = "test_map.db";
+
 	@Before
 	public void setUp() {
-		TEST_DATABASE_FILENAME = "target" + File.separator + "test_map.db";
+		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + File.separator + TEST_DATABASE_FILENAME;
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		if (databaseFile.exists()) {
 			databaseFile.delete();
@@ -43,19 +46,21 @@ public class MapDbServiceTest extends AbstractDbTest {
 	@Test
 	public void limit_memory() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_1", 1L);
-		innerSut.save(getDataForDatabase("dataId"));
-		List<Data> dataId = innerSut.findByFilename("dataId");
+		innerSut = new MapDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + File.separator +
+				"low_mem_mapdb_test_db_1", 1L);
+		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
+		List<Data> dataId = innerSut.findByFilename(AbstractDbTest.TEST_DATABASE_ID);
 
 		assertTrue(dataId.size() == 1);
-		assertTrue("WARNING".equals(dataId.get(0).getInternalId()));
+		assertTrue(AbstractDbService.WARNING_MESSAGE_MEMORY_OCCUPATION.equals(dataId.get(0).getInternalId()));
 	}
 
 	@Test
 	public void limit_memory_findall() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new MapDbService(storageServiceApi, "target" + File.separator + "low_mem_mapdb_test_db_2", 1L);
-		innerSut.save(getDataForDatabase("dataId"));
+		innerSut = new MapDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + File.separator +
+				"low_mem_mapdb_test_db_2", 1L);
+		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		List<Data> dataId = innerSut.findAll();
 
 		assertTrue(dataId.size() == 1);

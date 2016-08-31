@@ -33,9 +33,12 @@ import java.util.Optional;
 public class SimplexDbController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final DatabaseApi databaseService;
 
 	@Autowired
-	private DatabaseApi databaseService;
+	public SimplexDbController(final DatabaseApi databaseService) {
+		this.databaseService = databaseService;
+	}
 
 	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<HttpStatus> save(@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)

@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageService;
+import org.systemexception.simplexdb.test.database.AbstractDbTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class StorageServiceTest {
 
-	private final static String STORAGE_FOLDER = "target" + File.separator + "test_output";
+	private final static String STORAGE_FOLDER = AbstractDbTest.TARGET_FOLDER + File.separator + "test_output";
 	private final Data testData = new Data("TEST", "TEST".getBytes());
 	private StorageService sut;
 
@@ -86,7 +87,7 @@ public class StorageServiceTest {
 
 	private String convertTime(long time) {
 		Date date = new Date(time);
-		Format format = new SimpleDateFormat("yyyyMMddHHmmss");
+		Format format = new SimpleDateFormat(StorageService.DATE_TIME_FORMAT);
 		return format.format(date);
 	}
 }
