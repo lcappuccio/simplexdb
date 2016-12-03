@@ -1,3 +1,6 @@
+/* eslint no-undef: "error" */
+/* global $ */
+
 var uploadBtn = "uploadBtn";
 var deleteBtn = "deleteBtn_";
 var fileUploadBtn = "fileUploadBtn";
