@@ -51,9 +51,7 @@ public abstract class AbstractDbTest {
 		if (databaseFile.exists()) {
 			Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FULLPATH), FileVisitOption.FOLLOW_LINKS);
 			walk.forEach(item -> item.toFile().delete());
-			FileUtils.deleteDirectory(new File(TEST_DATABASE_FULLPATH));
-
-			assertFalse(databaseFile.exists());
+			databaseFile.deleteOnExit();
 		}
 	}
 
