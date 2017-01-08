@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -38,9 +37,8 @@ public class MapDbServiceTest extends AbstractDbTest {
 	public static void tearDownSut() {
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		if (databaseFile.exists()) {
-			databaseFile.delete();
+			databaseFile.deleteOnExit();
 		}
-		assertFalse(databaseFile.exists());
 	}
 
 	@Test
