@@ -1,7 +1,7 @@
 package org.systemexception.simplexdb.test.database;
 
 import com.sleepycat.je.DatabaseException;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
