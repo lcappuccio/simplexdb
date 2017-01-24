@@ -1,5 +1,5 @@
 /* eslint no-undef: "error" */
-/* global $ */
+/* global $, moment */
 
 var uploadBtn = "uploadBtn";
 var deleteBtn = "deleteBtn_";
@@ -10,7 +10,7 @@ var fileSizeElement = "fileSize";
 var fileTypeElement = "fileType";
 
 function formatDate(dateValue) {
-    return moment(new Date(dateValue)).format('YYYY/MM/DD HH:mm:ss');
+    return moment(new Date(dateValue)).format("YYYY/MM/DD HH:mm:ss");
 }
 
 function uploadProgress(evt) {
@@ -113,7 +113,7 @@ function uploadFile() {
 }
 
 function drawTable(data) {
-    var tableData = '';
+    var tableData = "";
     var dataTable = $("#dataTable");
     dataTable.find("tbody").empty();
     for (var i = 0; i < data.length; i++) {
