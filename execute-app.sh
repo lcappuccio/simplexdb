@@ -6,4 +6,4 @@
 # Profile with Flight Recorder
 # -ea -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=name=test_results.jfr -XX:FlightRecorderOptions=settings=max-settings.jfc,defaultrecording=true,dumponexit=true,dumponexitpath=test_results.jfr
 
-java -jar $artifact.jar
+java -jar simplexdb-VERSION.jar
