@@ -41,13 +41,17 @@ public class Application {
 
 	@Bean
 	public DatabaseApi databaseService() throws IOException, ClassNotFoundException {
-		if ("mapdb".equals(databaseType)) {
-			return new MapDbService(storageService(), databaseFilename, maxMemoryOccupation);
+		switch (databaseType) {
+			case "mapdb": {
+				return new MapDbService(storageService(), databaseFilename, maxMemoryOccupation);
+			}
+			case "berkeleydb": {
+				return new BerkeleyDbService(storageService(), databaseFilename, maxMemoryOccupation);
+			}
+			default: {
+				throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
+			}
 		}
-		if ("berkeleydb".equals(databaseType)) {
-			return new BerkeleyDbService(storageService(), databaseFilename, maxMemoryOccupation);
-		}
-		throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
 	}
 
 	@Bean
