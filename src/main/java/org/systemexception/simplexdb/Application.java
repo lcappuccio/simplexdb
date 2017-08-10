@@ -11,6 +11,7 @@ import org.systemexception.simplexdb.database.impl.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -70,7 +71,7 @@ public class Application {
 				"REST API with embedded Database",
 				null,
 				null,
-				"leo@systemexception.org",
+				new Contact("Leonardo Cappuccio", "https://github.com/lcappuccio/simplexdb/", null),
 				"GPL v3",
 				"https://github.com/lcappuccio/simplexdb/blob/master/LICENSE"
 		);
