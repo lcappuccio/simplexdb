@@ -1,207 +1,246 @@
 {
-	"id": "ac38563f-7873-4b24-429b-15465a67081c",
-	"name": "simplexdb",
-	"description": "",
-	"order": [
-		"3ce7577d-d677-c933-a0ea-57e6d5197eec",
-		"4c08fe5b-4204-bbb2-64a5-9089ac8e20c7",
-		"86036cf0-93fe-291c-7abf-03611b733e58",
-		"aefbdade-ef87-1238-65f6-18b7c4af63fe",
-		"894934cf-70b7-8729-68a0-d9ef1b7a6661",
-		"a140e502-1f38-f911-b3e4-e87d4533ede0",
-		"8b3d9e60-738e-a696-b83e-4c78de401489",
-		"e15d551c-7808-dada-c6b1-024381745877"
-	],
-	"folders": [],
-	"timestamp": 1449334633515,
-	"owner": 0,
-	"public": false,
-	"hasRequests": true,
-	"requests": [
+	"info": {
+		"name": "simplexdb",
+		"_postman_id": "e4f55046-5e34-e92d-b8f7-b0d6a8b38451",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
 		{
-			"id": "3ce7577d-d677-c933-a0ea-57e6d5197eec",
-			"headers": "",
-			"url": "http://{{ip}}:{{port}}/simplexdb/export",
-			"pathVariables": {},
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"data": [],
-			"dataMode": "params",
-			"name": "GET -Export",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1450822330128,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {}
+			"name": "Export",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/simplexdb/export",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"simplexdb",
+						"export"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "4c08fe5b-4204-bbb2-64a5-9089ac8e20c7",
-			"headers": "",
-			"url": "http://{{ip}}:{{port}}/simplexdb/findall",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "GET",
-			"data": [
-				{
-					"key": "file",
-					"value": "elitism.png",
-					"type": "file",
-					"enabled": true
-				}
-			],
-			"dataMode": "params",
-			"version": 2,
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1449398168314,
-			"name": "GET - Find All",
-			"description": "",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"responses": []
+			"name": "Find All",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"value": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/simplexdb/find",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"simplexdb",
+						"find"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "86036cf0-93fe-291c-7abf-03611b733e58",
-			"headers": "",
-			"url": "http://{{ip}}:{{port}}/simplexdb/findbyid/",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "GET",
-			"data": [
-				{
-					"key": "file",
-					"value": "Brain.png",
-					"type": "file",
-					"enabled": true
-				}
-			],
-			"dataMode": "params",
-			"version": 2,
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1456775342497,
-			"name": "GET - Find Id",
-			"description": "",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"responses": []
+			"name": "Find Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"value": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/simplexdb/find/b6999f3b-53b4-4891-8290-e810562082b1",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"simplexdb",
+						"find",
+						"b6999f3b-53b4-4891-8290-e810562082b1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "894934cf-70b7-8729-68a0-d9ef1b7a6661",
-			"headers": "",
-			"url": "http://{{ip}}:{{port}}/simplexdb/save",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "POST",
-			"data": [
-				{
-					"key": "fileToUpload",
-					"value": {
-						"0": {}
-					},
-					"type": "file",
-					"enabled": true
-				}
-			],
-			"dataMode": "params",
-			"version": 2,
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1457198748883,
-			"name": "POST - Save File",
-			"description": "",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"responses": []
+			"name": "Find Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"value": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/simplexdb//findbyname/alex",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"simplexdb",
+						"",
+						"findbyname",
+						"alex"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "8b3d9e60-738e-a696-b83e-4c78de401489",
-			"headers": "",
-			"url": "http://{{ip}}:{{port_management}}/health",
-			"pathVariables": {},
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"data": [],
-			"dataMode": "params",
-			"name": "GET - Health",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1450039051074,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {}
+			"name": "Save File",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fileToUpload",
+							"type": "file",
+							"value": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/simplexdb/save",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"simplexdb",
+						"save"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "a140e502-1f38-f911-b3e4-e87d4533ede0",
-			"headers": "",
-			"url": "http://{{ip}}:{{port}}/simplexdb/delete/c31aa5ef-d6fa-481a-9f5c-b7dd93c1c820",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "DELETE",
-			"data": [],
-			"dataMode": "params",
-			"version": 2,
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1450824721597,
-			"name": "DELETE - Delete File",
-			"description": "",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"responses": []
+			"name": "Delete File",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/simplexdb/delete/c31aa5ef-d6fa-481a-9f5c-b7dd93c1c820",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"simplexdb",
+						"delete",
+						"c31aa5ef-d6fa-481a-9f5c-b7dd93c1c820"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "aefbdade-ef87-1238-65f6-18b7c4af63fe",
-			"headers": "",
-			"url": "http://{{ip}}:{{port}}/simplexdb//findbyname/alex",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "GET",
-			"data": [
-				{
-					"key": "file",
-					"value": "Brain.png",
-					"type": "file",
-					"enabled": true
-				}
-			],
-			"dataMode": "params",
-			"version": 2,
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1450825478710,
-			"name": "GET - Find Name",
-			"description": "",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"responses": []
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{ip}}:{{port_management}}/health",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port_management}}",
+					"path": [
+						"health"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "e15d551c-7808-dada-c6b1-024381745877",
-			"headers": "",
-			"url": "http://{{ip}}:{{port_management}}/metrics",
-			"pathVariables": {},
-			"preRequestScript": "",
-			"method": "GET",
-			"collectionId": "ac38563f-7873-4b24-429b-15465a67081c",
-			"data": [],
-			"dataMode": "params",
-			"name": "GET - Metrics",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1450039073007,
-			"version": 2,
-			"responses": [],
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": {}
+			"name": "Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{ip}}:{{port_management}}/metrics",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port_management}}",
+					"path": [
+						"metrics"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Export copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{ip}}:{{port}}/simplexdb/export",
+					"protocol": "http",
+					"host": [
+						"{{ip}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"simplexdb",
+						"export"
+					]
+				},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }

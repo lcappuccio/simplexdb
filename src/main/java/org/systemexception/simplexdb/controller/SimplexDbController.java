@@ -19,6 +19,7 @@ import org.systemexception.simplexdb.domain.Data;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,36 +55,42 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(value = Endpoints.FINDALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public ResponseEntity<List<Data>> findAll() throws DatabaseException, IOException, ClassNotFoundException {
-		logger.info(LogMessages.FIND_ALL_IDS.toString());
-		return new ResponseEntity<>(databaseService.findAll(), HttpStatus.OK);
-	}
-
 	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
 	public String viewAll(Model model) throws DatabaseException, IOException, ClassNotFoundException {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}
 
-	@RequestMapping(value = Endpoints.FINDBYID + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
-			produces = MediaType.TEXT_PLAIN_VALUE)
+	@RequestMapping(value = {Endpoints.FIND, Endpoints.FIND + Endpoints.ID_WITH_EXTENSION},
+			method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<HttpStatus> findById(@PathVariable("id") final String id) throws IOException, ClassNotFoundException {
-		logger.info(LogMessages.FIND_ID + id);
-		Optional<Data> data = databaseService.findById(id);
-		if (data.equals(Optional.empty())) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<List<Data>> find(@PathVariable("id") final Optional<String> id) throws IOException,
+			ClassNotFoundException {
+
+		List<Data> dataList = new ArrayList<>();
+		if (id.isPresent()) {
+			String idToFind = id.get();
+			logger.info(LogMessages.FIND_ID + idToFind);
+			Optional<Data> data = databaseService.findById(idToFind);
+			if (data.isPresent()) {
+				dataList.add(data.get());
+			}
 		} else {
-			return new ResponseEntity<>(HttpStatus.FOUND);
+			dataList.addAll(databaseService.findAll());
+		}
+
+		if (dataList.isEmpty() && id.isPresent()) {
+			return new ResponseEntity<>(dataList, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(dataList, HttpStatus.OK);
 		}
 	}
 
 	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws IOException, ClassNotFoundException {
+	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws IOException,
+			ClassNotFoundException {
 		logger.info(LogMessages.FIND_MATCH + match);
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}

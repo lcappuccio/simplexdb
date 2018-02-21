@@ -28,14 +28,14 @@ public class BerkeleyDbTest extends AbstractControllerTest {
 	public void setUp() throws DatabaseException, IOException, ClassNotFoundException {
 		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + "/" +
 				BerkeleyDbServiceTest.TEST_DATABASE_FILENAME;
-		mockData = mock(Data.class);
-		when(mockData.getInternalId()).thenReturn("123");
-		when(mockData.getName()).thenReturn("123");
-		when(mockData.getContent()).thenReturn("123".getBytes());
+		testData = new Data();
+		testData.setInternalId("123");
+		testData.setName("123");
+		testData.setContent("123".getBytes());
 		databaseService = mock(BerkeleyDbService.class);
 		storageService = mock(StorageService.class);
-		when(databaseService.findById(mockData.getName())).thenReturn(Optional.of(mockData));
-		when(databaseService.delete(mockData.getName())).thenReturn(true);
+		when(databaseService.findById(testData.getInternalId())).thenReturn(Optional.of(testData));
+		when(databaseService.delete(testData.getName())).thenReturn(true);
 		when(databaseService.save(any())).thenReturn(true);
 		simplexDbController = new SimplexDbController(databaseService);
 		MockitoAnnotations.initMocks(this);
