@@ -64,9 +64,8 @@ public class SimplexDbController {
 	@RequestMapping(value = {Endpoints.FIND, Endpoints.FIND + Endpoints.ID_WITH_EXTENSION},
 			method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Data>> find(@PathVariable(value = "id", required = false) final Optional<String> id) throws
-			IOException,
-			ClassNotFoundException {
+	public ResponseEntity<List<Data>> find(@PathVariable(value = "id", required = false) final Optional<String> id)
+			throws IOException, ClassNotFoundException {
 
 		List<Data> dataList = new ArrayList<>();
 		if (id.isPresent()) {
