@@ -16,6 +16,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.io.IOException;
+import java.util.Collections;
 
 /**
  * @author leo
@@ -73,7 +74,8 @@ public class Application {
 				null,
 				new Contact("Leonardo Cappuccio", "https://github.com/lcappuccio/simplexdb/", null),
 				"GPL v3",
-				"https://github.com/lcappuccio/simplexdb/blob/master/LICENSE"
+				"https://github.com/lcappuccio/simplexdb/blob/master/LICENSE",
+				Collections.emptyList()
 		);
 	}
 }
