@@ -4,7 +4,7 @@ MapDB/BerkeleyDB Database and Spring REST Interface
 The goal of this project is to create a portable storage for moving multiple files providing the
 lightest possible database with a REST interface.
 
-[![Build](https://github.com/lcappuccio/mapdb/actions/workflows/build.yml/badge.svg)](https://github.com/lcappuccio/mapdb/actions/workflows/build.yml)
+[![Build](https://github.com/lcappuccio/simplexdb/actions/workflows/build.yml/badge.svg)](https://github.com/lcappuccio/simplexdb/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lcappuccio_mapdb-test&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lcappuccio_mapdb-test)
 
 ## Supported Databases
