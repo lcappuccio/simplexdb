@@ -18,6 +18,7 @@ import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageService;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,8 +43,11 @@ public abstract class AbstractControllerTest {
 	@Autowired
 	protected SimplexDbController simplexDbController;
 	protected MockMvc sut;
-	private final static String ENDPOINT = Endpoints.CONTEXT, REQUEST_PARAM = Endpoints.FILE_TO_UPLOAD,
-			FILE_TEXT_FORMAT = "text/plain", FILE_TEXT_DATA = "some data in the file", URL_SEPARATOR = "/";
+	private final static String ENDPOINT = Endpoints.CONTEXT;
+    private final static String REQUEST_PARAM = Endpoints.FILE_TO_UPLOAD;
+    private final static String FILE_TEXT_FORMAT = "text/plain";
+    private final static String FILE_TEXT_DATA = "some data in the file";
+    private final static String  URL_SEPARATOR = File.separator;
 	protected Data testData;
 
 	@Test

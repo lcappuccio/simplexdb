@@ -7,6 +7,7 @@ import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,17 +30,17 @@ public class AbstractDbService implements DatabaseApi {
 
 	@Override
 	public List<Data> findAll() throws IOException, ClassNotFoundException {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public Optional<Data> findById(String dataId) throws IOException, ClassNotFoundException {
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
 	public List<Data> findByFilename(String match) throws IOException, ClassNotFoundException {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override

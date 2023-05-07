@@ -35,7 +35,7 @@ public class StorageServiceTest {
         if (toRemove.exists()) {
             String[] files = toRemove.list();
             for (String file : files) {
-                new File(STORAGE_FOLDER + "/" + file).delete();
+                new File(STORAGE_FOLDER + File.separator + file).delete();
             }
         }
         FileUtils.deleteQuietly(toRemove);
@@ -50,7 +50,7 @@ public class StorageServiceTest {
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();
 			for (String file : files) {
-				new File(STORAGE_FOLDER + "/" + file).deleteOnExit();
+				new File(STORAGE_FOLDER + File.separator + file).deleteOnExit();
 			}
 		}
 		FileUtils.deleteQuietly(toRemove);
@@ -64,7 +64,7 @@ public class StorageServiceTest {
 	@Test
 	public void saveDataExists() throws IOException {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + "/" + testData.getName());
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
 
 		assertTrue(testDataFile.exists());
 	}
@@ -72,10 +72,10 @@ public class StorageServiceTest {
 	@Test
 	public void historify() throws IOException {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + "/" + testData.getName());
+		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
 		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(testData);
-		assertTrue(new File(STORAGE_FOLDER + "/" + convertTime(attrs.creationTime().toMillis()) + "_" +
+		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis()) + "_" +
 				testDataFile.getName()).exists());
 	}
 

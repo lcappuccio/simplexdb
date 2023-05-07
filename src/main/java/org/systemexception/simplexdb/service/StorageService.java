@@ -40,10 +40,11 @@ public class StorageService implements StorageServiceApi {
 
 	@Override
 	public void saveFile(Data data) throws IOException {
-		File dataFile = new File(storageFolder + "/" + data.getName());
+		File dataFile = new File(storageFolder + File.separator + data.getName());
 		historifyFile(dataFile);
-		FileOutputStream fos = new FileOutputStream(dataFile);
-		fos.write(data.getContent());
+        try (FileOutputStream fos = new FileOutputStream(dataFile)) {
+            fos.write(data.getContent());
+        }
 		logger.info(data.getName() + LogMessages.STORAGE_SAVE);
 	}
 
@@ -52,8 +53,8 @@ public class StorageService implements StorageServiceApi {
 			BasicFileAttributes attrs;
 			attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
 			long fileTime = attrs.creationTime().toMillis();
-			String historifiedFilename = "/" + convertTime(fileTime) + "_" + file.getName();
-			FileUtils.copyFile(file, new File(storageFolder + "/" + historifiedFilename));
+			String historifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
+			FileUtils.copyFile(file, new File(storageFolder + File.separator + historifiedFilename));
 			FileUtils.deleteQuietly(file);
 			logger.info(file.getName() + LogMessages.STORAGE_RENAME + historifiedFilename);
 		}

@@ -26,7 +26,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 
 	@BeforeEach
 	public void setUp() {
-		AbstractControllerTest.TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + "/" + TEST_DATABASE_FILENAME;
+		AbstractControllerTest.TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + File.separator + TEST_DATABASE_FILENAME;
 		File databaseFile = new File(TEST_DATABASE_FILENAME);
 		if (databaseFile.exists()) {
 			databaseFile.delete();
@@ -42,7 +42,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 	@Test
 	void limit_memory() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new MapDbService(STORAGE_SERVICE_API, AbstractDbTest.TARGET_FOLDER + "/" +
+		innerSut = new MapDbService(STORAGE_SERVICE_API, AbstractDbTest.TARGET_FOLDER + File.separator +
 				"low_mem_mapdb_test_db_1", 1L);
 		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		List<Data> dataId = innerSut.findByFilename(AbstractDbTest.TEST_DATABASE_ID);
@@ -54,7 +54,7 @@ public class MapDbServiceTest extends AbstractDbTest {
 	@Test
 	void limit_memory_findall() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new MapDbService(STORAGE_SERVICE_API, AbstractDbTest.TARGET_FOLDER + "/" +
+		innerSut = new MapDbService(STORAGE_SERVICE_API, AbstractDbTest.TARGET_FOLDER + File.separator +
 				"low_mem_mapdb_test_db_2", 1L);
 		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		List<Data> dataId = innerSut.findAll();

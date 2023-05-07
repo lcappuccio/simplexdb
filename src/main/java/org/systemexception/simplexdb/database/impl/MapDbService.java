@@ -12,10 +12,7 @@ import org.systemexception.simplexdb.service.StorageServiceApi;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author leo
@@ -60,7 +57,7 @@ public class MapDbService extends AbstractDbService {
 	public List<Data> findAll() {
 		logger.info(LogMessages.FIND_ALL_IDS.toString());
 		List<Data> foundData = new ArrayList<>();
-		Long usedMemory = 0L;
+		long usedMemory = 0L;
 		Iterator<String> iterator = databaseMap.keySet().iterator();
 		while (iterator.hasNext() && usedMemory < maxMemoryOccupation) {
 			String next = iterator.next();
@@ -93,10 +90,10 @@ public class MapDbService extends AbstractDbService {
 	public List<Data> findByFilename(final String match) {
 		logger.info(LogMessages.FIND_MATCH + match);
 		ArrayList<Data> foundData = new ArrayList<>();
-		Long usedMemory = 0L;
-		for (Object dataId : databaseMap.keySet()) {
-			if (databaseMap.get(dataId).getName().contains(match)) {
-				Data data = databaseMap.get(dataId);
+		long usedMemory = 0L;
+        for (Map.Entry<String, Data> dataEntry : databaseMap.entrySet()) {
+			if (databaseMap.get(dataEntry.getKey()).getName().contains(match)) {
+				Data data = databaseMap.get(dataEntry.getKey());
 				usedMemory += data != null ? data.getContent().length : 0;
 				foundData.add(data);
 			}

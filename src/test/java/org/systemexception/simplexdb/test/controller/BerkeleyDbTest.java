@@ -11,6 +11,7 @@ import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.test.database.AbstractDbTest;
 import org.systemexception.simplexdb.test.database.BerkeleyDbServiceTest;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ class BerkeleyDbTest extends AbstractControllerTest {
 
 	@BeforeEach
 	void setUp() throws DatabaseException, IOException, ClassNotFoundException {
-		AbstractControllerTest.TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + "/" +
+		AbstractControllerTest.TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + File.separator +
 				BerkeleyDbServiceTest.TEST_DATABASE_FILENAME;
 		testData = new Data();
 		testData.setInternalId("123");
