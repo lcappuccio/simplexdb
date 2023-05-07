@@ -1,10 +1,9 @@
 package org.systemexception.simplexdb.test;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.test.database.AbstractDbTest;
@@ -17,8 +16,8 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author leo
@@ -26,25 +25,26 @@ import static org.junit.Assert.assertTrue;
  */
 public class StorageServiceTest {
 
-	private final static String STORAGE_FOLDER = AbstractDbTest.TARGET_FOLDER + "/test_output";
-	private final Data testData = new Data("TEST", "TEST".getBytes());
-	private StorageService sut;
+    private static StorageService sut;
+    private final static String STORAGE_FOLDER = AbstractDbTest.TARGET_FOLDER + "test_output";
+    private final Data testData = new Data("TEST", "TEST".getBytes());
 
-	@BeforeClass
-	public static void setSut() {
+	@BeforeAll
+	public static void setSut() throws IOException {
 		File toRemove = new File(STORAGE_FOLDER);
-		if (toRemove.exists()) {
-			String[] files = toRemove.list();
-			for (String file : files) {
-				new File(STORAGE_FOLDER + "/" + file).delete();
-			}
-		}
-		FileUtils.deleteQuietly(toRemove);
+        if (toRemove.exists()) {
+            String[] files = toRemove.list();
+            for (String file : files) {
+                new File(STORAGE_FOLDER + "/" + file).delete();
+            }
+        }
+        FileUtils.deleteQuietly(toRemove);
 
-		assertFalse(toRemove.exists());
-	}
+        assertFalse(toRemove.exists());
+        sut = new StorageService(STORAGE_FOLDER);
+    }
 
-	@AfterClass
+	@AfterAll
 	public static void tearDownSut() {
 		File toRemove = new File(STORAGE_FOLDER);
 		if (toRemove.exists()) {
@@ -54,11 +54,6 @@ public class StorageServiceTest {
 			}
 		}
 		FileUtils.deleteQuietly(toRemove);
-	}
-
-	@Before
-	public void setUp() throws IOException {
-		sut = new StorageService(STORAGE_FOLDER);
 	}
 
 	@Test
