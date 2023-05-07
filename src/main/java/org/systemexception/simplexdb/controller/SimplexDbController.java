@@ -18,6 +18,7 @@ import org.systemexception.simplexdb.domain.Data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -43,7 +44,8 @@ public class SimplexDbController {
 			throws IOException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
-		LOGGER.info("Save: {}", dataId);
+        final String dataIdSanitized = Objects.requireNonNull(dataId).replaceAll("[\n\r]", "_");
+		LOGGER.info("Save: {}", dataIdSanitized);
 		boolean saved = databaseService.save(data);
 		if (saved) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
