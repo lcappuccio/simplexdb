@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.service;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.systemexception.simplexdb.constants.LogMessages;
@@ -39,7 +40,7 @@ public class StorageService implements StorageServiceApi {
 
 	@Override
 	public void saveFile(Data data) throws IOException {
-		File dataFile = new File(storageFolder + File.separator + data.getName());
+		File dataFile = new File(storageFolder + "/" + data.getName());
 		historifyFile(dataFile);
 		FileOutputStream fos = new FileOutputStream(dataFile);
 		fos.write(data.getContent());
@@ -51,8 +52,9 @@ public class StorageService implements StorageServiceApi {
 			BasicFileAttributes attrs;
 			attrs = Files.readAttributes(file.getAbsoluteFile().toPath(), BasicFileAttributes.class);
 			long fileTime = attrs.creationTime().toMillis();
-			String historifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
-			file.renameTo(new File(storageFolder + File.separator + historifiedFilename));
+			String historifiedFilename = "/" + convertTime(fileTime) + "_" + file.getName();
+			FileUtils.copyFile(file, new File(storageFolder + "/" + historifiedFilename));
+			FileUtils.deleteQuietly(file);
 			logger.info(file.getName() + LogMessages.STORAGE_RENAME + historifiedFilename);
 		}
 	}

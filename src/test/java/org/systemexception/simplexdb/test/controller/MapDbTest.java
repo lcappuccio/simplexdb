@@ -11,7 +11,6 @@ import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.test.database.AbstractDbTest;
 import org.systemexception.simplexdb.test.database.MapDbServiceTest;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -25,16 +24,16 @@ public class MapDbTest extends AbstractControllerTest {
 
 	@Before
 	public void setUp() throws DatabaseException, IOException, ClassNotFoundException {
-		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + File.separator +
+		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + "/" +
 				MapDbServiceTest.TEST_DATABASE_FILENAME;
-		mockData = mock(Data.class);
-		when(mockData.getInternalId()).thenReturn("123");
-		when(mockData.getName()).thenReturn("123");
-		when(mockData.getContent()).thenReturn("123".getBytes());
+		testData = new Data();
+		testData.setInternalId("123");
+		testData.setName("123");
+		testData.setContent("123".getBytes());
 		databaseService = mock(MapDbService.class);
 		storageService = mock(StorageService.class);
-		when(databaseService.findById(mockData.getName())).thenReturn(Optional.of(mockData));
-		when(databaseService.delete(mockData.getName())).thenReturn(true);
+		when(databaseService.findById(testData.getInternalId())).thenReturn(Optional.of(testData));
+		when(databaseService.delete(testData.getName())).thenReturn(true);
 		when(databaseService.save(any())).thenReturn(true);
 		simplexDbController = new SimplexDbController(databaseService);
 		MockitoAnnotations.initMocks(this);

@@ -11,10 +11,12 @@ import org.systemexception.simplexdb.database.impl.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.io.IOException;
+import java.util.Collections;
 
 /**
  * @author leo
@@ -41,13 +43,17 @@ public class Application {
 
 	@Bean
 	public DatabaseApi databaseService() throws IOException, ClassNotFoundException {
-		if ("mapdb".equals(databaseType)) {
-			return new MapDbService(storageService(), databaseFilename, maxMemoryOccupation);
+		switch (databaseType) {
+			case "mapdb": {
+				return new MapDbService(storageService(), databaseFilename, maxMemoryOccupation);
+			}
+			case "berkeleydb": {
+				return new BerkeleyDbService(storageService(), databaseFilename, maxMemoryOccupation);
+			}
+			default: {
+				throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
+			}
 		}
-		if ("berkeleydb".equals(databaseType)) {
-			return new BerkeleyDbService(storageService(), databaseFilename, maxMemoryOccupation);
-		}
-		throw new InvalidPropertyException(DatabaseApi.class, "database.type", "Database configuration missing");
 	}
 
 	@Bean
@@ -66,9 +72,10 @@ public class Application {
 				"REST API with embedded Database",
 				null,
 				null,
-				"leo@systemexception.org",
+				new Contact("Leonardo Cappuccio", "https://github.com/lcappuccio/simplexdb/", null),
 				"GPL v3",
-				"https://github.com/lcappuccio/simplexdb/blob/master/LICENSE"
+				"https://github.com/lcappuccio/simplexdb/blob/master/LICENSE",
+				Collections.emptyList()
 		);
 	}
 }
