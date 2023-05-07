@@ -39,7 +39,7 @@ public class SimplexDbController {
 		this.databaseService = databaseService;
 	}
 
-	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	@PostMapping(value = Endpoints.SAVE, produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<HttpStatus> save(@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
 			throws IOException {
 		String dataId = dataFile.getOriginalFilename();
@@ -53,14 +53,13 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
+	@GetMapping(value = Endpoints.VIEW)
 	public String viewAll(Model model) throws DatabaseException, IOException, ClassNotFoundException {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}
 
-	@RequestMapping(value = {Endpoints.FIND, Endpoints.FIND + Endpoints.ID_WITH_EXTENSION},
-			method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = {Endpoints.FIND, Endpoints.FIND + Endpoints.ID_WITH_EXTENSION}, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<Data>> find(@PathVariable(value = "id") final Optional<String> id)
 			throws IOException, ClassNotFoundException {
@@ -84,8 +83,7 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws IOException,
 			ClassNotFoundException {
@@ -93,8 +91,7 @@ public class SimplexDbController {
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,
-			produces = MediaType.TEXT_PLAIN_VALUE)
+	@DeleteMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
 		LOGGER.info(LogMessages.DELETE + id);
