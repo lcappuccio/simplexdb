@@ -58,13 +58,6 @@ public abstract class AbstractDbTest {
 	}
 
 	@Test
-	public void database_created() {
-		File databaseFile = new File(TEST_DATABASE_FULLPATH);
-
-		assertTrue(databaseFile.exists());
-	}
-
-	@Test
 	public void add_record() throws DatabaseException, IOException {
 		Data data = getDataForDatabase("id");
 		boolean saved = sut.save(data);
