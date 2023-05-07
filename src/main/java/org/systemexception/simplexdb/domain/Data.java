@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -90,4 +91,11 @@ public class Data implements Serializable {
 		return Arrays.equals(content, data.content);
 
 	}
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(internalId, name, size, date);
+        result = 31 * result + Arrays.hashCode(content);
+        return result;
+    }
 }

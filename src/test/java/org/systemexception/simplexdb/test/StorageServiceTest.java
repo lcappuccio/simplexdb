@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author leo
  * @date 08/12/15 22:09
  */
-public class StorageServiceTest {
+class StorageServiceTest {
 
     private static StorageService sut;
     private final static String STORAGE_FOLDER = AbstractDbTest.TARGET_FOLDER + "test_output";
@@ -57,12 +57,12 @@ public class StorageServiceTest {
 	}
 
 	@Test
-	public void outputFolderExists() {
+	void outputFolderExists() {
 		assertTrue(new File(STORAGE_FOLDER).exists());
 	}
 
 	@Test
-	public void saveDataExists() throws IOException {
+	void saveDataExists() throws IOException {
 		sut.saveFile(testData);
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
 
@@ -70,7 +70,7 @@ public class StorageServiceTest {
 	}
 
 	@Test
-	public void historify() throws IOException {
+	void historify() throws IOException {
 		sut.saveFile(testData);
 		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
 		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);

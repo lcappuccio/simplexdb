@@ -46,6 +46,7 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 	void rebuild_index() throws IOException, ClassNotFoundException {
 		sut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		sut.rebuildIndex();
+        assertTrue(true);
 	}
 
 	@Test

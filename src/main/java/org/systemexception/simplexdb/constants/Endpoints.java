@@ -6,6 +6,8 @@ package org.systemexception.simplexdb.constants;
  */
 public class Endpoints {
 
+    private Endpoints() {}
+
 	public static final String CONTEXT = "/simplexdb";
 	public static final String VIEW = "/view";
 	public static final String SAVE = "/save";
