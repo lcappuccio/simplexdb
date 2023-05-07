@@ -24,7 +24,7 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 
 	@Before
 	public void setUp() throws IOException, ClassNotFoundException {
-		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + File.separator + TEST_DATABASE_FILENAME;
+		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + "/" + TEST_DATABASE_FILENAME;
 		File databaseFile = new File(TEST_DATABASE_FULLPATH);
 		if (databaseFile.exists()) {
 			databaseFile.delete();
@@ -47,7 +47,7 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 	@Test
 	public void limit_memory() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new BerkeleyDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + File.separator +
+		innerSut = new BerkeleyDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + "/" +
 				"low_mem_berkeley_test_db", 1L);
 		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		List<Data> dataId = innerSut.findByFilename(AbstractDbTest.TEST_DATABASE_ID);
@@ -59,7 +59,7 @@ public class BerkeleyDbServiceTest extends AbstractDbTest {
 	@Test
 	public void limit_memory_find_all() throws IOException, ClassNotFoundException {
 		DatabaseApi innerSut;
-		innerSut = new BerkeleyDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + File.separator +
+		innerSut = new BerkeleyDbService(storageServiceApi, AbstractDbTest.TARGET_FOLDER + "/" +
 				"low_mem_test_db", 1L);
 		innerSut.save(getDataForDatabase(AbstractDbTest.TEST_DATABASE_ID));
 		List<Data> dataId = innerSut.findAll();

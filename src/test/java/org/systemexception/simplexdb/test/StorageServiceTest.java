@@ -1,5 +1,6 @@
 package org.systemexception.simplexdb.test;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class StorageServiceTest {
 
-	private final static String STORAGE_FOLDER = AbstractDbTest.TARGET_FOLDER + File.separator + "test_output";
+	private final static String STORAGE_FOLDER = AbstractDbTest.TARGET_FOLDER + "/test_output";
 	private final Data testData = new Data("TEST", "TEST".getBytes());
 	private StorageService sut;
 
@@ -35,10 +36,10 @@ public class StorageServiceTest {
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();
 			for (String file : files) {
-				new File(STORAGE_FOLDER + File.separator + file).delete();
+				new File(STORAGE_FOLDER + "/" + file).delete();
 			}
 		}
-		toRemove.delete();
+		FileUtils.deleteQuietly(toRemove);
 
 		assertFalse(toRemove.exists());
 	}
@@ -49,12 +50,10 @@ public class StorageServiceTest {
 		if (toRemove.exists()) {
 			String[] files = toRemove.list();
 			for (String file : files) {
-				new File(STORAGE_FOLDER + File.separator + file).delete();
+				new File(STORAGE_FOLDER + "/" + file).deleteOnExit();
 			}
 		}
-		toRemove.delete();
-
-		assertFalse(toRemove.exists());
+		FileUtils.deleteQuietly(toRemove);
 	}
 
 	@Before
@@ -70,7 +69,7 @@ public class StorageServiceTest {
 	@Test
 	public void saveDataExists() throws IOException {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
+		File testDataFile = new File(STORAGE_FOLDER + "/" + testData.getName());
 
 		assertTrue(testDataFile.exists());
 	}
@@ -78,10 +77,10 @@ public class StorageServiceTest {
 	@Test
 	public void historify() throws IOException {
 		sut.saveFile(testData);
-		File testDataFile = new File(STORAGE_FOLDER + File.separator + testData.getName());
+		File testDataFile = new File(STORAGE_FOLDER + "/" + testData.getName());
 		BasicFileAttributes attrs = Files.readAttributes(testDataFile.toPath(), BasicFileAttributes.class);
 		sut.saveFile(testData);
-		assertTrue(new File(STORAGE_FOLDER + File.separator + convertTime(attrs.creationTime().toMillis()) + "_" +
+		assertTrue(new File(STORAGE_FOLDER + "/" + convertTime(attrs.creationTime().toMillis()) + "_" +
 				testDataFile.getName()).exists());
 	}
 

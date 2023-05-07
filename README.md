@@ -4,17 +4,8 @@ MapDB/BerkeleyDB Database and Spring REST Interface
 The goal of this project is to create a portable storage for moving multiple files providing the
 lightest possible database with a REST interface.
 
-**Master**
-
-[![Build Status](https://travis-ci.org/lcappuccio/simplexdb.svg?branch=master)](https://travis-ci.org/lcappuccio/simplexdb)
-[![codecov.io](https://codecov.io/github/lcappuccio/simplexdb/coverage.svg?branch=master)](https://codecov.io/github/lcappuccio/simplexdb?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/68207375c31d4510afbad94e3f3a543a)](https://www.codacy.com/app/leo_4/simplexdb)
-[![codebeat badge](https://codebeat.co/badges/891e8942-8742-4e29-9131-578a0b85b0f1)](https://codebeat.co/projects/github-com-lcappuccio-simplexdb)
-
-**Develop**
-
-[![Build Status](https://travis-ci.org/lcappuccio/simplexdb.svg?branch=develop)](https://travis-ci.org/lcappuccio/simplexdb)
-[![codecov.io](https://codecov.io/github/lcappuccio/simplexdb/coverage.svg?branch=develop)](https://codecov.io/github/lcappuccio/simplexdb?branch=develop)
+[![Build](https://github.com/lcappuccio/mapdb/actions/workflows/build.yml/badge.svg)](https://github.com/lcappuccio/mapdb/actions/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lcappuccio_mapdb-test&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lcappuccio_mapdb-test)
 
 ## Supported Databases
 - **MapDB**

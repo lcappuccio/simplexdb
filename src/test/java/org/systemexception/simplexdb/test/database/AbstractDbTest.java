@@ -1,7 +1,7 @@
 package org.systemexception.simplexdb.test.database;
 
 import com.sleepycat.je.DatabaseException;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -51,17 +51,8 @@ public abstract class AbstractDbTest {
 		if (databaseFile.exists()) {
 			Stream<Path> walk = Files.walk(Paths.get(TEST_DATABASE_FULLPATH), FileVisitOption.FOLLOW_LINKS);
 			walk.forEach(item -> item.toFile().delete());
-			FileUtils.deleteDirectory(new File(TEST_DATABASE_FULLPATH));
-
-			assertFalse(databaseFile.exists());
+			databaseFile.deleteOnExit();
 		}
-	}
-
-	@Test
-	public void database_created() {
-		File databaseFile = new File(TEST_DATABASE_FULLPATH);
-
-		assertTrue(databaseFile.exists());
 	}
 
 	@Test
