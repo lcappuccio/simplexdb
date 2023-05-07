@@ -1,7 +1,6 @@
 package org.systemexception.simplexdb.controller;
 
 import com.sleepycat.je.DatabaseException;
-import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.simplexdb.constants.Endpoints;
-import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -29,11 +27,11 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping(value = Endpoints.CONTEXT)
-@EnableSwagger2
-@Api(basePath = Endpoints.CONTEXT, description = "SimplexDB REST API")
+//@EnableSwagger2
+//@Api(basePath = Endpoints.CONTEXT, description = "SimplexDB REST API")
 public class SimplexDbController {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimplexDbController.class.getName());
 	private final DatabaseApi databaseService;
 
 	@Autowired
@@ -41,12 +39,13 @@ public class SimplexDbController {
 		this.databaseService = databaseService;
 	}
 
-	@RequestMapping(value = Endpoints.SAVE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	@PostMapping(value = Endpoints.SAVE, produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<HttpStatus> save(@RequestParam(Endpoints.FILE_TO_UPLOAD) final MultipartFile dataFile)
 			throws IOException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
-		logger.info(LogMessages.SAVE + dataId);
+        final String dataIdSanitized = Objects.requireNonNull(dataId).replaceAll("[\n\r]", "_");
+		LOGGER.info("Save: {}", dataIdSanitized);
 		boolean saved = databaseService.save(data);
 		if (saved) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
@@ -55,14 +54,13 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(value = Endpoints.VIEW, method = RequestMethod.GET)
+	@GetMapping(value = Endpoints.VIEW)
 	public String viewAll(Model model) throws DatabaseException, IOException, ClassNotFoundException {
 		model.addAttribute("datalist", databaseService.findAll());
 		return "index";
 	}
 
-	@RequestMapping(value = {Endpoints.FIND, Endpoints.FIND + Endpoints.ID_WITH_EXTENSION},
-			method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = {Endpoints.FIND, Endpoints.FIND + Endpoints.ID_WITH_EXTENSION}, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<Data>> find(@PathVariable(value = "id") final Optional<String> id)
 			throws IOException, ClassNotFoundException {
@@ -70,7 +68,7 @@ public class SimplexDbController {
 		List<Data> dataList = new ArrayList<>();
 		if (id.isPresent()) {
 			String idToFind = id.get();
-			logger.info(LogMessages.FIND_ID + idToFind);
+			LOGGER.info("Find id: {}", idToFind);
 			Optional<Data> data = databaseService.findById(idToFind);
 			if (data.isPresent()) {
 				dataList.add(data.get());
@@ -86,20 +84,18 @@ public class SimplexDbController {
 		}
 	}
 
-	@RequestMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = Endpoints.FINDBYNAME + Endpoints.ID_WITH_EXTENSION, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws IOException,
 			ClassNotFoundException {
-		logger.info(LogMessages.FIND_MATCH + match);
+		LOGGER.info("Find matching: {}", match);
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, method = RequestMethod.DELETE,
-			produces = MediaType.TEXT_PLAIN_VALUE)
+	@DeleteMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
-		logger.info(LogMessages.DELETE + id);
+		LOGGER.info("Delete id: {}", id);
 		boolean deleted = databaseService.delete(id);
 		if (deleted) {
 			return new ResponseEntity<>(HttpStatus.OK);

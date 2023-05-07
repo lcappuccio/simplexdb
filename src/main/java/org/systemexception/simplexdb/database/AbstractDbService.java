@@ -2,11 +2,11 @@ package org.systemexception.simplexdb.database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public class AbstractDbService implements DatabaseApi {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbService.class.getName());
 	protected String databaseName;
 	protected Long maxMemoryOccupation;
 	protected StorageServiceApi storageService;
@@ -29,17 +29,17 @@ public class AbstractDbService implements DatabaseApi {
 
 	@Override
 	public List<Data> findAll() throws IOException, ClassNotFoundException {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	public Optional<Data> findById(String dataId) throws IOException, ClassNotFoundException {
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
 	public List<Data> findByFilename(String match) throws IOException, ClassNotFoundException {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class AbstractDbService implements DatabaseApi {
 	 * @return datalist with warning message
 	 */
 	protected List<Data> memoryOccupationHit(List<Data> dataList) {
-		logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
+		LOGGER.warn("Memory occupation limit");
 		dataList.clear();
 		Data warningData = new Data();
 		warningData.setInternalId(WARNING_MESSAGE_MEMORY_OCCUPATION);

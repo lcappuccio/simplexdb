@@ -1,7 +1,7 @@
 package org.systemexception.simplexdb.test.controller;
 
 import com.sleepycat.je.DatabaseException;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.systemexception.simplexdb.controller.SimplexDbController;
@@ -11,10 +11,11 @@ import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.test.database.AbstractDbTest;
 import org.systemexception.simplexdb.test.database.BerkeleyDbServiceTest;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,11 +23,11 @@ import static org.mockito.Mockito.when;
  * @author leo
  * @date 28/02/16 17:29
  */
-public class BerkeleyDbTest extends AbstractControllerTest {
+class BerkeleyDbTest extends AbstractControllerTest {
 
-	@Before
-	public void setUp() throws DatabaseException, IOException, ClassNotFoundException {
-		TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + "/" +
+	@BeforeEach
+	void setUp() throws DatabaseException, IOException, ClassNotFoundException {
+		AbstractControllerTest.TEST_DATABASE_FULLPATH = AbstractDbTest.TARGET_FOLDER + File.separator +
 				BerkeleyDbServiceTest.TEST_DATABASE_FILENAME;
 		testData = new Data();
 		testData.setInternalId("123");
