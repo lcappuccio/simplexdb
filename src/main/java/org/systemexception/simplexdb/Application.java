@@ -10,9 +10,6 @@ import org.systemexception.simplexdb.database.impl.BerkeleyDbService;
 import org.systemexception.simplexdb.database.impl.MapDbService;
 import org.systemexception.simplexdb.service.StorageService;
 import org.systemexception.simplexdb.service.StorageServiceApi;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
 
 import java.io.IOException;
 
@@ -59,6 +56,7 @@ public class Application {
 		return new StorageService(storageFolder);
 	}
 
+    /*
 	@Bean
 	public Docket restfulApi() {
 		return new Docket(DocumentationType.SWAGGER_2).groupName("restful-api").select().build().apiInfo(apiInfo());
@@ -75,4 +73,5 @@ public class Application {
 				"https://github.com/lcappuccio/simplexdb/blob/master/LICENSE"
 		);
 	}
+     */
 }

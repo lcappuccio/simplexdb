@@ -1,7 +1,6 @@
 package org.systemexception.simplexdb.controller;
 
 import com.sleepycat.je.DatabaseException;
-import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.systemexception.simplexdb.constants.Endpoints;
 import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,11 +27,11 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping(value = Endpoints.CONTEXT)
-@EnableSwagger2
-@Api(basePath = Endpoints.CONTEXT, description = "SimplexDB REST API")
+//@EnableSwagger2
+//@Api(basePath = Endpoints.CONTEXT, description = "SimplexDB REST API")
 public class SimplexDbController {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimplexDbController.class.getName());
 	private final DatabaseApi databaseService;
 
 	@Autowired
@@ -46,7 +44,7 @@ public class SimplexDbController {
 			throws IOException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
-		logger.info(LogMessages.SAVE + dataId);
+		LOGGER.info(LogMessages.SAVE + dataId);
 		boolean saved = databaseService.save(data);
 		if (saved) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
@@ -70,7 +68,7 @@ public class SimplexDbController {
 		List<Data> dataList = new ArrayList<>();
 		if (id.isPresent()) {
 			String idToFind = id.get();
-			logger.info(LogMessages.FIND_ID + idToFind);
+			LOGGER.info(LogMessages.FIND_ID + idToFind);
 			Optional<Data> data = databaseService.findById(idToFind);
 			if (data.isPresent()) {
 				dataList.add(data.get());
@@ -91,7 +89,7 @@ public class SimplexDbController {
 	@ResponseBody
 	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws IOException,
 			ClassNotFoundException {
-		logger.info(LogMessages.FIND_MATCH + match);
+		LOGGER.info(LogMessages.FIND_MATCH + match);
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
 
@@ -99,7 +97,7 @@ public class SimplexDbController {
 			produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
-		logger.info(LogMessages.DELETE + id);
+		LOGGER.info(LogMessages.DELETE + id);
 		boolean deleted = databaseService.delete(id);
 		if (deleted) {
 			return new ResponseEntity<>(HttpStatus.OK);
