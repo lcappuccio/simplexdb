@@ -3,7 +3,6 @@ package org.systemexception.simplexdb.service;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
@@ -21,9 +20,9 @@ import java.util.Date;
  */
 public class StorageService implements StorageServiceApi {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String storageFolder;
-	public static final String DATE_TIME_FORMAT = "yyyyMMddHHmmss";
+	private static final Logger LOGGER = LoggerFactory.getLogger(StorageService.class.getName());
+    public static final String DATE_TIME_FORMAT = "yyyyMMddHHmmss";
+    private final String storageFolder;
 
 	public StorageService(final String storageFolder) throws IOException {
 		this.storageFolder = storageFolder;
@@ -34,7 +33,7 @@ public class StorageService implements StorageServiceApi {
 		File storageFolderFile = new File(storageFolder);
 		if (!storageFolderFile.exists()) {
 			Files.createDirectory(storageFolderFile.toPath());
-			logger.info(LogMessages.STORAGE_FOLDER + storageFolder);
+			LOGGER.info("Create folder: {}",  storageFolder);
 		}
 	}
 
@@ -45,7 +44,7 @@ public class StorageService implements StorageServiceApi {
         try (FileOutputStream fos = new FileOutputStream(dataFile)) {
             fos.write(data.getContent());
         }
-		logger.info(data.getName() + LogMessages.STORAGE_SAVE);
+		LOGGER.info("Saved: {}", data.getName());
 	}
 
 	private void historifyFile(File file) throws IOException {
@@ -56,7 +55,7 @@ public class StorageService implements StorageServiceApi {
 			String historifiedFilename = File.separator + convertTime(fileTime) + "_" + file.getName();
 			FileUtils.copyFile(file, new File(storageFolder + File.separator + historifiedFilename));
 			FileUtils.deleteQuietly(file);
-			logger.info(file.getName() + LogMessages.STORAGE_RENAME + historifiedFilename);
+			LOGGER.info("Renamed: {} -> {}", file.getName(), historifiedFilename);
 		}
 	}
 

@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.systemexception.simplexdb.constants.Endpoints;
-import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.DatabaseApi;
 import org.systemexception.simplexdb.domain.Data;
 
@@ -44,7 +43,7 @@ public class SimplexDbController {
 			throws IOException {
 		String dataId = dataFile.getOriginalFilename();
 		Data data = new Data(dataId, dataFile.getBytes());
-		LOGGER.info(LogMessages.SAVE + dataId);
+		LOGGER.info("Save: {}", dataId);
 		boolean saved = databaseService.save(data);
 		if (saved) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
@@ -67,7 +66,7 @@ public class SimplexDbController {
 		List<Data> dataList = new ArrayList<>();
 		if (id.isPresent()) {
 			String idToFind = id.get();
-			LOGGER.info(LogMessages.FIND_ID + idToFind);
+			LOGGER.info("Find id: {}", idToFind);
 			Optional<Data> data = databaseService.findById(idToFind);
 			if (data.isPresent()) {
 				dataList.add(data.get());
@@ -87,14 +86,14 @@ public class SimplexDbController {
 	@ResponseBody
 	public ResponseEntity<List<Data>> findByFilename(@PathVariable("id") final String match) throws IOException,
 			ClassNotFoundException {
-		LOGGER.info(LogMessages.FIND_MATCH + match);
+		LOGGER.info("Find matching: {}", match);
 		return new ResponseEntity<>(databaseService.findByFilename(match), HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = Endpoints.DELETE + Endpoints.ID_WITH_EXTENSION, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") final String id) {
-		LOGGER.info(LogMessages.DELETE + id);
+		LOGGER.info("Delete id: {}", id);
 		boolean deleted = databaseService.delete(id);
 		if (deleted) {
 			return new ResponseEntity<>(HttpStatus.OK);

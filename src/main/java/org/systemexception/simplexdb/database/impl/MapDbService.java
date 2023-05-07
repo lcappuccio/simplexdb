@@ -4,7 +4,6 @@ import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
-import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
@@ -28,7 +27,7 @@ public class MapDbService extends AbstractDbService {
 		this.databaseName = databaseName;
 		this.maxMemoryOccupation = maxMemoryOccupation;
 		this.storageService = storageService;
-		logger.info(LogMessages.CREATE_DATABASE + databaseName);
+		LOGGER.info("Open database: {}", databaseName);
 		database = makeDatabase();
 		databaseMap = database.hashMap("dataCollection").keySerializer(Serializer.STRING)
 				.valueSerializer(Serializer.JAVA).createOrOpen();
@@ -40,22 +39,22 @@ public class MapDbService extends AbstractDbService {
 
 	@Override
 	public boolean save(Data data) {
-		logger.info(LogMessages.SAVE + data.getName());
+		LOGGER.info("Save: {}", data.getName());
 		if (databaseMap.containsKey(data.getInternalId())) {
-			logger.info(LogMessages.SAVE_CONFLICT + data.getName());
+			LOGGER.warn("Save conflict: {}", data.getName());
 			return false;
 		} else {
 			databaseMap.put(data.getInternalId(), data);
-			logger.info(LogMessages.SAVED + data.getName());
+			LOGGER.info("Saved: {}", data.getName());
 			database.commit();
-			logger.info(LogMessages.COMMIT_MESSAGE.toString());
+			LOGGER.info("Commit");
 			return true;
 		}
 	}
 
 	@Override
 	public List<Data> findAll() {
-		logger.info(LogMessages.FIND_ALL_IDS.toString());
+		LOGGER.info("Find all ids");
 		List<Data> foundData = new ArrayList<>();
 		long usedMemory = 0L;
 		Iterator<String> iterator = databaseMap.keySet().iterator();
@@ -66,29 +65,29 @@ public class MapDbService extends AbstractDbService {
 			usedMemory += data != null ? data.getContent().length : 0;
 		}
 		if (usedMemory > maxMemoryOccupation) {
-			logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
+            LOGGER.warn("Memory occupation limit");
 		}
-		logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
+		LOGGER.info("Found ids: {}", foundData.size());
 		return foundData;
 	}
 
 	@Override
 	public Optional<Data> findById(String dataId) throws IOException {
-		logger.info(LogMessages.FIND_ID + dataId);
+		LOGGER.info("Find id: {}", dataId);
 		if (databaseMap.containsKey(dataId)) {
-			logger.info(LogMessages.FOUND_ID + dataId);
+			LOGGER.info("Found id: {}", dataId);
 			Data data = databaseMap.get(dataId);
 			storageService.saveFile(data);
 			return Optional.ofNullable(data);
 		} else {
-			logger.info(LogMessages.FOUND_NOT_ID + dataId);
+            LOGGER.info("Not found id: {}", dataId);
 			return Optional.empty();
 		}
 	}
 
 	@Override
 	public List<Data> findByFilename(final String match) {
-		logger.info(LogMessages.FIND_MATCH + match);
+		LOGGER.info("Find matching: {}", match);
 		ArrayList<Data> foundData = new ArrayList<>();
 		long usedMemory = 0L;
         for (Map.Entry<String, Data> dataEntry : databaseMap.entrySet()) {
@@ -101,21 +100,21 @@ public class MapDbService extends AbstractDbService {
 				return memoryOccupationHit(foundData);
 			}
 		}
-		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
+		LOGGER.info("Found matching: {}", foundData.size());
 		return foundData;
 	}
 
 	@Override
 	public boolean delete(String dataId) {
-		logger.info(LogMessages.DELETE + dataId);
+		LOGGER.info("Delete id: {}", dataId);
 		if (databaseMap.containsKey(dataId)) {
 			databaseMap.remove(dataId);
-			logger.info(LogMessages.DELETED + dataId);
+			LOGGER.info("Deleted id: {}", dataId);
 			database.commit();
-			logger.info(LogMessages.COMMIT_MESSAGE.toString());
+			LOGGER.info("Committing");
 			return true;
 		} else {
-			logger.info(LogMessages.FOUND_NOT_ID + dataId);
+			LOGGER.info("Not found id: {}", dataId);
 			return false;
 		}
 	}
@@ -125,6 +124,6 @@ public class MapDbService extends AbstractDbService {
 	public void close() {
 		database.commit();
 		database.close();
-		logger.info(LogMessages.CLOSE_DATABASE + databaseName);
+		LOGGER.info("Close database {}", databaseName);
 	}
 }

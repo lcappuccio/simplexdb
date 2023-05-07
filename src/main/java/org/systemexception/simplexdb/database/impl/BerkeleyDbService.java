@@ -1,7 +1,6 @@
 package org.systemexception.simplexdb.database.impl;
 
 import com.sleepycat.je.*;
-import org.systemexception.simplexdb.constants.LogMessages;
 import org.systemexception.simplexdb.database.AbstractDbService;
 import org.systemexception.simplexdb.domain.Data;
 import org.systemexception.simplexdb.service.StorageServiceApi;
@@ -26,7 +25,7 @@ public class BerkeleyDbService extends AbstractDbService {
 		this.databaseName = databaseName;
 		this.maxMemoryOccupation = maxMemoryOccupation;
 		this.storageService = storageService;
-		logger.info(LogMessages.CREATE_DATABASE + databaseName);
+		LOGGER.info("Open database: {}", databaseName);
 		EnvironmentConfig envConfig = new EnvironmentConfig();
 		envConfig.setConfigParam("je.log.fileMax", "256000000");
 		envConfig.setTransactional(true);
@@ -36,7 +35,7 @@ public class BerkeleyDbService extends AbstractDbService {
 			boolean mkdir = productionDatabaseFile.mkdir();
 			if (!mkdir) {
 				String errorMessage = "Database directory creation failed";
-				logger.error(errorMessage);
+				LOGGER.error(errorMessage);
 				throw new FileNotFoundException(errorMessage);
 			}
 		}
@@ -50,7 +49,7 @@ public class BerkeleyDbService extends AbstractDbService {
 
 	@Override
 	public boolean save(Data data) throws DatabaseException, IOException {
-		logger.info(LogMessages.SAVE + data.getName());
+		LOGGER.info("Save: {}", data.getName());
 		DatabaseEntry dbKey = new DatabaseEntry(data.getInternalId().getBytes());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ObjectOutputStream os = new ObjectOutputStream(out);
@@ -65,14 +64,14 @@ public class BerkeleyDbService extends AbstractDbService {
 		} else {
 			database.put(null, dbKey, dbData);
 			indexFileNames.put(data.getInternalId(), data.getName());
-			logger.info(LogMessages.SAVED + data.getName());
+			LOGGER.info("Saved: {}", data.getName());
 			return true;
 		}
 	}
 
 	@Override
 	public List<Data> findAll() throws DatabaseException, IOException, ClassNotFoundException {
-		logger.info(LogMessages.FIND_ALL_IDS.toString());
+        LOGGER.info("Find all ids");
         try (Cursor databaseCursor = database.openCursor(null, null)) {
             List<Data> foundData = new ArrayList<>();
             DatabaseEntry dbKey = new DatabaseEntry();
@@ -89,16 +88,16 @@ public class BerkeleyDbService extends AbstractDbService {
                 usedMemory += data.getContent().length;
             }
             if (usedMemory > maxMemoryOccupation) {
-                logger.warn(LogMessages.MEMORY_OCCUPATION_HIT.toString());
+                LOGGER.warn("Memory occupation limit");
             }
-            logger.info(LogMessages.FOUND_ID.toString() + foundData.size());
+            LOGGER.info("Found ids: {}", foundData.size());
             return foundData;
         }
 	}
 
 	@Override
 	public Optional<Data> findById(String dataId) throws DatabaseException, IOException, ClassNotFoundException {
-		logger.info(LogMessages.FIND_ID + dataId);
+        LOGGER.info("Find id: {}", dataId);
 		DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 		DatabaseEntry dbData = new DatabaseEntry();
 		OperationStatus operationStatus = database.get(null, dbKey, dbData, READ_UNCOMMITTED);
@@ -109,16 +108,16 @@ public class BerkeleyDbService extends AbstractDbService {
 			is.close();
 			in.close();
 			storageService.saveFile(data);
-			logger.info(LogMessages.FOUND_ID + dataId);
+            LOGGER.info("Found id: {}", dataId);
 			return Optional.of(new Data(data.getInternalId(), data.getName(), data.getDate(), data.getContent()));
 		}
-		logger.info(LogMessages.FOUND_NOT_ID + dataId);
+        LOGGER.info("Not found id: {}", dataId);
 		return Optional.empty();
 	}
 
 	@Override
 	public List<Data> findByFilename(String match) throws DatabaseException, IOException, ClassNotFoundException {
-		logger.info(LogMessages.FIND_MATCH + match);
+        LOGGER.info("Find matching: {}", match);
 		List<Data> foundData = new ArrayList<>();
 		long usedMemory = 0L;
 		for (Map.Entry<String, String> dataEntry : indexFileNames.entrySet()) {
@@ -143,20 +142,20 @@ public class BerkeleyDbService extends AbstractDbService {
 				return memoryOccupationHit(foundData);
 			}
 		}
-		logger.info(LogMessages.FOUND_MATCHING.toString() + foundData.size());
+        LOGGER.info("Found matching: {}", foundData.size());
 		return foundData;
 	}
 
 	@Override
 	public boolean delete(String dataId) throws DatabaseException {
-		logger.info(LogMessages.DELETE + dataId);
+        LOGGER.info("Delete id: {}", dataId);
 		if (indexFileNames.containsKey(dataId)) {
 			DatabaseEntry dbKey = new DatabaseEntry(dataId.getBytes());
 			database.delete(null, dbKey);
-			logger.info(LogMessages.DELETED + dataId);
+            LOGGER.info("Deleted id: {}", dataId);
 			return true;
 		} else {
-			logger.info(LogMessages.FOUND_NOT_ID + dataId);
+            LOGGER.info("Not found id: {}", dataId);
 			return false;
 		}
 	}
@@ -166,12 +165,12 @@ public class BerkeleyDbService extends AbstractDbService {
 		database.close();
 		environment.cleanLog();
 		environment.close();
-		logger.info(LogMessages.CLOSE_DATABASE + databaseName);
+        LOGGER.info("Close database {}", databaseName);
 	}
 
 	@Override
 	public void rebuildIndex() throws IOException, ClassNotFoundException {
-		logger.info(LogMessages.INDEX_BUILD_START.toString());
+		LOGGER.info("Building indexes START");
         try (Cursor databaseCursor = database.openCursor(null, null)) {
             DatabaseEntry dbKey = new DatabaseEntry();
             DatabaseEntry dbData = new DatabaseEntry();
@@ -184,6 +183,6 @@ public class BerkeleyDbService extends AbstractDbService {
                 in.close();
             }
         }
-		logger.info(LogMessages.INDEX_BUILD_END.toString());
+        LOGGER.info("Building indexes END");
 	}
 }
