@@ -3,6 +3,7 @@ package org.systemexception.simplexdb.service;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.systemexception.simplexdb.domain.Data;
 
 import java.io.File;
@@ -24,6 +25,7 @@ public class StorageService implements StorageServiceApi {
     public static final String DATE_TIME_FORMAT = "yyyyMMddHHmmss";
     private final String storageFolder;
 
+    @Autowired
 	public StorageService(final String storageFolder) throws IOException {
 		this.storageFolder = storageFolder;
 		createStorageFolder();
