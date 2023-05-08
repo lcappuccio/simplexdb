@@ -84,11 +84,11 @@
 			<td>
 				<button type="submit" class="btn btn-default"
 				        th:id="'saveBtn_' + ${data.internalId}"
-				        th:onclick="'saveData(\'' + ${data.internalId} + '\');'">Export
+				        th:data-exportId="${data.internalId}" onclick="javascript:saveData(this.getAttribute('data-exportId'))">Export
 				</button>
 				<button type="submit" class="btn btn-danger"
 				        th:id="'deleteBtn_' + ${data.internalId}"
-				        th:onclick="'deleteData(\'' + ${data.internalId} + '\');'">Delete
+				        th:data-deleteId="${data.internalId}" onclick="javascript:deleteData(this.getAttribute('data-deleteId'))">Delete
 				</button>
 			</td>
 		</tr>
