@@ -48,7 +48,7 @@ function fileSizeCalculator(fileSize) {
 
 function saveData(data) {
     $.ajax({
-        url: "/simplexdb/findbyid/" + data,
+        url: "/simplexdb/find/" + data,
         type: "GET",
         statusCode: {
             302() {
